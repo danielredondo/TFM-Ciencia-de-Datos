@@ -7,7 +7,7 @@ setwd("C:/Users/dredondo/Dropbox/Transporte_interno/Máster/Ciencia de Datos/")
 # Mac
 #setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Dato/")
 
-setwd("TFM/Análisis preliminar/descarga_20200509/gdc_download_20200509_173000.089392/")
+setwd("TFM/Analisis_preliminar/descarga_20200509/gdc_download_20200509_173000.089392/")
 
 # ----- Carga de paquetes -----
 

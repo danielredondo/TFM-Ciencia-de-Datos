@@ -1,9 +1,9 @@
 # ----- Ruta de trabajo -----
 
 # Windows
-setwd("C:/Users/dredondo/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/Análisis preliminar/descarga_20200509")
+setwd("C:/Users/dredondo/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/Analisis_preliminar/descarga_20200509")
 # Mac
-#setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/Análisis preliminar/descarga_2020050")
+#setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/Analisis_preliminar/descarga_2020050")
 
 # ----- Carga de paquetes -----
 
