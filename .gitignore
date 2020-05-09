@@ -1,3 +1,6 @@
+## Analisis_preliminar
+*.htseq.counts
+
 ## Core latex/pdflatex auxiliary files:
 *.aux
 *.lof
