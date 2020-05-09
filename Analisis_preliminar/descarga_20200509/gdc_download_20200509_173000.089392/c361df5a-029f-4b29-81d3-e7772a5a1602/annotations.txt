@@ -1,0 +1,2 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+be28c8f7-6008-5af4-88bc-eb759f7747de	23119	case	1fe937f7-b4e5-4cf6-be9b-215a012533c6	Item does not meet study protocol	Notification	2014-10-15T00:00:00	Approved	Per the PAAD EPC, this tumor is atrophic pancreas

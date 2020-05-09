@@ -1,0 +1,2 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+f714dd7c-e70c-5f7a-bdb3-366cfeae7a0b	23137	case	d47e214d-efbc-436d-b928-303d1f5135c4	Item may not meet study protocol	Observation	2014-10-15T00:00:00	Approved	the PAAD EPC states that this case likely did not arise in the pancreas (ampullary or duodenal)

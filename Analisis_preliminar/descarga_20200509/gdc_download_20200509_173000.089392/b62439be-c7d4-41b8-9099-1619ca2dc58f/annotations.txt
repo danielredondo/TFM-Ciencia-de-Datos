@@ -1,0 +1,2 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+28532873-b675-5fef-8acb-fef6965b0d70	23136	case	a4569ce7-dde7-4660-a24c-409d294b2b8c	Item may not meet study protocol	Observation	2014-10-15T00:00:00	Approved	PAAD EPC had insufficient evidence to include this as an undifferentiated ductal adenocarcinoma

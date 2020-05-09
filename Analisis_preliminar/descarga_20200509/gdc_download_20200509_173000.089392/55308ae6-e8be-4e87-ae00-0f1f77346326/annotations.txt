@@ -1,0 +1,2 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+3cc8e16f-d592-5053-bebf-f86c7039e388	23127	case	3a3a8fe1-e35c-45d0-aa0b-4fefa9ee9183	Item does not meet study protocol	Notification	2014-10-15T00:00:00	Approved	Per the PAAD EPC, this tumor is normal pancreas with atrophy

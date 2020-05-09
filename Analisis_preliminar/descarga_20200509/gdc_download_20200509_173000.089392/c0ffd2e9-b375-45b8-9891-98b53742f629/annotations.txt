@@ -1,0 +1,2 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+bc0f61c4-051a-5b18-9007-f7caf2e3e5ea	23138	case	1521ac6d-31f7-4240-9d54-4f7600e78e16	Item may not meet study protocol	Observation	2014-10-15T00:00:00	Approved	the PAAD EPC states that this case likely did not arise in the pancreas (ampullary)

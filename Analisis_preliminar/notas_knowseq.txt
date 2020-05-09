@@ -1,0 +1,12 @@
+countsToMatrix:
+Quizá no imprimiría todos los .htseq.counts... se podría pasar directamente al mensaje "Merging 182 counts files..."
+El mensaje de "Meta tags detected: __no_feature, __ambiguous, __too_low_aQual, __not_aligned, __alignment_not_unique" sale en formato "warning", quizá debería salir como print normal
+
+
+calculateGeneExpressionValues:
+No imprimir un punto por cada iteración, llena la consola verticalmente. ¿Quizá mostrar porcentaje? U otro indicador...
+
+dataPlot con mode = "heatmap".
+Da error, pero crea el gráfico bien
+Error in par(op) : 
+  el valor especificado del parámetro del gráfico "pin" es inválido

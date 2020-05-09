@@ -1,0 +1,2 @@
+id	submitter_id	entity_type	entity_id	category	classification	created_datetime	status	notes
+dd6478fc-4f06-5645-a147-22db8ef8878a	23122	case	e4babd46-005a-4af3-8041-131648d9c2c6	Item does not meet study protocol	Notification	2014-10-15T00:00:00	Approved	Per the PAAD EPC, this tumor is atrophic pancreas with a single focus of low-grade PanIN
