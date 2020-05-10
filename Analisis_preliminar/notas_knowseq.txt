@@ -4,9 +4,4 @@ El mensaje de "Meta tags detected: __no_feature, __ambiguous, __too_low_aQual, _
 
 
 calculateGeneExpressionValues:
-No imprimir un punto por cada iteración, llena la consola verticalmente. ¿Quizá mostrar porcentaje? U otro indicador...
-
-dataPlot con mode = "heatmap".
-Da error, pero crea el gráfico bien
-Error in par(op) : 
-  el valor especificado del parámetro del gráfico "pin" es inválido
+En el RQFIT, no imprimir un punto por cada iteración, llena la consola horizontalmente. ¿Quizá mostrar porcentaje? U otro indicador...
