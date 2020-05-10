@@ -1,9 +1,10 @@
 # Epidemiología y detección de biomarcadores en cáncer de páncreas
-#### Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ingeniería de Computadores, Universidad de Granada
+
+Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ingeniería de Computadores, Universidad de Granada
 
 **Daniel Redondo Sánchez**
 
-**Tutores**: Ignacio Rojas, Luis Javier Herrera, Daniel Castillo.
+**Tutores: Ignacio Rojas, Luis Javier Herrera, Daniel Castillo.**
 
 ## Descripción del contenido
 
