@@ -2,9 +2,11 @@
 *.htseq.counts
 *.counts
 
-# Quitar referencias y documento
+# Quitar carpetas
 /Referencias/*
-/Documento/*
+#/Documento/*
+/Propuesta/*
+
 
 # R
 # History files
