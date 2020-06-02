@@ -10,4 +10,6 @@ Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ing
 
 - `Analisis_preliminar_gcd`: Análisis con KnowSeq de datos de GDC Portal sobre cáncer de páncreas.
 
+- `Documento`: Documento principal del TFM en LaTeX.
+
 - `Propuesta`: Propuesta de TFM.
