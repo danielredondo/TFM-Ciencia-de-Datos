@@ -4,8 +4,13 @@
 
 # Quitar carpetas
 /Referencias/*
-#/Documento/*
+/Documento/*
 /Propuesta/*
+/Analisis_preliminar_gdc_CR/*
+/Analisis_preliminar_gdc_higado/*
+/Analisis_final_higado/*
+/Analisis_final_CR/*
+/resumen.xlsx
 
 
 # R
