@@ -25,8 +25,10 @@ ui <- dashboardPage(
       menuItem("Introducción", tabName = "intro", icon = icon("file-alt")),
       menuItem("Carga de datos", tabName = "datos", icon = icon("database")),
       menuItem("Selección de genes", tabName = "genes", icon = icon("dna")),
-      menuItem("Gráficos", tabName = "graficos", icon = icon("chart-bar")),
-      menuItem("Autor", tabName = "autor", icon = icon("id-card"))
+      menuItem("Entrenamiento de modelos", tabName = "entrenamiento", icon = icon("play")),
+      menuItem("Validación de modelos", tabName = "validacion", icon = icon("check-circle")),
+      menuItem("Autor", tabName = "autor", icon = icon("id-card")),
+      menuItem("Código", tabName = "codigo", icon = icon("code"))
     )
   ),
   ## Cuerpo
@@ -87,7 +89,10 @@ ui <- dashboardPage(
       # Tab 3
       tabItem(tabName = "genes",
               h2("Selección de genes"),
-              "Se muestran a continuación los mejores 20 genes seleccionados por cada método de selección de características.",
+              sliderInput(inputId = "numero_genes", label = "Selecciona el número de genes relevantes", value = 20, min = 0, max = 50, step = 1),
+              "Se muestran a continuación los mejores genes seleccionados por cada método de selección de características.",
+              br(),
+              tags$i("Puede tardar unos segundos en actualizarse."),
               fluidRow(
                 column(4, h4(tags$b("  MRMR")), tableOutput("genes_mrmr")),
                 column(4, h4(tags$b("  RF")), tableOutput("genes_rf")),
@@ -101,25 +106,43 @@ ui <- dashboardPage(
       ),
       
       # Tab 4
-      tabItem(tabName = "graficos",
-              h2("Gráficos"),
+      tabItem(tabName = "entrenamiento",
+              h2("Entrenamiento de modelos"),
               
-              fluidRow(
-                column(6, plotOutput("plot1")),
-                column(6, 
-                       title = "Controls",
-                       sliderInput("slider", "Number of observations:",
-                                   min = 0,
-                                   max = 100,
-                                   value = 50,
-                                   step = 1)
-                )
-              )
+              # Elegir MRMR/RF/DA, se muestra MRMR por ahora
+              selectInput("tipo_entrenamiento",
+                          label = "Tipo de selección de genes",
+                          choices = c("mRMR", "rf", "da"),
+                          selected = "mRMR",
+                          width = "50%"),
+              
+              # Se puede añadir número de CV que se hacen
+              selectInput("numero_folds",
+                          label = "Número de folds",
+                          choices = c(3, 5, 10),
+                          selected = 5,
+                          width = "50%"),
+              
+              tableOutput("mejores_parametros"),
+              
+              plotOutput("resultados_entrenamiento")
+              
+              # Falta añadir el F1-score y decir cuál es el mejor método
+
+              
       ),
       # Tab 5
+      tabItem(tabName = "validacion",
+              h2("Validación de modelos")
+      ),
+      # Tab 6
       tabItem(tabName = "autor",
               h2("Autor")
-        )
+      ),
+      # Tab 7
+      tabItem(tabName = "codigo",
+              h2("Código")
+      )
       ) # Final tabs
   ) # Final dashboard body
 ) # Final dashboard page
@@ -238,7 +261,7 @@ server <- function(input, output){
     mrmrRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
                                     mode = "mrmr")
     
-    mrmrRanking <- names(mrmrRanking)[1:20]
+    mrmrRanking <- names(mrmrRanking)[1:input$numero_genes]
     
     return(mrmrRanking)
   }, colnames = FALSE)
@@ -247,7 +270,7 @@ server <- function(input, output){
     # Método random forest
     rfRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
                                   mode = "rf")
-    rfRanking <- rfRanking[1:20]
+    rfRanking <- rfRanking[1:input$numero_genes]
     
     return(rfRanking)
   }, colnames = FALSE)
@@ -256,13 +279,40 @@ server <- function(input, output){
     daRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
                                   mode = "da", disease = "liver cancer")
     
-    daRanking <- names(daRanking)[1:20]
+    daRanking <- names(daRanking)[1:input$numero_genes]
     
     return(daRanking)
   }, colnames = FALSE)
   
+  # Método mRMR (mínima redundancia, máxima relevancia)
+  mrmrRanking <- reactive({
+    aux <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
+                                  mode = "mrmr")
+    return(names(aux)[1:input$numero_genes])
+  })
+                          
   
+  results_cv <- reactive({
+    # Reestructurar para no calcular dos veces mrmrranking!
+
+    svm_CV(particion.entrenamiento(), labels_train(), mrmrRanking(),
+           numFold = as.numeric(input$numero_folds))
+  })
   
+  output$mejores_parametros <- renderTable({
+    as.data.frame(results_cv()$bestParameters)
+    }, rownames = TRUE)
+  
+  output$resultados_entrenamiento <- renderPlot({
+    
+    # Quizá mejor con F1
+    dataPlot(results_cv()$accMatrix[, 1:12], colours = rainbow(as.numeric(input$numero_folds)),
+             mode = "classResults",
+             main = "mRMR - Accuracy for each fold",
+             xlab = "Genes",
+             ylab = "Accuracy")
+    
+  })
   
   }) # Cierre botón import
   
