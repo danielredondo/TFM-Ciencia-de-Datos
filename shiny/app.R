@@ -1,8 +1,15 @@
+# Mejoras:
+# Añadir tumores y sanos en la parte derecha del gráfico de Sankey
+# da debe tener en cuenta la enfermedad!!
+
 library(shiny)
 library(shinydashboard)
 library(dplyr)
 library(KnowSeq)
 library(reshape2)
+library(caret)
+library(ggplot2)
+library(ggalluvial)
 
 source("www/dataPlot.R")
 
@@ -20,7 +27,6 @@ ui <- dashboardPage(
       menuItem("Selección de genes", tabName = "genes", icon = icon("dna")),
       menuItem("Gráficos", tabName = "graficos", icon = icon("chart-bar")),
       menuItem("Autor", tabName = "autor", icon = icon("id-card"))
-      
     )
   ),
   ## Cuerpo
@@ -43,7 +49,9 @@ ui <- dashboardPage(
               "Texto",
               # Parte final
               br(), br(), br(),
-              tags$img(src = "ugr.png", width = "250px")
+              fluidRow(column(6, tags$img(src = "ugr.png", height = "100px")),
+                       column(6, tags$img(src = "knowseq.png", height = "100px")))
+              
       ),
       
       # Tab 2
@@ -54,7 +62,6 @@ ui <- dashboardPage(
                         buttonLabel = "Examinar...",
                         accept = ".RData",
                         placeholder = "No se ha seleccionado ningún archivo",
-                        
                         width = "50%"
               ),
               
@@ -64,13 +71,30 @@ ui <- dashboardPage(
                            width = "50%"),
               br(),
               
-              tableOutput("tabla1")
+              tableOutput("tabla1"),
+              
+              h2("Partición entrenamiento-test"),
+              
+              sliderInput("porcentaje_entrenamiento",
+                          label = "Porcentaje entrenamiento (%)",
+                          value = 75, min = 5, max = 95, step = 5,
+                          width = "50%"
+                          ),
+              
+              plotOutput("sankey", width = "50%")
       ),
       
       # Tab 3
       tabItem(tabName = "genes",
               h2("Selección de genes"),
-              
+              "Se muestran a continuación los mejores 20 genes seleccionados por cada método de selección de características.",
+              fluidRow(
+                column(4, h4(tags$b("  MRMR")), tableOutput("genes_mrmr")),
+                column(4, h4(tags$b("  RF")), tableOutput("genes_rf")),
+                column(4, h4(tags$b("  DA")), tableOutput("genes_da")),
+              ),
+                
+
               br(),
               
               h2("Enfermedades relacionadas")
@@ -104,12 +128,39 @@ ui <- dashboardPage(
 options(shiny.maxRequestSize = 15*1024^2)
 
 server <- function(input, output){
-  
+
   observeEvent(input$boton_importar, {
+    
+    # Si se ha seleccionado un fichero, se importa
+    load(input$archivo_rdata$datapath)
+    # Extraer labels
+    labels <- matriz[1, ] %>% as.vector
+    # Extraer matriz
+    DEGsMatrix <- matriz[2:nrow(matriz), ]
+    filas <- rownames(DEGsMatrix)
+    DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
+    rownames(DEGsMatrix) <- filas
+    # Crear DEGsMatrixML
+    DEGsMatrixML <- t(DEGsMatrix)
+    
+    # Parámetros generales
+    
+    # Partición 75% / 25% con balanceo de clase
+    set.seed(1991)
+    indices <- reactive(createDataPartition(labels, p = input$porcentaje_entrenamiento / 100, list = FALSE))
+    particion <- reactive(list(training = DEGsMatrixML[indices(), ], test = DEGsMatrixML[-indices(), ]))
+    
+    # Conjuntos
+    particion.entrenamiento <- reactive(particion()$training)
+    particion.test <- reactive(particion()$test)
+    
+    # Etiquetas
+    labels_train <- reactive(labels[indices()])
+    labels_test  <- reactive(labels[-indices()])
     
     # Se muestra la tabla
     output$tabla1 <- renderTable({
-        if (is.null(input$archivo_rdata))
+        if(is.null(input$archivo_rdata))
           return(NULL)
         
       # Mensaje de OK
@@ -119,14 +170,101 @@ server <- function(input, output){
         easyClose = TRUE,
         footer = NULL
       ))
-      
-      # Si se ha seleccionado un fichero, se importa
-      load(input$archivo_rdata$datapath)
-      labels <- matriz[1, ] %>% as.vector
+    
       tabla_aux <- as.data.frame(table(labels)) %>% rename(Etiqueta = labels, Frecuencia = Freq)
       return(tabla_aux)
     })
-  })
+  
+  output$sankey <- renderPlot({
+    if(is.null(input$archivo_rdata))
+      return(NULL)
+    
+    # Número de casos
+    # Train
+    #table(labels_train)
+    entr_tum <- table(labels_train())[1]
+    entr_san <- table(labels_train())[2]
+    
+    # Test
+    #table(labels_test)
+    test_tum <- table(labels_test())[1]
+    test_san <- table(labels_test())[2]
+    # Total
+    #table(labels)
+    
+    # Verificar balanceo de clase en entrenamiento y test
+    # Train
+    #labels_train %>% table %>% prop.table %>% round(3) * 100
+    # Test
+    #labels_test %>% table %>% prop.table %>% round(3) * 100
+    # Total
+    #labels %>% table %>% prop.table %>% round(3) * 100
+    
+    # Diagrama de Sankey
+    datos_sankey <- data.frame(tipo = c(paste0("Tumor\n", entr_tum + test_tum, " casos"), paste0("Tumor\n", entr_tum + test_tum, " casos"),
+                                        paste0("Tejido normal\n", entr_san + test_san, " casos"), paste0("Tejido normal\n", entr_san + test_san, " casos")),
+                               traintest = c("Entrenamiento", "Test", "Entrenamiento", "Test"),
+                               value = c(entr_tum, test_tum, entr_san, test_san))
+    
+    # Pequeño reorden para que mejorar la presentación de los datos
+    datos_sankey$tipo <- factor(datos_sankey$tipo,
+                                levels = c(paste0("Tumor\n", entr_tum + test_tum, " casos"), paste0("Tejido normal\n", entr_san + test_san, " casos")),
+                                ordered = T)
+    
+    print(datos_sankey)
+    
+    ggplot(data = datos_sankey,
+           aes(axis1 = tipo, axis2 = traintest, y = value)) +
+      scale_x_discrete(limits = c("Tipo de muestra", "Entrenamiento-test"),
+                       expand = c(.1, .05)) +
+      ylab("") +
+      geom_alluvium(col = "black", alpha = 1) +
+      geom_alluvium(aes(fill = tipo), alpha = .6, show.legend = FALSE) +
+      geom_stratum() +
+      geom_text(stat = "stratum", infer.label = TRUE, cex = 3) +
+      theme_minimal() +
+      ggtitle("Partición en conjuntos de entrenamiento y test",
+              paste0("Reparto ", input$porcentaje_entrenamiento, "% - ", 100 - input$porcentaje_entrenamiento, "% con balanceo de clases")) +
+      theme(plot.title = element_text(hjust = .5),
+            plot.subtitle = element_text(hjust = .5),
+            axis.text = element_text(color = "black", margin = margin(t = -30), size = 12),
+            axis.text.y = element_blank(),
+            axis.ticks = element_blank(),
+            panel.grid = element_blank()) 
+    })
+  
+  output$genes_mrmr <- renderTable({
+    # Método mRMR (mínima redundancia, máxima relevancia)
+    mrmrRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
+                                    mode = "mrmr")
+    
+    mrmrRanking <- names(mrmrRanking)[1:20]
+    
+    return(mrmrRanking)
+  }, colnames = FALSE)
+  
+  output$genes_rf <- renderTable({
+    # Método random forest
+    rfRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
+                                  mode = "rf")
+    rfRanking <- rfRanking[1:20]
+    
+    return(rfRanking)
+  }, colnames = FALSE)
+  
+  output$genes_da <- renderTable({
+    daRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
+                                  mode = "da", disease = "liver cancer")
+    
+    daRanking <- names(daRanking)[1:20]
+    
+    return(daRanking)
+  }, colnames = FALSE)
+  
+  
+  
+  
+  }) # Cierre botón import
   
   set.seed(122)
   histdata <- rnorm(500)
