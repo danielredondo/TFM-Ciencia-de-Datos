@@ -145,26 +145,23 @@ Daniel Castillo
 \title{
 	\vspace{-4cm}
 	\centering
-	{\Large TRABAJO FIN DE MÁSTER}\\ \vspace{0.3cm}
-	{\large \textsc{Máster Universitario Oficial en Ciencia de Datos e Ingeniería de Computadores}}\\
-
-	\begin{center}
-		{\LARGE \textbf{\bfseries{Epidemiología y detección de biomarcadores en cáncer de páncreas}}}
+	{\Large TRABAJO FIN DE MÁSTER\\} \vspace{0.3cm}
+	{\large \textsc{Máster Universitario Oficial en Ciencia de Datos e Ingeniería de Computadores\\}}
+		{\LARGE \textbf{\bfseries{Epidemiología y detección de biomarcadores en cáncer\\}}}
 		\vspace{-0.75cm}
-		\rule{136mm}{0.5mm}
-	\end{center}
 }
 
 
 \date{\vspace{1cm}
 	Granada, septiembre de 2020 \\
 	\vspace{0.5cm}
-	\includegraphics[height=2.5cm]{logos/logoUgr.png} \\ 
+	\includegraphics[height=2.5cm]{logos/ugr.png} \\ 
 }
 	
 	\mainmatter
 	\maketitle
 	\thispagestyle{empty}
+	
 	%% 
 	%% \null\newpage
 	%% \thispagestyle{empty}
@@ -189,14 +186,17 @@ Daniel Castillo
 	% Epidemiología del cáncer de páncreas
 	\include{cap2}
 	
-	% Genómica
+	% Epidemiología del cáncer de páncreas
 	\include{cap3}
 	
 	% Machine learning aplicado a genómica
-	\include{cap4}
+    \include{cap4}
 	
 	% Detección de biomarcadores en cáncer de páncreas
 	\include{cap5}
+	
+	% Detección de biomarcadores en cáncer de colon-recto
+	\include{cap6}
 	
 	% Conclusiones y líneas abiertas de trabajo
 	\include{cap7}
@@ -212,7 +212,9 @@ Daniel Castillo
 	% Apéndices
 	\appendix
 	\backmatter
-	\chapter{Anexo: Código en R}
+	\chapter{AnexoI: Código de análisis en R}
 	\include{anexoR}
+	\chapter{Anexo II: Código de aplicación web}
+	\include{anexo_shiny}
 		
 \end{document}
