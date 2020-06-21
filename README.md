@@ -1,4 +1,4 @@
-# Epidemiología y detección de biomarcadores en cáncer de páncreas
+# Epidemiología y detección de biomarcadores en cáncer
 
 Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ingeniería de Computadores, Universidad de Granada
 
@@ -8,8 +8,8 @@ Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ing
 
 ## Descripción del contenido
 
-- `Analisis_preliminar_gcd`: Análisis con KnowSeq de datos de GDC Portal sobre cáncer de páncreas.
-
 - `Documento`: Documento principal del TFM en LaTeX.
 
-- `Propuesta`: Propuesta de TFM.
+- `Epidemiología`: Datos sobre la epidemiología del cáncer.
+
+- `shiny`: Aplicación Shiny (en desarrollo).
