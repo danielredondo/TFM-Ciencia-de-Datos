@@ -13,7 +13,7 @@ Para medir en la población el impacto del cáncer se utilizan principalmente cu
 	\item \textbf{Prevalencia} (casos nuevos y antiguos, vivos). Mide la carga asistencial de la enfermedad.
 \end{itemize}
 
-\textcolor{red}{Añadir tendencias}
+\textcolor{red}{Añadir tendencias}\\
 
 % ---------------------------------
 
@@ -31,9 +31,15 @@ Defunciones Ministerio - \cite{MSCBS}.
 
 \section{Incidencia de cáncer}
 
-\textcolor{red}{Cómo se obtiene la incidencia. Importancia de RCPoblacionales, estimaciones y proyecciones.}
+Para medir de manera precisa la incidencia de cáncer en una población es necesaria la existencia de un Registro de Cáncer Poblacional. Estas entidades se dedican a registrar exhaustivamente todos los casos de cáncer diagnosticados en un área geográfica, y sus datos son muy útiles para todo tipo de estudios epidemiológicos. Algunos de estos Registros cubren la población de todo un país (por ejemplo, Canadá) mientras que otros cubren regiones concretas (por ejemplo, la provincia de Granada). Desgraciadamente, muchas áreas geográficas no están cubiertas por un Registro de Cáncer Poblacional. Es el caso de España, en el que sólo el 27\% de la población está cubierta por un Registro de Cáncer Poblacional \cite{Redondo-Sanchez2019}. Para conocer de manera estimada la incidencia de cáncer en territorios sin Registro de Cáncer Poblacional o proyectar la incidencia a años posteriores se utilizan diversos métodos matemáticos y estadísticos \cite{Bray2018, GCO, ECIS, ECIS2, REDECAN2020, Redondo-Sanchez2019}.\\
 
-\textcolor{red}{Número de casos. Tiene problemas por tamaño de población. Tasa bruta. Tiene problemas por estructura de población. Tasas estandarizadas (mundiales, europeas viejas y nuevas). Se usan a veces otros indicadores como tasas acumulativas.}
+Con respecto a las medidas usadas para reportar la incidencia, la más sencilla y fácil de interpretar es el número nuevo de casos de cáncer, enmarcado siempre en un periodo concreto de tiempo y un área geográfica. A partir del número de casos se puede calcular la tasa bruta (TB), un indicador que tiene en cuenta el tamaño de la población \cite{IARC1995}.\\
+
+$$\text{TB}  = \dfrac{\text{Número de casos nuevos}}{\text{Personas-año a riesgo}} \cdot 100.000 = \dfrac{N}{P} \cdot 100.000$$\\
+
+$$\text{ASR} = 100.000 \cdot \sum_{i = 1}^{N} \omega_i \dfrac{N_i}{P_i} $$\\
+
+\textcolor{red}{Tasa bruta. Tiene problemas por estructura de población. Tasas estandarizadas (mundiales, europeas viejas y nuevas). Se usan a veces otros indicadores como tasas acumulativas.}\\
 
 Las poblaciones estándar más utilizadas son:
 \begin{itemize}
@@ -47,7 +53,7 @@ Las poblaciones estándar más utilizadas son:
 \end{itemize}
 
 \newpage
-\textbf{Tabla 1}. Poblaciones estándar más frecuentes.
+\textbf{Tabla 1}. Poblaciones estándar más frecuentes para el cálculo de tasas estandarizadas por edad.
 \begin{table}[H]
 	\begin{tabular}{|c|c|c|c|}
 		\hline
@@ -76,8 +82,7 @@ Las poblaciones estándar más utilizadas son:
 	\end{tabular}
 \end{table}
 
-
-\noindent Se notará ASR-W (de \textit{world}) a la tasa estandarizada por la población mundial, ASR-E a la tasa estandarizada por la población europea de 1976 y ASR-nE a la de 2013.\\
+Para utilizar notación internacional, la tasa estandarizada por la población mundial se notará ASR-W (\textit{Age-Standardised Rate, World standard population}), la tasa estandarizada por la población europea de 1976 se notará ASR-oE (\textit{old European standard population}) y la de 2013 se notará ASR-nE (\textit{new European standard population}).\\
 
 \subsection{Incidencia del total del cáncer excepto piel no melanoma}
 
