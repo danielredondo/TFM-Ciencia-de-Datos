@@ -1,5 +1,7 @@
 # Epidemiología y detección de biomarcadores en cáncer
 
+*(Trabajo en desarrollo)*
+
 Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ingeniería de Computadores, Universidad de Granada
 
 **Daniel Redondo Sánchez**
@@ -8,8 +10,8 @@ Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ing
 
 ## Descripción del contenido
 
-- `documento`: Documento principal del TFM en LaTeX.
+- `Documento`: Documento principal del TFM en LaTeX.
 
-- `epidemiología`: Datos sobre la epidemiología del cáncer.
+- `Epidemiología`: Datos sobre la epidemiología del cáncer.
 
-- `shiny`: Aplicación Shiny (en desarrollo).
+- `Shiny`: Aplicación web.
