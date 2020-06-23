@@ -40,25 +40,28 @@ Para medir de manera precisa la incidencia de cáncer en una población es neces
 
 Con respecto a las medidas usadas para reportar la incidencia, la más sencilla y fácil de interpretar es el número nuevo de casos de cáncer, enmarcado siempre en un periodo concreto de tiempo y un área geográfica. A partir del número de casos se puede calcular la tasa bruta (TB), un indicador que tiene en cuenta el tamaño de la población \cite{IARC1995}.\\
 
-$$\text{TB}  = \dfrac{\text{Número de casos nuevos}}{\text{Personas-año a riesgo}} \cdot 100.000 = \dfrac{N}{P} \cdot 100.000$$\\
+$$\text{TB}  = \dfrac{\text{Número de casos nuevos}}{\text{Personas-año a riesgo}} \cdot 100.000 $$\\
 
-$$\text{ASR} = 100.000 \cdot \sum_{i = 1}^{N} \omega_i \dfrac{N_i}{P_i} $$\\
+Para permitir comparaciones entre distintas poblaciones, o la misma población en momentos distintos, es necesario tener en cuenta la estructura de edad de la población. Para responder a esta motivación se define la tasa estandarizada por edad (ASR por sus siglas en inglés, \textit{Age-Standardised Rate}) como aquella tasa que habría en la población de estudio si tuviese exactamente la misma estructura de edad que una población estándar predefinida \cite{IARC1995}. La definición de la tasa estandarizada por edad para 18 grupos de edad quinquenales (0-4 años, 5-9 años, $\dots$, 80-84 años, 85 años y más) es la siguiente:
 
-\textcolor{red}{Tasa bruta. Tiene problemas por estructura de población. Tasas estandarizadas (mundiales, europeas viejas y nuevas). Se usan a veces otros indicadores como tasas acumulativas.}\\
+$$\text{ASR} = \sum_{i = 1}^{18} \omega_i \dfrac{N_i}{P_i} $$
+donde $N_i$ y $P_i$ son respectivamente el número de casos incidentes y la población en el $i$-ésimo grupo de edad, y $\omega_i$ es el peso que toma la población de referencia en el grupo $i$-ésimo, con $\sum_{i = 1}^{18}\omega_i = 100.000$. Los valores de ${\omega_i}$ están predefinidos en base a poblaciones estándar, siendo las más utilizadas en nuestro contexto las siguientes:
 
-Las poblaciones estándar más utilizadas son:
 \begin{itemize}
 	
-	
-	\item Antigua población estándar europea. Propuesta en 1976 \cite{Waterhouse1976} basándose en la estructura de edad de varias poblaciones escandinavas.
-	
-	\item Nueva población estándar europea. En el año 2013 se realiza una revisión de la población estándar europea de 1976 por parte de la Oficina Europea de Estadística (EUROSTAT) para que la población refleje fielmente el envejecimiento existente en la población europea \cite{EUROSTAT2013}. Debido a su novedad, el uso de esta población aún no está ampliamente extendido en los organismos internacionales \cite{ECIS2} y en ocasiones se reportan las dos tasas estandarizadas por las poblaciones estándar antigua y nueva \cite{ECIS}.
-	
 	\item Población mundial. Propuesta por primera vez en 1960 \cite{SegiM.1960} y modificada más tarde en 1966 \cite{Doll1966}, permite realizar comparaciones a nivel mundial.
+		
+	\item Antigua población estándar europea. Propuesta en 1976 \cite{Waterhouse1976} basándose en la estructura de edad de varias poblaciones escandinavas, permite comparaciones entre zonas europeas.
+	
+	\item Nueva población estándar europea. En el año 2013, la Oficina Europea de Estadística (EUROSTAT) realiza una revisión de la población estándar europea con el objetivo de que la población refleje fielmente el envejecimiento existente en la población europea \cite{EUROSTAT2013}. Debido a su novedad, el uso de esta población aún no está ampliamente extendido en los organismos internacionales \cite{ECIS2} y en ocasiones se reportan las dos tasas estandarizadas por las poblaciones estándar antigua y nueva \cite{ECIS}.
+	
+
 \end{itemize}
 
+En la Tabla 1 se muestran los pesos para cada una de las poblaciones de referencia mencionadas anteriormente.\\
+
 \newpage
-\textbf{Tabla 1}. Poblaciones estándar más frecuentes para el cálculo de tasas estandarizadas por edad.
+\textbf{Tabla 1}. Pesos de las poblaciones estándar para el cálculo de tasas estandarizadas por edad.
 \begin{table}[H]
 	\begin{tabular}{|c|c|c|c|}
 		\hline
@@ -93,7 +96,12 @@ Para utilizar notación internacional, la tasa estandarizada por la población m
 
 \textcolor{red}{Poca importancia de piel no melanoma}\\
 
-\textcolor{red}{Diagrama de Marimekko de incidencia de cáncer. Añadir categoría de Otros}
+\newpage
+\textbf{\textcolor{red}{Figura XX}}. Diagrama de Marimekko/mosaico con la incidencia estimada de cáncer en el mundo para el año 2018.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/marimekko_gco.png} \\
+\end{center}
+
 
 \subsection{Incidencia de cáncer de hígado}
 
