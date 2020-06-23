@@ -8,8 +8,8 @@ Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ing
 
 ## Descripción del contenido
 
-- `Documento`: Documento principal del TFM en LaTeX.
+- `documento`: Documento principal del TFM en LaTeX.
 
-- `Epidemiología`: Datos sobre la epidemiología del cáncer.
+- `epidemiología`: Datos sobre la epidemiología del cáncer.
 
 - `shiny`: Aplicación Shiny (en desarrollo).
