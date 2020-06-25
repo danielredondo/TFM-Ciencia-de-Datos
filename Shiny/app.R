@@ -17,8 +17,8 @@ ui <- dashboardPage(
   ## Tema
   skin = "black",
   ## Cabecera
-  dashboardHeader(title = "TFM: Biomarcadores en cáncer",
-                  titleWidth = 350),
+  dashboardHeader(title = "biomaRcadores"#,titleWidth = 350
+                  ),
   ## Barra lateral
   dashboardSidebar(
     sidebarMenu(
