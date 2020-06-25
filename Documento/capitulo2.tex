@@ -18,11 +18,11 @@ Para medir en la población el impacto del cáncer se utilizan principalmente cu
 	\item \textbf{Prevalencia} (casos nuevos y antiguos, vivos). Mide la carga asistencial de la enfermedad.
 \end{itemize}
 
-\textcolor{red}{Añadir tendencias}\\
+\textcolor{red}{Añadir algo de tendencias}\\
 
 % ---------------------------------
 
-\textbf{Referencias:}
+\textcolor{red}{\textbf{Referencias:}}
 
 GLOBOCAN - \cite{Bray2018, GCO}
 
@@ -38,7 +38,7 @@ Defunciones Ministerio - \cite{MSCBS}.
 
 Para medir de manera precisa la incidencia de cáncer en una población es necesaria la existencia de un Registro de Cáncer Poblacional. Estas entidades se dedican a registrar exhaustivamente todos los casos de cáncer diagnosticados en un área geográfica, y sus datos son muy útiles para todo tipo de estudios epidemiológicos. Algunos de estos Registros cubren la población de todo un país (por ejemplo, Canadá) mientras que otros cubren regiones concretas (por ejemplo, la provincia de Granada). Desgraciadamente, muchas áreas geográficas no están cubiertas por un Registro de Cáncer Poblacional. Es el caso de España, en el que sólo el 27\% de la población está cubierta por un Registro de Cáncer Poblacional \cite{Redondo-Sanchez2019}. Para conocer de manera estimada la incidencia de cáncer en territorios sin Registro de Cáncer Poblacional o proyectar la incidencia a años posteriores se utilizan diversos métodos matemáticos y estadísticos \cite{Bray2018, GCO, ECIS, ECIS2, REDECAN2020, Redondo-Sanchez2019}.\\
 
-Con respecto a las medidas usadas para reportar la incidencia, la más sencilla y fácil de interpretar es el número nuevo de casos de cáncer, enmarcado siempre en un periodo concreto de tiempo y un área geográfica. A partir del número de casos se puede calcular la tasa bruta (TB), un indicador que tiene en cuenta el tamaño de la población \cite{IARC1995}.\\
+Con respecto a las medidas usadas para reportar la incidencia, la más sencilla y fácil de interpretar es el número nuevo de casos de cáncer, enmarcado siempre en un periodo concreto de tiempo y un área geográfica. A partir del número de casos se puede calcular la tasa bruta (TB), un indicador que tiene en cuenta el tamaño de la población y que se suele calcular por 100.000 habitantes \cite{IARC1995}.\\
 
 $$\text{TB}  = \dfrac{\text{Número de casos nuevos}}{\text{Personas-año a riesgo}} \cdot 100.000 $$\\
 
@@ -63,10 +63,9 @@ En la Tabla 1 se muestran los pesos para cada una de las poblaciones de referenc
 \newpage
 \textbf{Tabla 1}. Pesos de las poblaciones estándar para el cálculo de tasas estandarizadas por edad.
 \begin{table}[H]
-	\begin{tabular}{|c|c|c|c|}
-		\hline
-		
-		Grupo de edad  &  \begin{tabular}[c]{@{}c@{}}Población estándar\\ mundial\end{tabular}  &  \begin{tabular}[c]{@{}c@{}}Población estándar\\ europea 1976\end{tabular}  &  \begin{tabular}[c]{@{}c@{}}Población estándar\\ europea 2013\end{tabular}\\\hline
+	\begin{tabular}{|r|r|r|r|}
+		\hline		
+		Grupo de edad  &  \begin{tabular}[r]{@{}r@{}}Población estándar\\ mundial\end{tabular}  &  \begin{tabular}[r]{@{}r@{}}Población estándar\\ europea 1976\end{tabular}  &  \begin{tabular}[r]{@{}r@{}}Población estándar\\ europea 2013\end{tabular}\\\hline
 		
 		0-4 años  &  12.000  &  8.000  &  5.000\\
 		5-9 años  &  10.000  &  7.000  &  5.500\\
@@ -86,34 +85,100 @@ En la Tabla 1 se muestran los pesos para cada una de las poblaciones de referenc
 		75-79 años  &  1.000  &  2.000  &  4.000\\
 		80-84 años  &  500  &  1.000  &  2.500\\
 		$\geq$85 años  &  500  &  1.000  &  2.500\\\hline
-		
 	\end{tabular}
 \end{table}
 
-Para utilizar notación internacional, la tasa estandarizada por la población mundial se notará ASR-W (\textit{Age-Standardised Rate, World standard population}), la tasa estandarizada por la población europea de 1976 se notará ASR-oE (\textit{old European standard population}) y la de 2013 se notará ASR-nE (\textit{new European standard population}).\\
+Para utilizar notación internacional, la tasa estandarizada por la población mundial se notará ASR-W (de \textit{World standard population}), la tasa estandarizada por la población europea de 1976 se notará ASR-oE (\textit{old European standard population}) y la de 2013 se notará ASR-nE (\textit{new European standard population}).\\
 
 \subsection{Incidencia del total del cáncer excepto piel no melanoma}
 
-\textcolor{red}{Poca importancia de piel no melanoma}\\
+\textcolor{red}{Poca importancia de piel no melanoma. Hablar de las fuentes. introducir siglas GCO, ECIS, REDECAN}\\
 
 \newpage
-\textbf{\textcolor{red}{Figura XX}}. Diagrama de Marimekko/mosaico con la incidencia estimada de cáncer en el mundo para el año 2018.
+\textbf{\textcolor{red}{Figura XX}}. Diagrama de Marimekko/mosaico con la incidencia estimada de cáncer en el mundo para el año 2018. Ocho localizaciones anatómicas más frecuentes en ambos sexos. Fuente: \textit{Global Cancer Observatory} (Organización Mundial de la Salud) \cite{GCO}.
 \begin{center}
 	\includegraphics[width=1\textwidth]{figuras/marimekko_gco.png} \\
 \end{center}
 
 
+\newpage
+\textbf{\textcolor{red}{Tabla X}}. Incidencia del total del cáncer excepto piel no melanoma en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (ASR-W),  tasa estandarizada por la antigua población europea (ASR-oE) y  tasa estandarizada por la nueva población europea (ASR-nE).
+
+\begin{table}[H]
+	\begin{tabular}{|c|l|c|r|r|r|r|r|}
+		\hline		
+
+\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & Fuente & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{ASR-W} & \multicolumn{1}{|c|}{ASR-oE} & \multicolumn{1}{|c|}{ASR-nE}\\\hline
+
+\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 8.818.685 & 229,0 & 204,7 &  & \\
+& Europa & ECIS \cite{ECIS} & 2.059.673 & 572,9 & 302,7 & 436,0 & 651,7\\
+& España & ECIS \cite{ECIS} & 142.353 & 625,6 & 309,7 & 444,7 & 658,6\\\hline
+\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 8.218.216 & 217,3 & 175,6 &  & \\
+& Europa & ECIS \cite{ECIS} & 1.851.644 & 481,8 & 242,7 & 332,6 & 451,2\\
+& España & ECIS \cite{ECIS} & 106.647 & 451,1 & 218,4 & 298,5 & 401,7\\\hline
+\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 17.036.901 & 223,2 & 187,8 &  & \\
+& Europa & ECIS \cite{ECIS} & 3.911.317 & 525,8 & 266,7 & 374,3 & 531,9\\
+& España & ECIS \cite{ECIS} & 249.000 & 536,7 & 259,4 & 363,8 & 515,3\\\hline
+
+
+
+	\end{tabular}
+\end{table}
+
+
+
 \subsection{Incidencia de cáncer de hígado}
 
-texto
+\textbf{\textcolor{red}{Tabla X}}. Incidencia de cáncer de hígado en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (ASR-W),  tasa estandarizada por la antigua población europea (ASR-oE) y  tasa estandarizada por la nueva población europea (ASR-nE).
+
+\begin{table}[H]
+	\begin{tabular}{|c|l|c|r|r|r|r|r|}
+		\hline		
+		
+		\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & Fuente & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{ASR-W} & \multicolumn{1}{|c|}{ASR-oE} & \multicolumn{1}{|c|}{ASR-nE}\\\hline
+		
+\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 596.574 & 15,5 & 13,9 &  & \\
+& Europa & ECIS \cite{ECIS} & 55.825 & 15,5 & 8,0 & 11,7 & 17,7\\
+& España & ECIS \cite{ECIS} & 4.976 & 21,9 & 10,9 & 15,7 & 22,5\\\hline
+\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 244.506 & 6,5 & 4,9 &  & \\
+& Europa & ECIS \cite{ECIS} & 26.641 & 6,9 & 2,7 & 4,0 & 6,3\\
+& España & ECIS \cite{ECIS} & 1.654 & 7,0 & 2,4 & 3,6 & 6,0\\\hline
+\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 841.080 & 11,0 & 9,3 &  & \\
+& Europa & ECIS \cite{ECIS} & 82.466 & 11,1 & 5,1 & 7,4 & 11,3\\
+& España & ECIS \cite{ECIS} & 6.630 & 14,3 & 6,5 & 9,3 & 13,6\\\hline
+		
+	\end{tabular}
+\end{table}
 
 \subsection{Incidencia de cáncer de colon-recto}
 
-texto
+\textbf{\textcolor{red}{Tabla X}}. Incidencia de cáncer de colon-recto en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (ASR-W),  tasa estandarizada por la antigua población europea (ASR-oE) y  tasa estandarizada por la nueva población europea (ASR-nE).
+
+\begin{table}[H]
+	\begin{tabular}{|c|l|c|r|r|r|r|r|}
+		\hline		
+		
+		\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & Fuente & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{ASR-W} & \multicolumn{1}{|c|}{ASR-oE} & \multicolumn{1}{|c|}{ASR-nE}\\\hline
+		
+\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 1.026.215 & 26,6 & 23,6 &  & \\
+& Europa & ECIS \cite{ECIS} & 275.519 & 76,6 & 38,1 & 56,8 & 88,9\\
+& España & ECIS \cite{ECIS} & 23.013 & 101,1 & 45,8 & 68,5 & 107,2\\\hline
+\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 823.303 & 21,8 & 16,3 &  & \\
+& Europa & ECIS \cite{ECIS} & 236.101 & 61,4 & 25,2 & 37,0 & 56,3\\
+& España & ECIS \cite{ECIS} & 14.642 & 61,9 & 23,6 & 34,9 & 53,5\\\hline
+\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 1.849.518 & 24,2 & 19,7 &  & \\
+& Europa & ECIS \cite{ECIS} & 511.620 & 68,8 & 30,8 & 45,6 & 70,0\\
+& España & ECIS \cite{ECIS} & 37.655 & 81,1 & 33,9 & 50,4 & 77,5\\\hline
+
+		
+	\end{tabular}
+\end{table}
 
 \section{Mortalidad por cáncer}
 
-\textcolor{red}{Cómo se obtiene la mortalidad. Importancia de certif de defunción. También estimaciones y proyecciones.}
+\textcolor{red}{Cómo se obtiene la mortalidad. Importancia de certif de defunción. También estimaciones y proyecciones.}\\
+
+\textcolor{red}{Aunque ECIS también reporta mortalidad por cáncer en el año 2018, se va a considerar mejor los datos del Ministerio por ser datos obsrervados y no estimaciones, por loq ue se consideran datos más fiables}.
 
 \subsection{Mortalidad del total del cáncer excepto piel no melanoma}
 
