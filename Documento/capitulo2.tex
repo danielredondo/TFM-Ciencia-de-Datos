@@ -1,11 +1,6 @@
 \chapter{Epidemiología del cáncer}
 
-La Epidemiología se ha definido tradicionalmente como el estudio de la distribución y de los determinantes de la enfermedad en los seres humanos [1]. En un sentido más amplio, sin limitarse únicamente a la enfermedad, la epidemiología se define como el estudio de la aparición y distribución de los estados o acontecimientos relacionados con la salud en poblaciones específicas, incluyendo el estudio de los determinantes de estos estados, y la aplicación de este conocimiento al control de los problemas de la salud [2, 3].\\
-
-[1] MacMahon B, Pugh TF. Principios y métodos de Epidemiología. Segunda edición. México: La Prensa Médica Mexicana, 1983.
-[2] Last JM. Diccionario de Epidemiología. Barcelona: Salvat, 1989.
-[3] Porta M (editor). A Dictionary of Epidemiology (5th edition). New York: Oxford University Press; 2008.
-
+La Epidemiología se ha definido tradicionalmente como la ciencia que estudia la distribución y los determinantes de la enfermedad en los seres humanos \cite{MacMahon1970}. En una definición más moderna, no limitada exclusivamente a la enfermedad, la Epidemiología se define como el estudio de la aparición y distribución de los estados o acontecimientos relacionados con la salud en poblaciones específicas, incluyendo el estudio de los determinantes de estos estados, y la aplicación de este conocimiento al control de los problemas de la salud \cite{Porta2008}.
 
 \section{Indicadores epidemiológicos}
 
@@ -18,29 +13,32 @@ Para medir en la población el impacto del cáncer se utilizan principalmente cu
 	\item \textbf{Prevalencia} (casos nuevos y antiguos, vivos). Mide la carga asistencial de la enfermedad.
 \end{itemize}
 
-\textcolor{red}{Añadir algo de tendencias}\\
+Además, se puede examinar la evolución de cada indicador a lo largo del tiempo, hablando así de tendencias de la incidencia, de la mortalidad, de la supervivencia o de la prevalencia.\\
+
+\textcolor{blue}{(Ver si se incluyen tendencias, sería conveniente al menos para incidencia y/o mortalidad)}
 
 % ---------------------------------
 
-\textcolor{red}{\textbf{Referencias:}}
+\subsection{Fuentes de información}
 
-GLOBOCAN - \cite{Bray2018, GCO}
+A nivel mundial, las estadísticas de cáncer las proporciona el \textit{Global Cancer Observatory} (GCO), una plataforma web de la \textit{International Agency for Research on Cancer}, de la Organización Mundial de la Salud \cite{Bray2018, GCO}.\\
 
-ECIS - \cite{ECIS, ECIS2}
+El organismo equivalente al GCO a nivel europeo es el \textit{European Cancer Information System} (ECIS), de reciente creación y apoyado por la Comisión Europea \cite{ECIS, ECIS2}.\\
 
-REDECAN - \cite{REDECAN2020}
+Aunque estos organismos proporcionan estadísticas sobre cáncer en España, también existen fuentes a nivel nacional que cuentan con datos más actualizados y con distinta metodología. La Red Española de Registros de Cáncer (REDECAN) publica periódicamente datos sobre incidencia y supervivencia de cáncer en España \cite{REDECAN2020, Guevara2019}, mientras que las estadísticas de mortalidad por cáncer se pueden calcular a partir de las defunciones que publica el Ministerio de Sanidad, Consumo y Bienestar Social del Gobierno de España \cite{MSCBS} y la población que proporciona el Instituto Nacional de Estadística \cite{INEpob}.\\
 
-Población INE - \cite{INEpob}
+\textcolor{red}{SUPERVIVENCIA: CONCORD y/o EUROCARE}.
 
-Defunciones Ministerio - \cite{MSCBS}.
 
 \section{Incidencia de cáncer}
+
+\subsection{Metodología}
 
 Para medir de manera precisa la incidencia de cáncer en una población es necesaria la existencia de un Registro de Cáncer Poblacional. Estas entidades se dedican a registrar exhaustivamente todos los casos de cáncer diagnosticados en un área geográfica, y sus datos son muy útiles para todo tipo de estudios epidemiológicos. Algunos de estos Registros cubren la población de todo un país (por ejemplo, Canadá) mientras que otros cubren regiones concretas (por ejemplo, la provincia de Granada). Desgraciadamente, muchas áreas geográficas no están cubiertas por un Registro de Cáncer Poblacional. Es el caso de España, en el que sólo el 27\% de la población está cubierta por un Registro de Cáncer Poblacional \cite{Redondo-Sanchez2019}. Para conocer de manera estimada la incidencia de cáncer en territorios sin Registro de Cáncer Poblacional o proyectar la incidencia a años posteriores se utilizan diversos métodos matemáticos y estadísticos \cite{Bray2018, GCO, ECIS, ECIS2, REDECAN2020, Redondo-Sanchez2019}.\\
 
 Con respecto a las medidas usadas para reportar la incidencia, la más sencilla y fácil de interpretar es el número nuevo de casos de cáncer, enmarcado siempre en un periodo concreto de tiempo y un área geográfica. A partir del número de casos se puede calcular la tasa bruta (TB), un indicador que tiene en cuenta el tamaño de la población y que se suele calcular por 100.000 habitantes \cite{IARC1995}.\\
 
-$$\text{TB}  = \dfrac{\text{Número de casos nuevos}}{\text{Personas-año a riesgo}} \cdot 100.000 $$\\
+$$\text{TB}  = 100.000 \cdot \dfrac{\text{Número de casos nuevos}}{\text{Personas-año a riesgo}}$$\\
 
 Para permitir comparaciones entre distintas poblaciones, o la misma población en momentos distintos, es necesario tener en cuenta la estructura de edad de la población. Para responder a esta motivación se define la tasa estandarizada por edad (ASR por sus siglas en inglés, \textit{Age-Standardised Rate}) como aquella tasa que habría en la población de estudio si tuviese exactamente la misma estructura de edad que una población estándar predefinida \cite{IARC1995}. La definición de la tasa estandarizada por edad para 18 grupos de edad quinquenales (0-4 años, 5-9 años, $\dots$, 80-84 años, 85 años y más) es la siguiente:
 
@@ -90,12 +88,12 @@ En la Tabla 1 se muestran los pesos para cada una de las poblaciones de referenc
 
 Para utilizar notación internacional, la tasa estandarizada por la población mundial se notará ASR-W (de \textit{World standard population}), la tasa estandarizada por la población europea de 1976 se notará ASR-oE (\textit{old European standard population}) y la de 2013 se notará ASR-nE (\textit{new European standard population}).\\
 
+
 \subsection{Incidencia del total del cáncer excepto piel no melanoma}
 
-\textcolor{red}{Poca importancia de piel no melanoma. Hablar de las fuentes. introducir siglas GCO, ECIS, REDECAN}\\
+El cáncer de piel no melanoma se suele excluir al reportar datos de incidencia del total del cáncer, debido a que es muy frecuente y cuenta con buen pronóstico, por lo que no se suele registrar en los Registros de Cáncer Poblacionales \cite{Gordon2013, Madan2010}.\\
 
-\newpage
-\textbf{\textcolor{red}{Figura XX}}. Diagrama de Marimekko/mosaico con la incidencia estimada de cáncer en el mundo para el año 2018. Ocho localizaciones anatómicas más frecuentes en ambos sexos. Fuente: \textit{Global Cancer Observatory} (Organización Mundial de la Salud) \cite{GCO}.
+\textbf{\textcolor{red}{Figura XX}}. Diagrama de Marimekko/mosaico con la incidencia estimada de cáncer excepto piel no melanoma en el mundo para el año 2018. Ocho localizaciones anatómicas más frecuentes en ambos sexos. Fuente: \textit{Global Cancer Observatory}, Organización Mundial de la Salud \cite{GCO}.
 \begin{center}
 	\includegraphics[width=1\textwidth]{figuras/marimekko_gco.png} \\
 \end{center}
@@ -120,15 +118,14 @@ Para utilizar notación internacional, la tasa estandarizada por la población m
 & Europa & ECIS \cite{ECIS} & 3.911.317 & 525,8 & 266,7 & 374,3 & 531,9\\
 & España & ECIS \cite{ECIS} & 249.000 & 536,7 & 259,4 & 363,8 & 515,3\\\hline
 
-
-
 	\end{tabular}
 \end{table}
 
-
+A nivel nacional, REDECAN ha publicado estimaciones de la incidencia en España más recientes a las mostradas en la \textcolor{red}{Tabla X}, correspondientes al año 2020, \cite{REDECAN2020}. En este análisis se estima el número de casos de cáncer excepto piel no melanoma en 277.394 casos (57.8\% en hombres), con una tasa bruta de 588,0 por 100.000 habitantes, y tasas estandarizadas de 280,3 (ASR-W), 399,4 (ASR-oE) y 579,8 (ASR-nE).
 
 \subsection{Incidencia de cáncer de hígado}
 
+\newpage
 \textbf{\textcolor{red}{Tabla X}}. Incidencia de cáncer de hígado en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (ASR-W),  tasa estandarizada por la antigua población europea (ASR-oE) y  tasa estandarizada por la nueva población europea (ASR-nE).
 
 \begin{table}[H]
@@ -149,6 +146,8 @@ Para utilizar notación internacional, la tasa estandarizada por la población m
 		
 	\end{tabular}
 \end{table}
+
+En las estimaciones publicadas por REDECAN para 2020 se estiman en España 6.595 casos de cáncer de hígado (75,4\% en hombres), con una tasa bruta de 14,0 y tasas estandarizadas de 6,5 (ASR-W), 9,4 (ASR-oE) y 13,9 (ASR-nE) \cite{REDECAN2020}.
 
 \subsection{Incidencia de cáncer de colon-recto}
 
@@ -174,11 +173,18 @@ Para utilizar notación internacional, la tasa estandarizada por la población m
 	\end{tabular}
 \end{table}
 
+
+En las estimaciones publicadas por REDECAN para 2020 se estiman en España 44.231 casos de cáncer de colon-recto (58,9\% en hombres), con una tasa bruta de 93,8 y tasas estandarizadas de 40,0 (ASR-W), 59,5 (ASR-oE) y 91,9 (ASR-nE) \cite{REDECAN2020}.
+
 \section{Mortalidad por cáncer}
 
-\textcolor{red}{Cómo se obtiene la mortalidad. Importancia de certif de defunción. También estimaciones y proyecciones.}\\
+\textcolor{red}{Diferenciar mortalidad CON cáncer y mortalidad POR cáncer.}\\
 
-\textcolor{red}{Aunque ECIS también reporta mortalidad por cáncer en el año 2018, se va a considerar mejor los datos del Ministerio por ser datos obsrervados y no estimaciones, por loq ue se consideran datos más fiables}.
+Los indicadores para medir la mortalidad por cáncer son los mismos que para la incidencia, cambiando número de casos por defunciones.\\
+
+\textcolor{red}{Cómo se obtiene la mortalidad. Registros de mortalidad. Importancia de certificados de defunción. También estimaciones y proyecciones.}\\
+
+\textcolor{red}{Aunque ECIS también reporta mortalidad por cáncer en el año 2018, se va a considerar mejor los datos del Ministerio por ser datos observados y no estimaciones, por lo que se consideran datos más fiables}.
 
 \subsection{Mortalidad del total del cáncer excepto piel no melanoma}
 

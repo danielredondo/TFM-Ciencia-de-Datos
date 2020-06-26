@@ -83,29 +83,38 @@ Para intentar prevenir el cáncer de colon-recto se deben cambiar aquellos facto
 
 \section{Ciencias -ómicas}
 
-\textcolor{red}{Ver apuntes asignatura bioinformática}
+Se presenta a continuación una corta introducción a las ciencias -ómicas, con el objetivo de comprender los conceptos que se utilizarán más adelante y ubicarlos dentro de su contexto biológico.
+
+\subsection{Algunas definiciones básicas}
+
+\begin{itemize}
+	\item Los seres vivos están hechos de células. En el núcleo de cada célula se encuentran los cromosomas, estructuras que almacenan el material genético del individuo.
+	\item Los cromosomas están formados por ácido desoxirribonucleico (DNA, por sus siglas en inglés), una molécula que codifica las instrucciones genéticas para la vida.
+	\item Un gen es la región del DNA que codifica una proteína. Las proteínas son cadenas de aminoácidos unidos por enlaces peptídicos (enlaces entre el grupo amino y carboxilo).
+	\item El genoma es la secuencia de nucleótidos que forman el ADN de un individuo.
+	\item El ácido ribonucleico (RNA, por sus siglas en inglés) es un ácido nucleico formado por ribonucleótidos. 
+\end{itemize}
 
 \subsection{Genómica}
 
+La genómica es la ciencia que estudia la composición, estructura y función de los genomas. Se dedica por tanto a estudiar cromosomas, mutaciones y variaciones tanto de nucleótidos concretos como de regiones del genoma.\\
+
+El análisis GWAS (Genome-wide association study) es un ejemplo de análisis genómico.
+
 \subsection{Transcriptómica}
 
-\subsection{Proteómica}
+La transcriptómica estudia el transcriptoma, esto es, el conjunto de RNA presente en una célula). El transcriptoma indica el nivel de expresión de genes en un determinado momento.\\
 
-\subsection{Metabolómica}
+Los análisis de RNA-Seq y microRNA se enmarcan en el ámbito de la transcriptómica. \\
 
-\subsection{¿Secuenciación del genoma?}
+\subsection{Otras ciencias -ómicas}
 
-\textcolor{red}{Human Genome Project, ...}
+La proteómica es la ciencia que estudia y caracteriza el proteoma (imagen dinámica de todas las proteínas expresadas).\\
 
-\textcolor{red}{DEGs, }
+\textcolor{red}{Metabolómica}.
 
-\subsection{ARN}
+\section{RNA-Seq}
 
-\textcolor{red}{Apuntes asignatura:\\
-	RNA-Seq: lo que se hace es contar, para cada gen, reads para ver si están sobreexpresados o infraexpresados. Luego, se comparan con una referencia (enfermos vs sanos). Como sólo se cuenta, los ficheros están anonimizados, y accesibles a menudo vía web.}\\
+Leer \cite{Stark2019, VanVerk2013, CastilloSecilla2020}.\\
 
-\textcolor{red}{Daniel: La
-	genómica estudia el genoma como tal (Cromosomas, mutaciones y
-	variaciones tanto de nucleótidos concretos como de regiones del genoma), sin embargo la transcriptómica estudia las transcripciones de los genes, transcripciones que luego son convertidas a proteínas. Tanto RNA-seq como microRNA, se enmarcan en el ámbito de transcriptómica.}
-
-
+Este trabajo se enmarca dentro de la transcriptómica, y está basado en datos obtenidos mediante RNA-Seq, técnica en la que se cuentan distintas lecturas de cada gen para ver si están sobreexpresados o infraexpresados, para finalmente comparar esas expresiones con una referencia (por ejemplo, enfermos contra sanos). Como sólo se realizan cuentas de la expresión de los genes, el RNA-Seq de un individuo no permite su identificación, por lo que los datos a menudo son accesibles de manera abierta.

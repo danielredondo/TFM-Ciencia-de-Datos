@@ -67,7 +67,7 @@ ggplot(stats) +
   scale_y_continuous(expand = c(0,0), limits = c(0, 1.02)) +
   scale_fill_manual(values = c("turquoise4", "steelblue3")) +
   ggtitle("Incidencia de cáncer en el mundo, 2018",
-          "Distribución de casos por sexo y localización anatómica. \nFuente: Global Cancer Observatory (Organización Mundial de la Salud).") +
+          "Distribución de casos por sexo y localización anatómica. \nFuente: Global Cancer Observatory, Organización Mundial de la Salud.") +
   theme(axis.line.x = element_blank(),
         axis.text.y = element_blank(),
         axis.text.x = element_text(size = 14, color = "black", family = "Perpetua", face = "bold"),
