@@ -83,7 +83,7 @@ ui <- dashboardPage(
                           width = "50%"
                           ),
               
-              plotOutput("sankey", width = "50%")
+              plotOutput("sankey", width = "75%")
       ),
       
       # Tab 3
@@ -255,6 +255,10 @@ server <- function(input, output){
             axis.ticks = element_blank(),
             panel.grid = element_blank()) 
     })
+  
+  
+  # Esto se puede mejorar para que calcule los mejores 50 genes y luego sólo tenga que hacer un subset de esa tabla
+  # seleccionando sólo los primeros X elementos, para que reaccione antes la aplicación web.
   
   output$genes_mrmr <- renderTable({
     # Método mRMR (mínima redundancia, máxima relevancia)
