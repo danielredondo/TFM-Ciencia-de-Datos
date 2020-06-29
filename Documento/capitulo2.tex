@@ -15,15 +15,13 @@ Para medir en la población el impacto del cáncer se utilizan principalmente cu
 
 Además, se puede examinar la evolución de cada indicador a lo largo del tiempo, hablando así de tendencias de la incidencia, de la mortalidad, de la supervivencia o de la prevalencia.\\
 
-\textcolor{blue}{(Ver si se incluyen tendencias, sería conveniente al menos para incidencia y/o mortalidad)}
-
 % ---------------------------------
 
 \section{Fuentes de información}
 
 A nivel mundial, las estadísticas de cáncer las proporciona el \textit{Global Cancer Observatory} (GCO), una plataforma web de la \textit{International Agency for Research on Cancer}, de la Organización Mundial de la Salud \cite{Bray2018, GCO}. El organismo equivalente al GCO a nivel europeo es el \textit{European Cancer Information System} (ECIS), de reciente creación y apoyado por la Comisión Europea \cite{ECIS, ECIS2}.\\
 
-Aunque estos organismos proporcionan estadísticas sobre cáncer en España, también existen fuentes a nivel nacional que cuentan con datos más actualizados y con distinta metodología. La Red Española de Registros de Cáncer (REDECAN) publica periódicamente datos sobre incidencia y supervivencia de cáncer en España \cite{REDECAN2020, Guevara2019}, mientras que las estadísticas de mortalidad por cáncer se pueden calcular a partir de las defunciones que publica el Ministerio de Sanidad, Consumo y Bienestar Social del Gobierno de España \cite{MSCBS} y la población que proporciona el Instituto Nacional de Estadística \cite{INEpob}.\\
+Aunque estos organismos proporcionan estadísticas sobre cáncer en España, también existen fuentes a nivel nacional que cuentan con datos más actualizados y con distinta metodología. La Red Española de Registros de Cáncer (REDECAN) publica periódicamente datos sobre incidencia y supervivencia de cáncer en España \cite{REDECAN2020, Guevara2019}, mientras que las estadísticas de mortalidad por cáncer se pueden calcular a partir de las defunciones que publica el Ministerio de Sanidad, Consumo y Bienestar Social (MSCBS) del Gobierno de España \cite{MSCBS} y la población que proporciona el Instituto Nacional de Estadística \cite{INEpob}.\\
 
 \textcolor{red}{SUPERVIVENCIA: CONCORD y/o EUROCARE}.
 
@@ -39,9 +37,9 @@ Con respecto a las medidas usadas para reportar la incidencia, la más sencilla 
 
 $$\text{TB}  = 100.000 \cdot \dfrac{\text{Número de casos nuevos}}{\text{Personas-año a riesgo}}$$\\
 
-Para permitir comparaciones entre distintas poblaciones, o la misma población en momentos distintos, es necesario tener en cuenta la estructura de edad de la población. Para responder a esta motivación se define la tasa estandarizada por edad (ASR por sus siglas en inglés, \textit{Age-Standardised Rate}) como aquella tasa que habría en la población de estudio si tuviese exactamente la misma estructura de edad que una población estándar predefinida \cite{IARC1995}. La definición de la tasa estandarizada por edad para 18 grupos de edad quinquenales (0-4 años, 5-9 años, $\dots$, 80-84 años, 85 años y más) es la siguiente:
+Para permitir comparaciones entre distintas poblaciones, o la misma población en momentos distintos, es necesario tener en cuenta la estructura de edad de la población. Para responder a esta motivación se define la tasa estandarizada por edad (TE) como aquella tasa que habría en la población de estudio si tuviese exactamente la misma estructura de edad que una población estándar predefinida \cite{IARC1995}. La definición de la tasa estandarizada por edad para 18 grupos de edad quinquenales (0-4 años, 5-9 años, $\dots$, 80-84 años, 85 años y más) es la siguiente:
 
-$$\text{ASR} = \sum_{i = 1}^{18} \omega_i \dfrac{N_i}{P_i} $$
+$$\text{TE} = \sum_{i = 1}^{18} \omega_i \dfrac{N_i}{P_i} $$
 donde $N_i$ y $P_i$ son respectivamente el número de casos incidentes y la población en el $i$-ésimo grupo de edad, y $\omega_i$ es el peso que toma la población de referencia en el grupo $i$-ésimo, con $\sum_{i = 1}^{18}\omega_i = 100.000$. Los valores de ${\omega_i}$ están predefinidos en base a poblaciones estándar, siendo las más utilizadas en nuestro contexto las siguientes:
 
 \begin{itemize}
@@ -85,7 +83,7 @@ En la Tabla 1 se muestran los pesos para cada una de las poblaciones de referenc
 	\end{tabular}
 \end{table}
 
-Para utilizar notación internacional, la tasa estandarizada por la población mundial se notará ASR-W (de \textit{World standard population}), la tasa estandarizada por la población europea de 1976 se notará ASR-oE (\textit{old European standard population}) y la de 2013 se notará ASR-nE (\textit{new European standard population}).\\
+Para utilizar notación internacional, la tasa estandarizada por la población mundial se notará TE-W (de \textit{World standard population}), la tasa estandarizada por la población europea de 1976 se notará TE-oE (\textit{old European standard population}) y la de 2013 se notará TE-nE (\textit{new European standard population}).\\
 
 
 \subsection{Incidencia del total del cáncer excepto piel no melanoma}
@@ -96,88 +94,86 @@ Para dar una perspectiva global del cáncer y sus diferentes tipos, en la \textc
 
 \textbf{\textcolor{red}{Figura X}}. Gráfico de mosaico con la incidencia estimada de cáncer excepto piel no melanoma en el mundo para el año 2018. Ocho localizaciones anatómicas más frecuentes en ambos sexos. Fuente: \textit{Global Cancer Observatory}, Organización Mundial de la Salud \cite{GCO}.
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/marimekko_gco.png} \\
+	\includegraphics[width=1\textwidth]{figuras/marimekko_gco_incidencia.png} \\
 \end{center}
 
-El cáncer de pulmón es el más frecuente en todo el mundo, seguido por los cánceres de mama, colon-recto, próstata, estómago, hígado, esófago y cuello uterino. En la mayoría de las localizaciones anatómicas el cáncer es más frecuente en hombres que en mujeres.\\
+El cáncer de pulmón es el más frecuente en todo el mundo, seguido por los cánceres de mama, colon-recto, próstata, estómago, hígado, esófago y cuello uterino. En la mayoría de las localizaciones anatómicas el cáncer es más frecuente en hombres que en mujeres \textcolor{red}{(Figura X)}.\\
 
-\textbf{\textcolor{red}{Tabla X}}. Incidencia del total del cáncer excepto piel no melanoma en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (ASR-W),  tasa estandarizada por la antigua población europea (ASR-oE) y  tasa estandarizada por la nueva población europea (ASR-nE).
+\textbf{\textcolor{red}{Tabla X}}. Incidencia del total del cáncer excepto piel no melanoma en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (TE-W),  tasa estandarizada por la antigua población europea (TE-oE) y  tasa estandarizada por la nueva población europea (TE-nE).
 
 \begin{table}[H]
 	\begin{tabular}{|c|l|c|r|r|r|r|r|}
 		\hline		
 
-\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & Fuente & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{ASR-W} & \multicolumn{1}{|c|}{ASR-oE} & \multicolumn{1}{|c|}{ASR-nE}\\\hline
-
-\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 8.818.685 & 229,0 & 204,7 &  & \\
-& Europa & ECIS \cite{ECIS} & 2.059.673 & 572,9 & 302,7 & 436,0 & 651,7\\
-& España & ECIS \cite{ECIS} & 142.353 & 625,6 & 309,7 & 444,7 & 658,6\\\hline
-\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 8.218.216 & 217,3 & 175,6 &  & \\
-& Europa & ECIS \cite{ECIS} & 1.851.644 & 481,8 & 242,7 & 332,6 & 451,2\\
-& España & ECIS \cite{ECIS} & 106.647 & 451,1 & 218,4 & 298,5 & 401,7\\\hline
-\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 17.036.901 & 223,2 & 187,8 &  & \\
-& Europa & ECIS \cite{ECIS} & 3.911.317 & 525,8 & 266,7 & 374,3 & 531,9\\
-& España & ECIS \cite{ECIS} & 249.000 & 536,7 & 259,4 & 363,8 & 515,3\\\hline
+		\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & Fuente & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{TE-W} & \multicolumn{1}{|c|}{TE-oE} & \multicolumn{1}{|c|}{TE-nE}\\\hline
+		
+		\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 8.818.685 & 229,0 & 204,7 &  & \\
+		& Europa & ECIS \cite{ECIS} & 2.059.673 & 572,9 & 302,7 & 436,0 & 651,7\\
+		& España & ECIS \cite{ECIS} & 142.353 & 625,6 & 309,7 & 444,7 & 658,6\\\hline
+		\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 8.218.216 & 217,3 & 175,6 &  & \\
+		& Europa & ECIS \cite{ECIS} & 1.851.644 & 481,8 & 242,7 & 332,6 & 451,2\\
+		& España & ECIS \cite{ECIS} & 106.647 & 451,1 & 218,4 & 298,5 & 401,7\\\hline
+		\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 17.036.901 & 223,2 & 187,8 &  & \\
+		& Europa & ECIS \cite{ECIS} & 3.911.317 & 525,8 & 266,7 & 374,3 & 531,9\\
+		& España & ECIS \cite{ECIS} & 249.000 & 536,7 & 259,4 & 363,8 & 515,3\\\hline
 	\end{tabular}
 \end{table}
 
-A nivel nacional, REDECAN ha publicado estimaciones de la incidencia en España más recientes a las mostradas en la \textcolor{red}{Tabla X}, correspondientes al año 2020, \cite{REDECAN2020}. En este análisis se estima el número de casos de cáncer excepto piel no melanoma en 277.394 casos (57,8\% en hombres), con una tasa bruta de 588,0 por 100.000 habitantes y tasas estandarizadas de 280,3 (ASR-W), 399,4 (ASR-oE) y 579,8 (ASR-nE).
+A nivel nacional, REDECAN ha publicado estimaciones de la incidencia en España más recientes a las mostradas en la \textcolor{red}{Tabla X}, correspondientes al año 2020, \cite{REDECAN2020}. En este análisis se estima el número de casos de cáncer excepto piel no melanoma en 277.394 casos (57,8\% en hombres), con una tasa bruta de 588,0 por 100.000 habitantes y tasas estandarizadas de 280,3 (TE-W), 399,4 (TE-oE) y 579,8 (TE-nE).
 
 \subsection{Incidencia de cáncer de hígado}
 
-El cáncer de hígado es el sexto cáncer más frecuente del mundo (\textcolor{red}{Figura X}), con más de 840.000 casos nuevos anuales en todo el mundo, 82.000 de ellos en Europa y 6.600 en España. Es un cáncer más frecuente en hombres que en mujeres: por cada caso en mujeres hay 2,4 casos en hombres. En ambos sexos, la ASR-W de España (6,5) es mayor que la de Europa (5,1) aunque mucho menor que la del mundo (9,3).\\
+El cáncer de hígado es el sexto cáncer más frecuente del mundo (\textcolor{red}{Figura X}), con más de 840.000 casos nuevos anuales en todo el mundo, 82.000 de ellos en Europa y 6.600 en España \textcolor{red}{(Tabla X)}. Es un cáncer más frecuente en hombres que en mujeres: por cada caso en mujeres hay 2,4 casos en hombres. En ambos sexos, la TE-W de España (6,5) es mayor que la de Europa (5,1) aunque mucho menor que la del mundo (9,3).\\
 
 \newpage
-\textbf{\textcolor{red}{Tabla X}}. Incidencia de cáncer de hígado en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (ASR-W),  tasa estandarizada por la antigua población europea (ASR-oE) y  tasa estandarizada por la nueva población europea (ASR-nE).
+\textbf{\textcolor{red}{Tabla X}}. Incidencia de cáncer de hígado en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (TE-W),  tasa estandarizada por la antigua población europea (TE-oE) y  tasa estandarizada por la nueva población europea (TE-nE).
 
 \begin{table}[H]
 	\begin{tabular}{|c|l|c|r|r|r|r|r|}
 		\hline		
 		
-		\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & Fuente & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{ASR-W} & \multicolumn{1}{|c|}{ASR-oE} & \multicolumn{1}{|c|}{ASR-nE}\\\hline
+		\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & Fuente & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{TE-W} & \multicolumn{1}{|c|}{TE-oE} & \multicolumn{1}{|c|}{TE-nE}\\\hline
 		
-\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 596.574 & 15,5 & 13,9 &  & \\
-& Europa & ECIS \cite{ECIS} & 55.825 & 15,5 & 8,0 & 11,7 & 17,7\\
-& España & ECIS \cite{ECIS} & 4.976 & 21,9 & 10,9 & 15,7 & 22,5\\\hline
-\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 244.506 & 6,5 & 4,9 &  & \\
-& Europa & ECIS \cite{ECIS} & 26.641 & 6,9 & 2,7 & 4,0 & 6,3\\
-& España & ECIS \cite{ECIS} & 1.654 & 7,0 & 2,4 & 3,6 & 6,0\\\hline
-\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 841.080 & 11,0 & 9,3 &  & \\
-& Europa & ECIS \cite{ECIS} & 82.466 & 11,1 & 5,1 & 7,4 & 11,3\\
-& España & ECIS \cite{ECIS} & 6.630 & 14,3 & 6,5 & 9,3 & 13,6\\\hline
-		
+		\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 596.574 & 15,5 & 13,9 &  & \\
+		& Europa & ECIS \cite{ECIS} & 55.825 & 15,5 & 8,0 & 11,7 & 17,7\\
+		& España & ECIS \cite{ECIS} & 4.976 & 21,9 & 10,9 & 15,7 & 22,5\\\hline
+		\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 244.506 & 6,5 & 4,9 &  & \\
+		& Europa & ECIS \cite{ECIS} & 26.641 & 6,9 & 2,7 & 4,0 & 6,3\\
+		& España & ECIS \cite{ECIS} & 1.654 & 7,0 & 2,4 & 3,6 & 6,0\\\hline
+		\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 841.080 & 11,0 & 9,3 &  & \\
+		& Europa & ECIS \cite{ECIS} & 82.466 & 11,1 & 5,1 & 7,4 & 11,3\\
+		& España & ECIS \cite{ECIS} & 6.630 & 14,3 & 6,5 & 9,3 & 13,6\\\hline
+				
 	\end{tabular}
 \end{table}
 
-En las estimaciones publicadas por REDECAN para 2020 se estiman en España 6.595 casos de cáncer de hígado (75,4\% en hombres), con una tasa bruta de 14,0 y tasas estandarizadas de 6,5 (ASR-W), 9,4 (ASR-oE) y 13,9 (ASR-nE) \cite{REDECAN2020}.
+En las estimaciones publicadas por REDECAN para 2020 se estiman en España 6.595 casos de cáncer de hígado (75,4\% en hombres), con una tasa bruta de 14,0 y tasas estandarizadas de 6,5 (TE-W), 9,4 (TE-oE) y 13,9 (TE-nE) \cite{REDECAN2020}.
 
 \subsection{Incidencia de cáncer de colon-recto}
 
-El cáncer de colon-recto es el tercer cáncer más frecuente del mundo (\textcolor{red}{Figura X}), con más de 1.800.000 casos nuevos anuales en todo el mundo. En Europa y España es el cáncer más frecuente en ambos sexos con 510.000 casos anuales en Europa y 37.000 en España. Es un cáncer ligeramente más frecuente en hombres que en mujeres: por cada caso en mujeres hay 1,2 casos en hombres. En ambos sexos, la ASR-W de España (81,1) es mayor que la de Europa (68,8) y la del mundo (24,2), lo que puede deberse a una mayor exposición a factores de riesgo como el tipo de dieta o la ausencia de un programa de cribado a nivel nacional \cite{Zavoral2009}.\\
+El cáncer de colon-recto es el tercer cáncer más frecuente del mundo (\textcolor{red}{Figura X}), con más de 1.800.000 casos nuevos anuales en todo el mundo. En Europa y España es el cáncer más frecuente en ambos sexos con 510.000 casos anuales en Europa y 37.000 en España \textcolor{red}{(Tabla X)}. Es un cáncer ligeramente más frecuente en hombres que en mujeres: por cada caso en mujeres hay 1,2 casos en hombres. En ambos sexos, la TE-W de España (81,1) es mayor que la de Europa (68,8) y la del mundo (24,2), lo que puede deberse a una mayor exposición a factores de riesgo como el tipo de dieta o la ausencia de un programa de cribado a nivel nacional \cite{Zavoral2009}.\\
 
-\textbf{\textcolor{red}{Tabla X}}. Incidencia de cáncer de colon-recto en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (ASR-W),  tasa estandarizada por la antigua población europea (ASR-oE) y  tasa estandarizada por la nueva población europea (ASR-nE).
+\textbf{\textcolor{red}{Tabla X}}. Incidencia de cáncer de colon-recto en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (TE-W),  tasa estandarizada por la antigua población europea (TE-oE) y  tasa estandarizada por la nueva población europea (TE-nE).
 
 \begin{table}[H]
 	\begin{tabular}{|c|l|c|r|r|r|r|r|}
 		\hline		
 		
-		\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & Fuente & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{ASR-W} & \multicolumn{1}{|c|}{ASR-oE} & \multicolumn{1}{|c|}{ASR-nE}\\\hline
+		\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & Fuente & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{TE-W} & \multicolumn{1}{|c|}{TE-oE} & \multicolumn{1}{|c|}{TE-nE}\\\hline
 		
-\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 1.026.215 & 26,6 & 23,6 &  & \\
-& Europa & ECIS \cite{ECIS} & 275.519 & 76,6 & 38,1 & 56,8 & 88,9\\
-& España & ECIS \cite{ECIS} & 23.013 & 101,1 & 45,8 & 68,5 & 107,2\\\hline
-\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 823.303 & 21,8 & 16,3 &  & \\
-& Europa & ECIS \cite{ECIS} & 236.101 & 61,4 & 25,2 & 37,0 & 56,3\\
-& España & ECIS \cite{ECIS} & 14.642 & 61,9 & 23,6 & 34,9 & 53,5\\\hline
-\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 1.849.518 & 24,2 & 19,7 &  & \\
-& Europa & ECIS \cite{ECIS} & 511.620 & 68,8 & 30,8 & 45,6 & 70,0\\
-& España & ECIS \cite{ECIS} & 37.655 & 81,1 & 33,9 & 50,4 & 77,5\\\hline
-
-		
+		\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 1.026.215 & 26,6 & 23,6 &  & \\
+		& Europa & ECIS \cite{ECIS} & 275.519 & 76,6 & 38,1 & 56,8 & 88,9\\
+		& España & ECIS \cite{ECIS} & 23.013 & 101,1 & 45,8 & 68,5 & 107,2\\\hline
+		\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 823.303 & 21,8 & 16,3 &  & \\
+		& Europa & ECIS \cite{ECIS} & 236.101 & 61,4 & 25,2 & 37,0 & 56,3\\
+		& España & ECIS \cite{ECIS} & 14.642 & 61,9 & 23,6 & 34,9 & 53,5\\\hline
+		\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 1.849.518 & 24,2 & 19,7 &  & \\
+		& Europa & ECIS \cite{ECIS} & 511.620 & 68,8 & 30,8 & 45,6 & 70,0\\
+		& España & ECIS \cite{ECIS} & 37.655 & 81,1 & 33,9 & 50,4 & 77,5\\\hline
 	\end{tabular}
 \end{table}
 
-En las estimaciones publicadas por REDECAN para 2020 se estiman en España 44.231 casos de cáncer de colon-recto (58,9\% en hombres), con una tasa bruta de 93,8 y tasas estandarizadas de 40,0 (ASR-W), 59,5 (ASR-oE) y 91,9 (ASR-nE) \cite{REDECAN2020}.
+En las estimaciones publicadas por REDECAN para 2020 se estiman en España 44.231 casos de cáncer de colon-recto (58,9\% en hombres), con una tasa bruta de 93,8 y tasas estandarizadas de 40,0 (TE-W), 59,5 (TE-oE) y 91,9 (TE-nE) \cite{REDECAN2020}.
 
 % ---------------------------------
 
@@ -187,19 +183,97 @@ En las estimaciones publicadas por REDECAN para 2020 se estiman en España 44.23
 
 Los indicadores para medir la mortalidad por cáncer son los mismos que para la incidencia, cambiando número de casos por defunciones por cáncer. Es importante destacar que la mortalidad por cáncer es por definición aquella mortalidad que es causada directamente por el cáncer. En este sentido, una persona diagnosticada de cáncer que falleciese por otras causas no puede ser considerada como fallecida por cáncer, sino fallecida con cáncer.\\
 
-Aunque ECIS \cite{ECIS} reporta mortalidad por cáncer en España para el año 2018, la mortalidad que se presenta a nivel nacional es la que proporciona el Ministerio de Sanidad, Consumo y Bienestar Social \cite{MSCBS}, al tratarse de datos observados basados en certificados médicos de defunción y no estimaciones, por lo que se consideran datos más fiables.
+Aunque ECIS \cite{ECIS} reporta mortalidad por cáncer en España para el año 2018, la mortalidad que se presenta a continuación a nivel nacional es la que proporciona el MSCBS del Gobierno de España \cite{MSCBS}, al tratarse de datos observados basados en certificados médicos de defunción y no estimaciones, por lo que se consideran datos más fiables.
  
 \subsection{Mortalidad del total del cáncer excepto piel no melanoma}
 
-texto
+En el mundo se producen más de 9 millones de defunciones por cáncer anualmente, siendo esta enfermedad la segunda causa de muerte a nivel global, por detrás de las enfermedades cardiovasculares. Una de cada 6 muertes es causa directa del cáncer \cite{WorldHealthOrganization2018}.\\
+
+En ambos sexos, los cánceres que provocan más defunciones son los de pulmón, colon-recto y estómago, mientras que en mujeres el cáncer con más defunciones es el cáncer de mama y en hombres el de pulmón \textcolor{red}{(Figura X)}.\\
+
+\textbf{\textcolor{red}{Figura X}}. Gráfico de mosaico con la mortalidad estimada por cáncer excepto piel no melanoma en el mundo para el año 2018. Ocho localizaciones anatómicas con más defunciones en ambos sexos. Fuente: \textit{Global Cancer Observatory}, Organización Mundial de la Salud \cite{GCO}.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/marimekko_gco_mortalidad.png} \\
+\end{center}
+
+En España se producen más de 100.000 muertes anuales por cáncer, siendo la tasa de mortalidad inferior a la europea y a la mundial tanto en ambos sexos como en hombres y mujeres \textcolor{red}{(Tabla X)}.\\
+
+\textbf{\textcolor{red}{Tabla X}}. Mortalidad por total del cáncer excepto piel no melanoma en 2018, por sexo y población. Número de defunciones (N), tasa bruta (TB), tasa estandarizada por la población mundial (TE-W),  tasa estandarizada por la antigua población europea (TE-oE) y  tasa estandarizada por la nueva población europea (TE-nE).
+
+\begin{table}[H]
+	\begin{tabular}{|c|l|r|r|r|r|r|r|}
+		\hline		
+		
+		\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & \multicolumn{1}{|c|}{Fuente} & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{TE-W} & \multicolumn{1}{|c|}{TE-oE} & \multicolumn{1}{|c|}{TE-nE}\\\hline
+		
+		\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 5.347.295 & 138,9 & 121,9 &  & \\
+		& Europa & ECIS \cite{ECIS} & 1.077.986 & 299,8 & 143,2 & 217,4 & 355,4\\
+		& España & MSCBS \cite{MSCBS} & 65.610 & 286,4 & 121,3 & 186,8 & 314,1\\\hline
+		\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 4.142.577 & 109,5 & 82,7 &  & \\
+		& Europa & ECIS \cite{ECIS} & 851.723 & 221,6 & 86,4 & 128,1 & 201,0\\
+		& España & MSCBS \cite{MSCBS} & 42.248 & 177,4 & 63,2 & 94,6 & 151,1\\\hline
+		\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 9.489.872 & 124,3 & 100,5 &  & \\
+		& Europa & ECIS \cite{ECIS} & 1.929.709 & 259,4 & 110,8 & 165,8 & 263,9\\
+		& España & MSCBS \cite{MSCBS} & 107.858 & 230,8 & 89,4 & 135,4 & 221,2\\\hline
+
+	\end{tabular}
+\end{table}
+
 
 \subsection{Mortalidad de cáncer de hígado}
 
-texto
+Si bien el cáncer de hígado es el sexto cáncer más incidente del mundo, en mortalidad ocupa la cuarta posición, siendo la causa de 782.000 defunciones anuales \textcolor{red}{(Figura X)}. La muerte por cáncer de hígado es mucho más frecuente en hombres que en mujeres. En Europa el cáncer de hígado causa cerca de 80.000 muertes y en España unas 5.100, con unas tasas de mortalidad muy similares y por debajo de la tasa mundial \textcolor{red}{(Tabla X)}.\\
+
+\textbf{\textcolor{red}{Tabla X}}. Mortalidad por cáncer de hígado en 2018, por sexo y población. Número de defunciones (N), tasa bruta (TB), tasa estandarizada por la población mundial (TE-W),  tasa estandarizada por la antigua población europea (TE-oE) y  tasa estandarizada por la nueva población europea (TE-nE).
+
+
+\begin{table}[H]
+	\begin{tabular}{|c|l|r|r|r|r|r|r|}
+		\hline		
+		\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & \multicolumn{1}{|c|}{Fuente} & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{TE-W} & \multicolumn{1}{|c|}{TE-oE} & \multicolumn{1}{|c|}{TE-nE}\\\hline
+		
+		\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 548.375 & 14,2 & 12,7 &  & \\
+		& Europa & ECIS \cite{ECIS} & 50.365 & 14,0 & 6,8 & 10,3 & 16,4\\
+		& España & MSCBS \cite{MSCBS} & 3.577 & 15,6 & 7,0 & 10,7 & 17,0\\\hline
+		\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 233.256 & 6,2 & 4,6 &  & \\
+		& Europa & ECIS \cite{ECIS} & 27.010 & 7,0 & 2,4 & 3,8 & 6,3\\
+		& España & MSCBS \cite{MSCBS} & 1.564 & 6,6 & 2,0 & 3,2 & 5,6\\\hline
+		\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 781.631 & 10,2 & 8,5 &  & \\
+		& Europa & ECIS \cite{ECIS} & 77.375 & 10,4 & 4,4 & 6,6 & 10,6\\
+		& España & MSCBS \cite{MSCBS} & 5.141 & 11,0 & 4,4 & 6,7 & 10,7\\\hline
+
+		
+	\end{tabular}
+\end{table}
 
 \subsection{Mortalidad de cáncer de colon-recto}
 
-texto
+El cáncer de colon-recto es el segundo cáncer que provoca más defunciones, con más de 880.000 defunciones anuales en todo el mundo \textcolor{red}{(Figura X)}. La defunción por cáncer de colon-recto es ligeramente más frecuente en hombres que en mujeres. Las tasas de mortalidad en España y Europa son muy similares, por encima en ambos casos de la tasa mundial \textcolor{red}{(Tabla X)}.\\
+
+\textbf{\textcolor{red}{Tabla X}}. Mortalidad por cáncer de colon-recto en 2018, por sexo y población. Número de defunciones (N), tasa bruta (TB), tasa estandarizada por la población mundial (TE-W),  tasa estandarizada por la antigua población europea (TE-oE) y  tasa estandarizada por la nueva población europea (TE-nE).
+
+
+\begin{table}[H]
+	\begin{tabular}{|c|l|r|r|r|r|r|r|}
+		\hline		
+		
+		\multicolumn{1}{|c|}{Sexo} & \multicolumn{1}{|c|}{Población} & \multicolumn{1}{|c|}{Fuente} & \multicolumn{1}{|c|}{N} & \multicolumn{1}{|c|}{TB} & \multicolumn{1}{|c|}{TE-W} & \multicolumn{1}{|c|}{TE-oE} & \multicolumn{1}{|c|}{TE-nE}\\\hline
+		
+		\multirow{3}{*}{Hombres} & Mundo & GCO \cite{GCO} & 484.224 & 12,6 & 10,8 &  & \\
+		& Europa & ECIS \cite{ECIS} & 131.155 & 36,5 & 16,4 & 25,7 & 44,3\\
+		& España & MSCBS \cite{MSCBS} & 9.222 & 40,3 & 15,8 & 25,1 & 44,4\\\hline
+		\multirow{3}{*}{Mujeres} & Mundo & GCO \cite{GCO} & 396.568 & 10,5 & 7,2 &  & \\
+		& Europa & ECIS \cite{ECIS} & 115.059 & 29,9 & 10,0 & 15,6 & 26,6\\
+		& España & MSCBS \cite{MSCBS} & 6.066 & 25,5 & 7,5 & 11,9 & 20,7\\\hline
+		\multirow{3}{*}{\begin{tabular}[c]{@{}c@{}}Ambos\\sexos\end{tabular}} & Mundo & GCO \cite{GCO} & 880.792 & 11,5 & 8,9 &  & \\
+		& Europa & ECIS \cite{ECIS} & 246.214 & 33,1 & 12,8 & 19,9 & 33,8\\
+		& España & MSCBS \cite{MSCBS} & 15.288 & 32,7 & 11,2 & 17,7 & 30,9\\\hline
+
+		
+
+		
+	\end{tabular}
+\end{table}
 
 % ---------------------------------
 

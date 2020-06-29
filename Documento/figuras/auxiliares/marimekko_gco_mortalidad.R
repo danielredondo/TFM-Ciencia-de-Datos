@@ -11,10 +11,7 @@ library(extrafont)
 loadfonts(device = "win")
 
 # Datos: Global Cancer Observatory (World Health Organization)
-stats <- read.csv2("marimekko_gco.csv", encoding = "UTF-8")
-
-# Versión abreviada
-stats <- stats[c(1:8, 12), ]
+stats <- read.csv2("marimekko_gco_mortalidad.csv", encoding = "UTF-8")
 
 casos_otros <- c(stats[nrow(stats), "Hombres"] - sum(stats[1:(nrow(stats) - 1), "Hombres"]),
            stats[nrow(stats), "Mujeres"] - sum(stats[1:(nrow(stats) - 1), "Mujeres"])) %>% as.numeric
@@ -66,8 +63,8 @@ ggplot(stats) +
                      labels = scales::percent, breaks = c(0, 0.25, 0.5, 0.75, 1)) +
   scale_y_continuous(expand = c(0,0), limits = c(0, 1.02)) +
   scale_fill_manual(values = c("turquoise4", "steelblue3")) +
-  ggtitle("Incidencia de cáncer en el mundo, 2018",
-          "Distribución de casos por sexo y localización anatómica. \nFuente: Global Cancer Observatory, Organización Mundial de la Salud.") +
+  ggtitle("Mortalidad por cáncer en el mundo, 2018",
+          "Distribución de defunciones por sexo y localización anatómica. \nFuente: Global Cancer Observatory, Organización Mundial de la Salud.") +
   theme(axis.line.x = element_blank(),
         axis.text.y = element_blank(),
         axis.text.x = element_text(size = 14, color = "black", family = "Perpetua", face = "bold"),
@@ -79,5 +76,5 @@ ggplot(stats) +
         legend.position = "none",
         panel.background = element_blank())
 
-ggsave("marimekko_gco.png", width = 10, height = 10, dpi = 600)
+ggsave("marimekko_gco_mortalidad.png", width = 10, height = 10, dpi = 600)
 
