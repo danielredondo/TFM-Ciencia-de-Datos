@@ -51,8 +51,8 @@ ui <- dashboardPage(
               "Texto",
               # Parte final
               br(), br(), br(),
-              fluidRow(column(6, tags$img(src = "ugr.png", height = "100px")),
-                       column(6, tags$img(src = "knowseq.png", height = "100px")))
+              fluidRow(column(6, tags$img(src = "ugr.png", height = "150px")),
+                       column(6, tags$img(src = "knowseq.png", height = "150px")))
               
       ),
       
