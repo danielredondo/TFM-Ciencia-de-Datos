@@ -19,11 +19,9 @@ Además, se puede examinar la evolución de cada indicador a lo largo del tiempo
 
 \section{Fuentes de información}
 
-A nivel mundial, las estadísticas de cáncer las proporciona el \textit{Global Cancer Observatory} (GCO), una plataforma web de la \textit{International Agency for Research on Cancer}, de la Organización Mundial de la Salud \cite{Bray2018, GCO}. El organismo equivalente al GCO a nivel europeo es el \textit{European Cancer Information System} (ECIS), de reciente creación y apoyado por la Comisión Europea \cite{ECIS, ECIS2}.\\
+A nivel mundial, las estadísticas de incidencia, mortalidad y prevalencia de cáncer las proporciona el \textit{Global Cancer Observatory} (GCO), una plataforma web de la \textit{International Agency for Research on Cancer}, de la Organización Mundial de la Salud \cite{Bray2018, GCO}. El organismo equivalente al GCO a nivel europeo es el \textit{European Cancer Information System} (ECIS), de reciente creación y apoyado por la Comisión Europea \cite{ECIS, ECIS2}. Para conocer la supervivencia, el programa CONCORD \cite{Allemani2018} publica datos a nivel mundial y EUROCARE \cite{DeAngelis2014} a nivel europeo.\\
 
 Aunque estos organismos proporcionan estadísticas sobre cáncer en España, también existen fuentes a nivel nacional que cuentan con datos más actualizados y con distinta metodología. La Red Española de Registros de Cáncer (REDECAN) publica periódicamente datos sobre incidencia y supervivencia de cáncer en España \cite{REDECAN2020, Guevara2019}, mientras que las estadísticas de mortalidad por cáncer se pueden calcular a partir de las defunciones que publica el Ministerio de Sanidad, Consumo y Bienestar Social (MSCBS) del Gobierno de España \cite{MSCBS} y la población que proporciona el Instituto Nacional de Estadística \cite{INEpob}.\\
-
-\textcolor{red}{SUPERVIVENCIA: CONCORD y/o EUROCARE}.
 
 % ---------------------------------
 
@@ -55,9 +53,9 @@ donde $N_i$ y $P_i$ son respectivamente el número de casos incidentes y la pobl
 
 En la Tabla 1 se muestran los pesos para cada una de las poblaciones de referencia mencionadas anteriormente.\\
 
-\newpage
+%\newpage
 \textbf{Tabla 1}. Pesos de las poblaciones estándar para el cálculo de tasas estandarizadas por edad.
-\begin{table}[H]
+\begin{table}[!htb]
 	\begin{tabular}{|r|r|r|r|}
 		\hline		
 		Grupo de edad  &  \begin{tabular}[r]{@{}r@{}}Población estándar\\ mundial\end{tabular}  &  \begin{tabular}[r]{@{}r@{}}Población estándar\\ europea 1976\end{tabular}  &  \begin{tabular}[r]{@{}r@{}}Población estándar\\ europea 2013\end{tabular}\\\hline
@@ -83,22 +81,23 @@ En la Tabla 1 se muestran los pesos para cada una de las poblaciones de referenc
 	\end{tabular}
 \end{table}
 
-Para utilizar notación internacional, la tasa estandarizada por la población mundial se notará TE-M (población mundial), la tasa estandarizada por la población europea de 1976 se notará TE-aE (antigua población europea) y la de 2013 se notará TE-nE (nueva población europea).\\
-
+Para utilizar notación internacional, la tasa estandarizada por la población mundial se notará TE-M (población mundial), la tasa estandarizada por la población europea de 1976 se notará TE-aE (antigua población europea) y la de 2013 se notará TE-nE (nueva población europea).
 
 \subsection{Incidencia del total del cáncer excepto piel no melanoma}
 
 El cáncer de piel no melanoma se suele excluir al reportar datos de incidencia del total del cáncer, debido a que es muy frecuente y cuenta con buen pronóstico, por lo que no se suele registrar en los Registros de Cáncer Poblacionales \cite{Gordon2013, Madan2010}.\\
 
-Para dar una perspectiva global del cáncer y sus diferentes tipos, en la \textcolor{red}{Figura X} se muestran las localizaciones anatómicas más frecuentes de cáncer en el mundo, así como su distribución por sexos.\\
+Para dar una perspectiva global del cáncer y sus diferentes tipos, en la Figura 3 se muestran las localizaciones anatómicas más frecuentes de cáncer en el mundo, así como su distribución por sexos.\\
 
-\textbf{\textcolor{red}{Figura X}}. Gráfico de mosaico con la incidencia estimada de cáncer excepto piel no melanoma en el mundo para el año 2018. Ocho localizaciones anatómicas más frecuentes en ambos sexos. Fuente: \textit{Global Cancer Observatory}, Organización Mundial de la Salud \cite{GCO}.
+\newpage
+\textbf{Figura 3}. Gráfico de mosaico con la incidencia estimada de cáncer excepto piel no melanoma en el mundo para el año 2018. Ocho localizaciones anatómicas más frecuentes en ambos sexos. Fuente: \textit{Global Cancer Observatory}, Organización Mundial de la Salud \cite{GCO}.
 \begin{center}
 	\includegraphics[width=1\textwidth]{figuras/marimekko_gco_incidencia.png} \\
 \end{center}
 
-El cáncer de pulmón es el más frecuente en todo el mundo, seguido por los cánceres de mama, colon-recto, próstata, estómago, hígado, esófago y cuello uterino. En la mayoría de las localizaciones anatómicas el cáncer es más frecuente en hombres que en mujeres \textcolor{red}{(Figura X)}.\\
+El cáncer de pulmón es el más frecuente en todo el mundo, seguido por los cánceres de mama, colon-recto, próstata, estómago, hígado, esófago y cuello uterino. En la mayoría de las localizaciones anatómicas el cáncer es más frecuente en hombres que en mujeres (Figura 3).\\
 
+\newpage
 \textbf{Tabla 2}. Incidencia del total del cáncer excepto piel no melanoma en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (TE-M),  tasa estandarizada por la antigua población europea (TE-aE) y  tasa estandarizada por la nueva población europea (TE-nE).
 
 \begin{table}[H]
@@ -123,7 +122,7 @@ A nivel nacional, REDECAN ha publicado estimaciones de la incidencia en España 
 
 \subsection{Incidencia de cáncer de hígado}
 
-El cáncer de hígado es el sexto cáncer más frecuente del mundo (\textcolor{red}{Figura X}), con más de 840.000 casos nuevos anuales en todo el mundo, 82.000 de ellos en Europa y 6.600 en España (Tabla 3). Es un cáncer más frecuente en hombres que en mujeres: por cada caso en mujeres hay 2,4 casos en hombres. En ambos sexos, la TE-M de España (6,5) es mayor que la de Europa (5,1) aunque mucho menor que la del mundo (9,3).\\
+El cáncer de hígado es el sexto cáncer más frecuente del mundo (Figura 3), con más de 840.000 casos nuevos anuales en todo el mundo, 82.000 de ellos en Europa y 6.600 en España (Tabla 3). Es un cáncer más frecuente en hombres que en mujeres: por cada caso en mujeres hay 2,4 casos en hombres. En ambos sexos, la TE-M de España (6,5) es mayor que la de Europa (5,1) aunque mucho menor que la del mundo (9,3).\\
 
 \newpage
 \textbf{Tabla 3}. Incidencia de cáncer de hígado en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (TE-M),  tasa estandarizada por la antigua población europea (TE-aE) y  tasa estandarizada por la nueva población europea (TE-nE).
@@ -151,7 +150,7 @@ En las estimaciones publicadas por REDECAN para 2020 se estiman en España 6.595
 
 \subsection{Incidencia de cáncer de colon-recto}
 
-El cáncer de colon-recto es el tercer cáncer más frecuente del mundo (\textcolor{red}{Figura X}), con más de 1.800.000 casos nuevos anuales en todo el mundo. En Europa y España es el cáncer más frecuente en ambos sexos con 510.000 casos anuales en Europa y 37.000 en España (Tabla 4). Es un cáncer ligeramente más frecuente en hombres que en mujeres: por cada caso en mujeres hay 1,2 casos en hombres. En ambos sexos, la TE-M de España (81,1) es mayor que la de Europa (68,8) y la del mundo (24,2), lo que puede deberse a una mayor exposición a factores de riesgo como el tipo de dieta o la ausencia de un programa de cribado a nivel nacional \cite{Zavoral2009}.\\
+El cáncer de colon-recto es el tercer cáncer más frecuente del mundo (Figura 3), con más de 1.800.000 casos nuevos anuales en todo el mundo. En Europa y España es el cáncer más frecuente en ambos sexos con 510.000 casos anuales en Europa y 37.000 en España (Tabla 4). Es un cáncer ligeramente más frecuente en hombres que en mujeres: por cada caso en mujeres hay 1,2 casos en hombres. En ambos sexos, la TE-M de España (81,1) es mayor que la de Europa (68,8) y la del mundo (24,2), lo que puede deberse a una mayor exposición a factores de riesgo como el tipo de dieta o la ausencia de un programa de cribado a nivel nacional \cite{Zavoral2009}.\\
 
 \textbf{Tabla 4}. Incidencia de cáncer de colon-recto en 2018, por sexo y población. Número de casos nuevos (N), tasa bruta (TB), tasa estandarizada por la población mundial (TE-M),  tasa estandarizada por la antigua población europea (TE-aE) y  tasa estandarizada por la nueva población europea (TE-nE).
 
@@ -189,9 +188,9 @@ Aunque ECIS \cite{ECIS} reporta mortalidad por cáncer en España para el año 2
 
 En el mundo se producen más de 9 millones de defunciones por cáncer anualmente, siendo esta enfermedad la segunda causa de muerte a nivel global, por detrás de las enfermedades cardiovasculares. Una de cada 6 muertes es causa directa del cáncer \cite{WorldHealthOrganization2018}.\\
 
-En ambos sexos, los cánceres que provocan más defunciones son los de pulmón, colon-recto y estómago, mientras que en mujeres el cáncer con más defunciones es el cáncer de mama y en hombres el de pulmón \textcolor{red}{(Figura X)}.\\
+En ambos sexos, los cánceres que provocan más defunciones son los de pulmón, colon-recto y estómago, mientras que en mujeres el cáncer con más defunciones es el cáncer de mama y en hombres el de pulmón (Figura 4).\\
 
-\textbf{\textcolor{red}{Figura X}}. Gráfico de mosaico con la mortalidad estimada por cáncer excepto piel no melanoma en el mundo para el año 2018. Ocho localizaciones anatómicas con más defunciones en ambos sexos. Fuente: \textit{Global Cancer Observatory}, Organización Mundial de la Salud \cite{GCO}.
+\textbf{Figura 4}. Gráfico de mosaico con la mortalidad estimada por cáncer excepto piel no melanoma en el mundo para el año 2018. Ocho localizaciones anatómicas con más defunciones en ambos sexos. Fuente: \textit{Global Cancer Observatory}, Organización Mundial de la Salud \cite{GCO}.
 \begin{center}
 	\includegraphics[width=1\textwidth]{figuras/marimekko_gco_mortalidad.png} \\
 \end{center}
@@ -222,7 +221,7 @@ En España se producen más de 100.000 muertes anuales por cáncer, siendo la ta
 
 \subsection{Mortalidad de cáncer de hígado}
 
-Si bien el cáncer de hígado es el sexto cáncer más incidente del mundo, en mortalidad ocupa la cuarta posición \textcolor{red}{(Figura X)}, siendo la causa de 782.000 defunciones anuales \textcolor{red}{(Figura X)}. La muerte por cáncer de hígado es mucho más frecuente en hombres que en mujeres. En Europa el cáncer de hígado causa cerca de 80.000 muertes y en España unas 5.100, con unas tasas de mortalidad muy similares y por debajo de la tasa mundial (Tabla 6).\\
+Si bien el cáncer de hígado es el sexto cáncer más incidente del mundo, en mortalidad ocupa la cuarta posición, siendo la causa de 782.000 defunciones anuales (Figura 4). La muerte por cáncer de hígado es mucho más frecuente en hombres que en mujeres. En Europa el cáncer de hígado causa cerca de 80.000 muertes y en España unas 5.100, con unas tasas de mortalidad muy similares y por debajo de la tasa mundial (Tabla 6).\\
 
 \textbf{Tabla 6}. Mortalidad por cáncer de hígado en 2018, por sexo y población. Número de defunciones (N), tasa bruta (TB), tasa estandarizada por la población mundial (TE-M),  tasa estandarizada por la antigua población europea (TE-aE) y  tasa estandarizada por la nueva población europea (TE-nE).
 
@@ -248,7 +247,7 @@ Si bien el cáncer de hígado es el sexto cáncer más incidente del mundo, en m
 
 \subsection{Mortalidad de cáncer de colon-recto}
 
-El cáncer de colon-recto es el segundo cáncer que provoca más defunciones, con más de 880.000 defunciones anuales en todo el mundo \textcolor{red}{(Figura X)}. La defunción por cáncer de colon-recto es ligeramente más frecuente en hombres que en mujeres. Las tasas de mortalidad en España y Europa son muy similares, por encima en ambos casos de la tasa mundial (Tabla 7).\\
+El cáncer de colon-recto es el segundo cáncer que provoca más defunciones, con más de 880.000 defunciones anuales en todo el mundo (Figura 4). La defunción por cáncer de colon-recto es ligeramente más frecuente en hombres que en mujeres. Las tasas de mortalidad en España y Europa son muy similares, por encima en ambos casos de la tasa mundial (Tabla 7).\\
 
 \textbf{Tabla 7}. Mortalidad por cáncer de colon-recto en 2018, por sexo y población. Número de defunciones (N), tasa bruta (TB), tasa estandarizada por la población mundial (TE-M),  tasa estandarizada por la antigua población europea (TE-aE) y  tasa estandarizada por la nueva población europea (TE-nE).
 
@@ -279,23 +278,13 @@ El cáncer de colon-recto es el segundo cáncer que provoca más defunciones, co
 
 \textcolor{red}{Supervivencia se calcula principalmente a partir de inc, mort y tablas de vida población general}
 
-\subsection{Supervivencia del total del cáncer excepto piel no melanoma}
-
-texto
-
-\subsection{Supervivencia de cáncer de hígado}
-
-texto
-
-\subsection{Supervivencia de cáncer de colon-recto}
-
-texto
+\textbf{Tabla 8}. Supervivencia del total del cáncer excepto piel no melanoma, cáncer de hígado y cáncer de colon-recto en 2018, por sexo y población. Número de casos prevalentes y tasas por 100.000 habitantes a 1 y 5 años.
 
 % ---------------------------------
 
 \section{Prevalencia de cáncer}
 
-\textbf{\textcolor{red}{Tabla X}}. Prevalencia del total del cáncer excepto piel no melanoma, cáncer de hígado y cáncer de colon-recto en 2018, por sexo y población. Número de casos prevalentes y tasas por 100.000 habitantes a 1 y 5 años.
+\textbf{Tabla 9}. Prevalencia del total del cáncer excepto piel no melanoma, cáncer de hígado y cáncer de colon-recto en 2018, por sexo y población. Número de casos prevalentes y tasas por 100.000 habitantes a 1 y 5 años.
 
 \begin{table}[H]
 	\begin{tabular}{|c|c|c|rr|rr|}
