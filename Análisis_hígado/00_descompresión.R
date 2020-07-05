@@ -1,10 +1,10 @@
 # ----- Ruta de trabajo -----
 
 # Windows
-#setwd("C:/Users/dredondo/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/Analisis_final_higado/")
+#setwd("C:/Users/dredondo/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/Análisis hígado/")
 
 # Mac
-setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/Analisis_final_higado/")
+setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/Análisis_hígado/")
 
 # ----- Carga de paquetes -----
 

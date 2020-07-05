@@ -10,7 +10,7 @@ set.seed(31415)
 setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Datos/")
 
 # Carpeta de datos
-setwd("TFM/Analisis_final_higado/data/")
+setwd("TFM/Análisis_hígado/data/")
 
 # ----- Carga de paquetes -----
 
@@ -29,7 +29,7 @@ library(ggalluvial)  # Para diagrama de Sankey
 
 # -----  Sobreescribir la función dataPlot con la nueva función que pinta líneas discontinuas -----
 
-source("../Funciones_actualizadas_KnowSeq/dataPlot.R")
+source("../funciones_personalizadas_knowseq/dataPlot.R")
 
 # ----- Preprocesamiento para adecuar ficheros a KnowSeq -----
 
@@ -88,14 +88,14 @@ toc()
 
 # ----- Boxplots de la expresión para todos los genes -----
 
-png(filename = "../../01_images/01_boxplot_all.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/01_boxplot_all.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(expressionMatrix, labels, mode = "boxplot", colours = c("red", "green"))
 legend(1, 29, c("Primary Tumor", "Solid Tissue Normal"),
        fill = c("red", "green"), xpd = TRUE)
 title("Boxplot de matriz de expresión para todos los genes")
 dev.off()
 
-png(filename = "../../01_images/02_boxplot_all_ordered.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/02_boxplot_all_ordered.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(expressionMatrix, labels, mode = "orderedBoxplot", colours = c("red", "green"))
 legend(1, 29, c("Primary Tumor", "Solid Tissue Normal"),
        fill = c("red", "green"), xpd = TRUE)
@@ -135,12 +135,12 @@ DEGsMatrixML <- t(DEGsMatrix)
 # ----- Representación de DEG -----
 
 # Boxplots para todas las muestras de los primeros genes
-png(filename = "../../01_images/03_boxplot_primeros_10_genes.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/03_boxplot_primeros_10_genes.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(DEGsMatrix[1:10, ], labels, mode = "genesBoxplot")
 dev.off()
 
 # Mapa de calor para todas las muestras de los primeros genes
-png(filename = "../../01_images/04_heatmap_primeros_10_genes.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/04_heatmap_primeros_10_genes.png", width = 13, height = 8, units = "in", res = 300)
 DEGsMatrix_heatmap <- DEGsMatrix[, c(which(SamplesDataFrame$Class == "Primary Tumor"),
                                      which(SamplesDataFrame$Class == "Solid Tissue Normal"))]
 labels_heatmap <- labels[c(which(SamplesDataFrame$Class == "Primary Tumor"),
@@ -243,7 +243,7 @@ ggplot(data = datos_sankey,
         axis.ticks = element_blank(),
         panel.grid = element_blank()) 
 
-ggsave(filename = "../../01_images/05_sankey.png", width = 8, height = 7)
+ggsave(filename = "../../01_figuras/05_sankey.png", width = 8, height = 7)
 
 # ----- Selección de características: 10 genes más importantes -----
 
@@ -302,37 +302,37 @@ print(mejores_parametros_svm)
 
 # ----- SVM: Resultados gráficos de validación cruzada -----
 
-png(filename = "../../01_images/06_svm_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/06_svm_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_svm_mrmr$accMatrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../01_images/07_svm_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/07_svm_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_svm_rf$accMatrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../01_images/08_svm_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/08_svm_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_svm_da$accMatrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../01_images/09_svm_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/09_svm_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_svm_mrmr$f1Matrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../01_images/10_svm_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/10_svm_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_svm_rf$f1Matrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../01_images/11_svm_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/11_svm_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_svm_da$f1Matrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
@@ -417,7 +417,7 @@ ggplot(melt(t(f1)), aes(Var1, Var2, fill = value, label = sprintf(round(value, 2
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/12_svm_f1_score.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/12_svm_f1_score.png", width = 8, height = 8)
 
 # Gráfico precisión
 mejores <- which(prec == max(prec), arr.ind = TRUE)
@@ -445,7 +445,7 @@ ggplot(melt(t(prec)), aes(Var1, Var2, fill = value, label = sprintf(round(value,
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/13_svm_accuracy.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/13_svm_accuracy.png", width = 8, height = 8)
 
 # Gráfico sens
 mejores <- which(sens == max(sens), arr.ind = TRUE)
@@ -473,7 +473,7 @@ ggplot(melt(t(sens)), aes(Var1, Var2, fill = value, label = sprintf(round(value,
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/14_svm_sens.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/14_svm_sens.png", width = 8, height = 8)
 
 # Gráfico spec
 mejores <- which(spec == max(spec), arr.ind = TRUE)
@@ -501,7 +501,7 @@ ggplot(melt(t(spec)), aes(Var1, Var2, fill = value, label = sprintf(round(value,
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/15_svm_spec.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/15_svm_spec.png", width = 8, height = 8)
 
 # ----- SVM: Resultados gráficos en train con el mejor método ------
 
@@ -509,7 +509,7 @@ ggsave(filename = "../../01_images/15_svm_spec.png", width = 8, height = 8)
 mejores_genes_svm <- rfRanking[1:4]
 
 # Se grafican boxplots y mapas de calor con el mejor método
-png(filename = "../../01_images/16_svm_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/16_svm_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_svm, c(which(labels == "Primary Tumor"),
                                                 which(labels == "Solid Tissue Normal"))]
 labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
@@ -517,7 +517,7 @@ labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
 dataPlot(DEGsMatrix_heatmap[mejores_genes_svm, ], labels_heatmap, mode = "heatmap")
 dev.off()
 
-png(filename = "../../01_images/17_svm_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/17_svm_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(DEGsMatrix[mejores_genes_svm, ], labels, mode = "genesBoxplot")
 dev.off()
 
@@ -542,7 +542,7 @@ results_svm_da <- svm_test(train = particion.entrenamiento, labels_train,
 tabla <- results_svm_rf$cfMats[[4]]$table
 
 # Gráficamente
-png(filename = "../../01_images/18_svm_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/18_svm_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(tabla, labels_test,
          mode = "confusionMatrix")
 dev.off()
@@ -564,37 +564,37 @@ results_cv_rf_da <- rf_CV(particion.entrenamiento, labels_train, daRanking,
 
 # ----- RF: Resultados gráficos de validación cruzada -----
 
-png(filename = "../../01_images/19_rf_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/19_rf_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_rf_mrmr$accMatrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../01_images/20_rf_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/20_rf_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_rf_rf$accMatrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../01_images/21_rf_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/21_rf_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_rf_da$accMatrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../01_images/22_rf_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/22_rf_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_rf_mrmr$f1Matrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../01_images/23_rf_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/23_rf_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_rf_rf$f1Matrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../01_images/24_rf_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/24_rf_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_rf_da$f1Matrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
@@ -683,7 +683,7 @@ ggplot(melt(t(f1)), aes(Var1, Var2, fill = value, label = sprintf(round(value, 2
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/25_rf_f1_score.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/25_rf_f1_score.png", width = 8, height = 8)
 
 # Gráfico precisión
 mejores <- which(prec == max(prec), arr.ind = TRUE)
@@ -711,7 +711,7 @@ ggplot(melt(t(prec)), aes(Var1, Var2, fill = value, label = sprintf(round(value,
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/26_rf_accuracy.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/26_rf_accuracy.png", width = 8, height = 8)
 
 # Gráfico sens
 mejores <- which(sens == max(sens), arr.ind = TRUE)
@@ -739,7 +739,7 @@ ggplot(melt(t(sens)), aes(Var1, Var2, fill = value, label = sprintf(round(value,
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/27_rf_sens.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/27_rf_sens.png", width = 8, height = 8)
 
 # Gráfico spec
 mejores <- which(spec == max(spec), arr.ind = TRUE)
@@ -767,7 +767,7 @@ ggplot(melt(t(spec)), aes(Var1, Var2, fill = value, label = sprintf(round(value,
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/28_rf_spec.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/28_rf_spec.png", width = 8, height = 8)
 
 # --- Mejor método en CV basado en F1-score
 
@@ -777,7 +777,7 @@ mejores_genes_rf <- mrmrRanking[1:6]
 # ----- RF: Resultados gráficos en train con el mejor método ------
 
 # Se grafican boxplots y mapas de calor con el mejor método
-png(filename = "../../01_images/29_rf_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/29_rf_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_rf, c(which(labels == "Primary Tumor"),
                                                       which(labels == "Solid Tissue Normal"))]
 labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
@@ -785,7 +785,7 @@ labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
 dataPlot(DEGsMatrix_heatmap[mejores_genes_rf, ], labels_heatmap, mode = "heatmap")
 dev.off()
 
-png(filename = "../../01_images/30_rf_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/30_rf_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(DEGsMatrix[mejores_genes_rf, ], labels, mode = "genesBoxplot")
 dev.off()
 
@@ -807,7 +807,7 @@ results_rf_da <- rf_test(train = particion.entrenamiento, labels_train,
 tabla <- results_rf_mrmr$cfMats[[6]]$table
 
 # Gráficamente
-png(filename = "../../01_images/31_rf_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/31_rf_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(tabla, labels_test,
          mode = "confusionMatrix")
 dev.off()
@@ -832,37 +832,37 @@ results_cv_knn_da$bestK
 
 # ----- kNN: Resultados gráficos de validación cruzada -----
 
-png(filename = "../../01_images/32_knn_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/32_knn_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_knn_mrmr$accMatrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../01_images/33_knn_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/33_knn_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_knn_rf$accMatrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../01_images/34_knn_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/34_knn_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_knn_da$accMatrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../01_images/35_knn_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/35_knn_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_knn_mrmr$f1Matrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../01_images/36_knn_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/36_knn_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_knn_rf$f1Matrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../01_images/37_knn_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/37_knn_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(results_cv_knn_da$f1Matrix[, 1:10], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
@@ -952,7 +952,7 @@ ggplot(melt(t(f1)), aes(Var1, Var2, fill = value, label = sprintf(round(value, 2
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/38_knn_f1_score.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/38_knn_f1_score.png", width = 8, height = 8)
 
 # Gráfico precisión
 mejores <- which(prec == max(prec), arr.ind = TRUE)
@@ -980,7 +980,7 @@ ggplot(melt(t(prec)), aes(Var1, Var2, fill = value, label = sprintf(round(value,
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/39_knn_accuracy.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/39_knn_accuracy.png", width = 8, height = 8)
 
 # Gráfico sens
 mejores <- which(sens == max(sens), arr.ind = TRUE)
@@ -1008,7 +1008,7 @@ ggplot(melt(t(sens)), aes(Var1, Var2, fill = value, label = sprintf(round(value,
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/40_knn_sens.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/40_knn_sens.png", width = 8, height = 8)
 
 # Gráfico spec
 mejores <- which(spec == max(spec), arr.ind = TRUE)
@@ -1036,7 +1036,7 @@ ggplot(melt(t(spec)), aes(Var1, Var2, fill = value, label = sprintf(round(value,
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../01_images/41_knn_spec.png", width = 8, height = 8)
+ggsave(filename = "../../01_figuras/41_knn_spec.png", width = 8, height = 8)
 
 # --- Mejor método en CV basado en F1-score
 
@@ -1046,7 +1046,7 @@ mejores_genes_knn <- rfRanking[1:2]
 # ----- kNN: Resultados gráficos en train con el mejor método ------
 
 # Se grafican boxplots y mapas de calor con el mejor método
-png(filename = "../../01_images/42_knn_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/42_knn_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_knn, c(which(labels == "Primary Tumor"),
                                                       which(labels == "Solid Tissue Normal"))]
 labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
@@ -1054,7 +1054,7 @@ labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
 dataPlot(DEGsMatrix_heatmap[mejores_genes_knn, ], labels_heatmap, mode = "heatmap")
 dev.off()
 
-png(filename = "../../01_images/43_knn_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/43_knn_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(DEGsMatrix[mejores_genes_knn, ], labels, mode = "genesBoxplot")
 dev.off()
 
@@ -1079,7 +1079,7 @@ results_knn_da <- knn_test(train = particion.entrenamiento, labels_train,
 tabla <- results_knn_rf$cfMats[[2]]$table
 
 # Gráficamente
-png(filename = "../../01_images/44_knn_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../01_figuras/44_knn_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(tabla, labels_test,
          mode = "confusionMatrix")
 dev.off()
@@ -1186,3 +1186,6 @@ toc()
 # Guardar imagen
 #save.image(file =  "../saved_files/01_workspace_completo.RData")
 #load("../saved_files/01_workspace_completo.RData")
+
+# Session_info para reproducibilidad
+devtools::session_info()

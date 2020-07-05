@@ -10,7 +10,7 @@ set.seed(31415)
 setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Datos/")
 
 # Carpeta de datos
-setwd("TFM/Analisis_final_higado/data/")
+setwd("TFM/Análisis_hígado/data/")
 
 # ----- Carga de paquetes -----
 
@@ -30,7 +30,7 @@ library(readr)       # Para leer el fichero de datos clínicos
 
 # -----  Sobreescribir la función dataPlot con la nueva función que pinta líneas discontinuas -----
 
-source("../Funciones_actualizadas_KnowSeq/dataPlot.R")
+source("../funciones_personalizadas_knowseq/dataPlot.R")
 
 # ----- Preprocesamiento para adecuar ficheros a KnowSeq -----
 
