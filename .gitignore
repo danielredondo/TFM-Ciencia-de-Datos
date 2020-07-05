@@ -3,7 +3,7 @@
 *.counts
 
 # Quitar carpetas
-#/Referencias/*
+/Referencias/*
 /Propuesta/*
 /Analisis_preliminar_gdc_CR/*
 /Analisis_preliminar_gdc_higado/*
