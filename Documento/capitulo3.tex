@@ -2,17 +2,39 @@
 
 \section{Algoritmos de selección de características}
 
-\textcolor{red}{Ver apuntes asignatura bioinformática} \cite{HerreraMaldonado2020}.\\
+Los algoritmos de selección de características, o variables, consisten en la elección de un subconjunto de variables relevantes que permitan:
 
-\textcolor{red}{Leer y citar \cite{Xing}.}\\
+\begin{itemize}
+	\item Mejorar la capacidad predictiva de los modelos.
+	\item Proporcionar predictores menos costosos computacionalmente.
+	\item Mejorar la interpretabilidad de los modelos resultantes, y facilitar la visualización de datos.
+ \end{itemize} 
 
+La selección de características cuenta con interesantes aplicaciones en la genómica \cite{Xing, Tadist2019}. Si se considera cada gen como una variable, la selección de características consigue reducir los problemas asociados la maldición de la dimensionalidad \cite{Bellman1957, Bellman1961}. \\
 
+Se distinguen principalmente 3 tipos de algoritmos de selección de características, descritos en varias referencias \cite{HerreraMaldonado2020, Tadist2019}:
+
+\begin{itemize}
+	\item Algoritmos de selección por filtrado. Utilizan técnicas estadísticas para identificar las variables más relevantes antes de diseñar el modelo predictivo. Suelen estar basados en medidas de correlación entre variables, como la información mutua, y pueden devolver un ranking de relevancia de las variables, o un subconjunto óptimo de variables. Entre sus ventajas destacan un bajo costo computacional en el entrenamiento del modelo, gran interpretabilidad y facilidad de implementación. Un ejemplo de algoritmo de selección por filtrado es mRMR (mínima redundancia, máxima relevancia). 
+	
+	\item Algoritmos de selección embebidos. Utilizan el mismo método de entrenamiento del modelo para seleccionar a la vez las características más relevantes. Un ejemplo de algoritmo de selección embebido puede ser el uso de máquinas de soporte vectorial (SVM). 
+	
+	\item Algoritmos de selección por envoltura. En estos métodos, el algoritmo de selección de variables está incluido en el propio modelo predictivo y es retroalimentado por él, seleccionando aquel modelo que proporciona mejor efectividad. El principal inconveniente de estos métodos es el elevado coste computacional, aunque como ventaja asegura el mejor rendimiento de entre todas las opciones que se han evaluado. Un ejemplo es MINT, una mejora de mRMR \cite{He2016}.
+\end{itemize}
 
 \subsection{Mínima redundancia, máxima relevancia (mRMR)}
 
+Usado ampliamente en omics por \cite{Ding2005, Yang2013}.\\
+
+En R está implementado en \texttt{KnowSeq::featureSelection(mode = `mrmr')}, que a su vez utiliza \texttt{praznik::MRMR}.
+
 \subsection{\textit{Random Forest} (RF)}
 
+En R está implementado en \texttt{KnowSeq::featureSelection(mode = `rf')} que a su vez utiliza \texttt{randomForest::randomForest}.
+
 \subsection{Asociación de enfermedades (DA)}
+
+En R está implementado en \texttt{KnowSeq::featureSelection(mode = `da')}, que utiliza la REST API de la plataforma Open Targets \cite{OpenTargets2020}.
 
 \section{Algoritmos de clasificación}
 
