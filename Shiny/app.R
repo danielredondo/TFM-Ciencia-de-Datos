@@ -27,7 +27,7 @@ ui <- dashboardPage(
       menuItem("Selección de genes", tabName = "genes", icon = icon("dna")),
       menuItem("Entrenamiento de modelos", tabName = "entrenamiento", icon = icon("play")),
       menuItem("Validación de modelos", tabName = "validacion", icon = icon("check-circle")),
-      menuItem("Autor", tabName = "autor", icon = icon("id-card")),
+      menuItem("Autores", tabName = "autores", icon = icon("id-card")),
       menuItem("Código", tabName = "codigo", icon = icon("code"))
     )
   ),
@@ -36,18 +36,16 @@ ui <- dashboardPage(
     tabItems(
       # Tab 1
       tabItem(tabName = "intro",
-              h2("Introducción App + abstract TFM"),
+              h2("Abstract"),
               
               h4(tags$b("Introducción")),
-              "Texto",
-              h4(tags$b("Métodos")),
               "Texto",
               h4(tags$b("Resultados")),
               "Texto",
               h4(tags$b("Conclusiones")),
               "Texto",
               
-              h4(tags$b("Sobre esta aplicación")),
+              h2("Sobre esta aplicación"),
               "Texto",
               # Parte final
               br(), br(), br(),
@@ -136,13 +134,22 @@ ui <- dashboardPage(
               h2("Validación de modelos")
       ),
       # Tab 6
-      tabItem(tabName = "autor",
-              h2("Autor")
-      ),
+      tabItem(tabName = "autores",
+              h2("Autores"),
+              tags$h4(
+                tags$li(tags$b("Daniel Redondo Sánchez")), br(),
+                tags$li(tags$b("Ignacio Rojas")), br(),
+                tags$li(tags$b("Luis Javier Herrera")), br(),
+                tags$li(tags$b("Daniel Castillo"))
+                )
+              ),
       # Tab 7
       tabItem(tabName = "codigo",
-              h2("Código")
-      )
+              h2("Código"),
+              tags$h4(
+                "En ", tags$a(href = "https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/Shiny/app.R", "este repositorio de GitHub"),
+                "puedes encontrar el código de la aplicación.")
+              )
       ) # Final tabs
   ) # Final dashboard body
 ) # Final dashboard page
@@ -327,6 +334,7 @@ server <- function(input, output){
     data <- histdata[seq_len(input$slider)]
     hist(data)
   })
+
   
 }
 
