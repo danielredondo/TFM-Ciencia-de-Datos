@@ -38,9 +38,9 @@ Para cáncer de hígado se han descargado datos sobre 462 pacientes, de los cual
 
 Para el análisis se ha utilizado el software estadístico \texttt{R} \cite{R} y el paquete \texttt{KnowSeq} (v.1.1.19) \cite{KnowSeq}, librería que ha sido desarrollada por los tutores del presente trabajo, y en la que el autor ha contribuido con pequeñas actualizaciones. El paquete está además disponible en Bioconductor, la plataforma de código abierto en R más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
 
-Para asegurar la reproducibilidad de los análisis, en el \nameref{anexo1} (caja 1) se muestran todos los paquetes utilizados y sus versiones, como resultado de ejecutar \texttt{devtools::session\_info()}.\\
+Para asegurar la reproducibilidad de los análisis, en el fichero \texttt{session\_info.txt} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020} se muestran todos los paquetes utilizados y sus versiones, como resultado de ejecutar \texttt{devtools::session\_info()}.\\
 
-Todo el código de los análisis está disponible en el repositorio de GitHub del presente Trabajo Fin de Máster \cite{Redondo-Sanchez2020}.
+Todo el código de los análisis está disponible la carpeta \texttt{analisis\_higado} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.
 
 \section{Resultados: cáncer de hígado}
 
@@ -84,12 +84,12 @@ Para los casos de cáncer de hígado se ha descargado información clínica de G
 		Indio americano o nativo de Alaska             & 2 (0,5\%)                                        \\ \hline
 		\multicolumn{1}{l}{\textbf{Estado vital}}      &                                                  \\ 
 		Vivo                                           & 257 (63,6\%)                                     \\
-		Muerto                                         & 146 (36,1\%)                                     \\
+		Fallecido                                         & 146 (36,1\%)                                     \\
 		Desconocido                                    & 1 (0,2\%)                                        \\ \hline
 	\end{tabular}
 \end{table}
 
-En la \textcolor{red}{Tabla X} se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de $\chi^2$ \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el repositorio de GitHub asociado al trabajo (fichero \texttt{Analisis\_higado\textbackslash03\_analisis\_datos\_clinicos.R}) \cite{Redondo-Sanchez2020}.\\
+En la \textcolor{red}{Tabla X} se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de chi cuadrado ($\chi^2$) \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el repositorio de GitHub asociado al trabajo (fichero \texttt{analisis\_higado\textbackslash03\_analisis\_datos\_clinicos.R}) \cite{Redondo-Sanchez2020}.\\
 
 \textbf{\textcolor{red}{Tabla X}}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, etnia, raza y estado vital.
 
@@ -97,7 +97,7 @@ En la \textcolor{red}{Tabla X} se muestran tablas de contingencia del estado vit
 	\centering
 	\begin{tabular}{rrrc}
 		\cline{2-4}
-		\multicolumn{1}{l}{}                           & \multicolumn{1}{c}{Vivos} & \multicolumn{1}{c}{Muertos} & \multicolumn{1}{l}{p-valor $\chi^2$} \\ \hline
+		\multicolumn{1}{l}{}                           & \multicolumn{1}{c}{Vivos} & \multicolumn{1}{c}{Fallecidos} & \multicolumn{1}{l}{p-valor} \\ \hline
 		\multicolumn{1}{l}{\textbf{Número de casos}} & \multicolumn{1}{c}{257}            & \multicolumn{1}{c}{146}     & \multicolumn{1}{l}{}                     \\ \hline
 		\multicolumn{1}{l}{\textbf{Sexo}}              &                           &                             & 0,033                                    \\
 		Hombre                                         & 178 (67,7\%)              & 85 (32,3\%)                 &                                          \\
