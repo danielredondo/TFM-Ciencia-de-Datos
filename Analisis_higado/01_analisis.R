@@ -10,7 +10,7 @@ set.seed(31415)
 setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Datos/")
 
 # Carpeta de datos
-setwd("TFM/Análisis_hígado/data/")
+setwd("TFM/Analisis_higado/data/")
 
 # ----- Carga de paquetes -----
 

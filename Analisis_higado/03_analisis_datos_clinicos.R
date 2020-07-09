@@ -4,9 +4,14 @@ library(dplyr)
 clinical <- read_delim("data/clinical.cart.2020-06-11/clinical.tsv",
                        "\t", escape_double = FALSE, trim_ws = TRUE)
 
+# Diccionario de variables: https://docs.gdc.cancer.gov/Data_Dictionary/viewer/#?view=table-definition-view&id=diagnosis
+
 clinical <- clinical %>% 
-  select(case_id, tumor_stage, age_at_diagnosis, gender, ethnicity, race, vital_status) %>% 
+  select(case_id, tumor_stage, age_at_diagnosis, gender, ethnicity, race, vital_status, year_of_diagnosis) %>% 
   unique
+
+# Años de diagnóstico
+clinical$year_of_diagnosis %>% table
 
 # Todos los casos de "Primary Tumor" tienen un registro clínico
 length(clinical$case_id)
@@ -57,18 +62,18 @@ clinical <- clinical %>% filter(vital_status != "Not Reported")
 round(table(clinical$gender, clinical$vital_status, useNA = "always"), 1)
 round(prop.table(table(clinical$gender, clinical$vital_status, useNA = "always"), margin = 1) * 100, 1)
 
-chisq.test(clinical$gender, clinical$vital_status, correct = F)
+chisq.test(clinical$gender, clinical$vital_status)
 
 # Estado vital - gedad
 clinical2 <- clinical %>% filter(is.na(gedad) != T)
 round(table(clinical2$gedad, clinical2$vital_status, useNA = "always"), 1)
 round(prop.table(table(clinical2$gedad, clinical2$vital_status, useNA = "always"), margin = 1) * 100, 1)
 
-chisq.test(clinical2$gedad, clinical2$vital_status, correct = F)
+chisq.test(clinical2$gedad, clinical2$vital_status)
 
 # Estado vital - gedad
 clinical3 <- clinical %>% filter(is.na(estadio) != T)
 round(table(clinical3$estadio, clinical3$vital_status, useNA = "always"), 1)
 round(prop.table(table(clinical3$estadio, clinical3$vital_status, useNA = "always"), margin = 1) * 100, 1)
 
-chisq.test(clinical3$estadio, clinical3$vital_status, correct = F)
+chisq.test(clinical3$estadio, clinical3$vital_status)
