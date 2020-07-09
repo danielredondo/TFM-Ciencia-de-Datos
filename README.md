@@ -10,10 +10,10 @@ Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ing
 
 ## Descripción del contenido
 
-- `Analisis_higado`: Código, resultados y figuras del análisis realizado para cáncer de hígado.
+- `analisis_higado`: Código, resultados y figuras del análisis realizado para cáncer de hígado.
 
-- `Documento`: Documento principal del TFM en LaTeX.
+- `documento`: Documento principal del TFM en *LaTeX*.
 
-- `Epidemiologia`: Datos sobre la epidemiología del cáncer.
+- `epidemiologia`: Datos sobre la epidemiología del cáncer.
 
-- `Shiny`: Aplicación web biomaRcadores.
+- `shiny`: Aplicación web biomaRcadores.
