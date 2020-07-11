@@ -14,6 +14,7 @@ library(ggalluvial)
 source("www/dataPlot.R")
 
 ui <- dashboardPage(
+  
   ## Tema
   skin = "black",
   ## Cabecera
@@ -21,6 +22,9 @@ ui <- dashboardPage(
                   ),
   ## Barra lateral
   dashboardSidebar(
+    tags$head(
+      tags$link(rel = "stylesheet", type = "text/css", href = "css.css")
+    ),
     sidebarMenu(
       menuItem("Introducción", tabName = "intro", icon = icon("file-alt")),
       menuItem("Carga de datos", tabName = "datos", icon = icon("database")),

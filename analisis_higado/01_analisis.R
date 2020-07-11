@@ -1178,6 +1178,9 @@ unique(c(enfermedades[grep(pattern = "cancer", ignore.case = T, x = enfermedades
          )
        )
 
+# Pruebas para KnowSeqWeb
+# KnowSeq::knowseqReport(DEGsMatrix, labels)
+
 # ----- Guardar imagen para Shiny -----
 matriz <- rbind(labels, DEGsMatrix)
 save(matriz, file =  "../saved_files/matriz.RData")
