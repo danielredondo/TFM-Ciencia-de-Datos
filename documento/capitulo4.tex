@@ -42,29 +42,33 @@ Para asegurar la reproducibilidad de los análisis, en el fichero \texttt{sessio
 
 Todo el código de los análisis está disponible la carpeta \texttt{analisis\_higado} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.
 
-\section{Resultados: cáncer de hígado}
+\section{Características clínicas de los tumores}
+ 
+La plataforma GDC Portal \cite{GDCPortal} permite descargar información clínica sobre los pacientes que tienen casos de cáncer, aunque no sobre los casos sanos.
 
-\subsection{Características clínicas de los tumores}
+\subsection{Características clínicas para cáncer de hígado}
 
-Para los casos de cáncer de hígado se ha descargado información clínica de GDC Portal. En la \textcolor{red}{Tabla X} se muestra  la distribución de casos según algunas variables de interés. Los casos se recogieron entre los años 1995 y 2013, con el 67,6\% de los casos recogidos entre los años 2010 y 2013. La mayoría de los casos son hombres (65,3\%) y están diagnosticados en estadios iniciales (70,3\% en estadios I y II). La edad media de diagnóstico es de 60,1 años (mediana: 61,7 años), con un rango de edad que comprende de los 16 a los 87 años. Un 5,0\% de los casos son hispanos o latinos y más de la mitad son blancos (52,5\%), que es la raza más común seguida por asiáticos (39,9\%) y negros o afroamericanos (4,7\%). Aproximadamente dos de cada 3 personas estaban vivas en el momento del último contacto realizado (63,6\%).\\
+En la \textcolor{red}{Tabla X} se muestra  la distribución de casos de cáncer de hígado según algunas variables de interés. Los casos se recogieron entre los años 1995 y 2013, con el 67,6\% de los casos recogidos entre los años 2010 y 2013. La mayoría de los casos son hombres (65,3\%) y están diagnosticados en estadios iniciales (70,3\% en estadios I y II). La edad media de diagnóstico es de 60,1 años (mediana: 61,7 años), con un rango de edad que comprende de los 16 a los 87 años. Un 5,0\% de los casos son hispanos o latinos y más de la mitad son blancos (52,5\%), que es la raza más común seguida por asiáticos (39,9\%) y negros o afroamericanos (4,7\%). Aproximadamente dos de cada tres personas estaban vivas en el momento del último contacto realizado (63,6\%).\\
 
-\textbf{\textcolor{red}{Tabla X}}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, etnia, raza y estado vital.
+\newpage
+\textbf{\textcolor{red}{Tabla X}}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, edad, estadio, etnia, raza y estado vital.
 
 \begin{table}[H]
 	\centering
 	\begin{tabular}{rc}
-		\multicolumn{1}{l}{}                           & \multicolumn{1}{c}{Número de casos (Porcentaje)} \\ \hline
+		\cline{2-2}
+		\multicolumn{1}{l}{}                           & \multicolumn{1}{c}{\textbf{Número de casos (Porcentaje)}} \\ \hline
 		\multicolumn{1}{l}{\textbf{Total}} & 404 (100\%)                                      \\ \hline
 		\multicolumn{1}{l}{\textbf{Sexo}}              &                                                  \\
 		Hombre                                         & 264 (65,3\%)                                     \\
 		Mujer                                          & 140 (34,7\%)                                     \\ \hline
 		\multicolumn{1}{l}{\textbf{Grupo de edad}}     &                                                  \\
-		0-40 años                                      & 34 (8,4\%)                                       \\
+		$\leq$40 años                                      & 34 (8,4\%)                                       \\
 		41-50 años                                     & 40 (9,9\%)                                       \\
 		51-60 años                                     & 106 (26,2\%)                                     \\
 		61-70 años                                     & 127 (31,4\%)                                     \\
 		71-80 años                                     & 77 (19,1\%)                                      \\
-		81 años o más                                  & 16 (4,0\%)                                         \\
+		$>$80 años                                       & 16 (4,0\%)                                         \\
 		Desconocido                                    & 4 (1,0\%)                                          \\ \hline
 		\multicolumn{1}{l}{\textbf{Estadio}}           &                                                  \\
 		Estadio I                                      & 189 (46,8\%)                                     \\
@@ -89,7 +93,7 @@ Para los casos de cáncer de hígado se ha descargado información clínica de G
 	\end{tabular}
 \end{table}
 
-En la \textcolor{red}{Tabla X} se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de chi cuadrado ($\chi^2$) \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el repositorio de GitHub asociado al trabajo (fichero \texttt{analisis\_higado\textbackslash03\_analisis\_datos\_clinicos.R}) \cite{Redondo-Sanchez2020}.\\
+En la \textcolor{red}{Tabla X} se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de chi cuadrado ($\chi^2$) \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el fichero \texttt{analisis\_higado\textbackslash03\_analisis\_datos\_clinicos.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
 
 \textbf{\textcolor{red}{Tabla X}}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, etnia, raza y estado vital.
 
@@ -97,18 +101,18 @@ En la \textcolor{red}{Tabla X} se muestran tablas de contingencia del estado vit
 	\centering
 	\begin{tabular}{rrrc}
 		\cline{2-4}
-		\multicolumn{1}{l}{}                           & \multicolumn{1}{c}{Vivos} & \multicolumn{1}{c}{Fallecidos} & \multicolumn{1}{l}{p-valor} \\ \hline
+		\multicolumn{1}{l}{}                           & \multicolumn{1}{c}{\textbf{Vivos}} & \multicolumn{1}{c}{\textbf{Fallecidos}} & \multicolumn{1}{l}{\textbf{p-valor}} \\ \hline
 		\multicolumn{1}{l}{\textbf{Número de casos}} & \multicolumn{1}{c}{257}            & \multicolumn{1}{c}{146}     & \multicolumn{1}{l}{}                     \\ \hline
 		\multicolumn{1}{l}{\textbf{Sexo}}              &                           &                             & 0,033                                    \\
 		Hombre                                         & 178 (67,7\%)              & 85 (32,3\%)                 &                                          \\
 		Mujer                                          & 79 (83,2\%)               & 16 (16,8\%)                 &                                          \\ \hline
 		\multicolumn{1}{l}{\textbf{Grupo de edad}}     &                           &                             & 0,018                                    \\
-		0-40 años                                      & 24 (70,6\%)               & 10 (29,4\%)                 &                                          \\
+		$\leq$40 años                                      & 24 (70,6\%)               & 10 (29,4\%)                 &                                          \\
 		41-50 años                                     & 27 (67,5\%)               & 13 (32,5\%)                 &                                          \\
 		51-60 años                                     & 68 (64,2\%)               & 38 (35,8\%)                 &                                          \\
 		61-70 años                                     & 89 (70,6\%)               & 37 (29,4\%)                 &                                          \\
 		71-80 años                                     & 42 (54,5\%)               & 35 (45,5\%)                 &                                          \\
-		81 años o más                                  & 5 (31,3\%)                & 11 (68,8\%)                 &                                          \\ \hline
+		$>$80 años                                   & 5 (31,3\%)                & 11 (68,8\%)                 &                                          \\ \hline
 		\multicolumn{1}{l}{\textbf{Estadio}}           &                           &                             & $<$0,001                         \\
 		Estadio I                                      & 138 (73,4\%)              & 50 (26,6\%)                 &                                          \\
 		Estadio II                                     & 64 (67,4\%)               & 31 (32,6\%)                 &                                          \\
@@ -117,15 +121,95 @@ En la \textcolor{red}{Tabla X} se muestran tablas de contingencia del estado vit
 	\end{tabular}
 \end{table}
 
-\textcolor{red}{DESCRIBIR LA TABLA}\\
+Para las variables con datos faltantes se ha realizado un análisis de casos completos (exclusión del análisis de los casos con tenían datos faltantes).  La mortalidad entre los casos es el doble en hombres (32,3\%) que en mujeres (16,8\%). La mortalidad aumenta conforme aumenta la edad, desde 29,4\% en menores de 41 años hasta 68,8\% en mayores de 80 años. El estadio es uno de los principales factores pronósticos del cáncer, algo que se refleja en la gran diferencia existente en la supervivencia entre estadios. En los estadios iniciales (I-II) la supervivencia está cerca al 30\% y en los más avanzados (III-IV) más cerca del 55\%. Se detecta una dependencia entre todas las variables consideradas (sexo, grupo de edad y estadio)  y el estado vital, con p-valores $<$0,05 en todos los casos.
 
-Para grupo de edad y estadio, variables para las que había datos desconocidos, se ha realizado un análisis de casos completos (exclusión del análisis de los casos con tenían datos faltantes).  Se detecta una dependencia entre todas las variables consideradas (sexo, grupo de edad y estadio)  y el estado vital, con p-valores <0,05 en todos los casos.
+\subsection{Características clínicas para cáncer de colon-recto}
+
+En la \textcolor{red}{Tabla X} se muestra  la distribución de casos de cáncer de colon-recto según algunas variables de interés. Los casos se recogieron entre los años 1998 y 2013, con la mayoría de los casos recogidos entre los años 2007 y 2011. La proporción entre hombres y mujeres es similar (53,1\% y 46,9\% respectivamente), y los estadios más comunes son los intermedios (estadio II: 36,3\% y estadio III: 28,7\%). La edad media de diagnóstico es de 66,7 años (mediana: 68,1 años), con un rango de edad de entre 31 y 90 años. Aproximadamente la mitad de los pacientes son blancos (47,3\%), que es la raza más común seguida por negros o afroamericanos (10,5\%) y asiáticos (2,1\%). Se desconoce la raza del 40,0\% de las personas. Aproximadamente cuatro de cada cinco personas estaban vivas en el momento del último contacto realizado (79,2\%), y sólo un 0,8\% de los casos son hispanos o latinos.\\
+
+\newpage
+\textbf{\textcolor{red}{Tabla X}}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, edad, estadio, etnia, raza y estado vital.
+
+\begin{table}[H]
+		\centering
+	\begin{tabular}{rr}
+		\cline{2-2}
+		\multicolumn{1}{l}{}                       & \multicolumn{1}{c}{\textbf{Número de casos (Porcentaje)}} \\ \hline
+		\multicolumn{1}{l}{\textbf{Total}}         & 620 (100\%)                                               \\ \hline
+		\multicolumn{1}{l}{\textbf{Sexo}}          &                                                           \\
+		Hombre                                     & 329 (53,1\%)                                              \\
+		Mujer                                      & 291 (46,9\%)                                              \\ \hline
+		\multicolumn{1}{l}{\textbf{Grupo de edad}} &                                                           \\
+		$\leq$40 años                                   & 16 (2,6\%)                                                \\
+		41-50 años                                 & 59 (9,5\%)                                                \\
+		51-60 años                                 & 101 (16,3\%)                                              \\
+		61-70 años                                 & 173 (27,9\%)                                              \\
+		71-80 años                                 & 171 (27,6\%)                                              \\
+		$>$80 años                               & 98 (15,8\%)                                               \\
+		Desconocido                                & 2 (0,3\%)                                                 \\ \hline
+		\multicolumn{1}{l}{\textbf{Estadio}}       &                                                           \\
+		Estadio I                                  & 105 (16,9\%)                                              \\
+		Estadio II                                 & 225 (36,3\%)                                              \\
+		Estadio III                                & 178 (28,7\%)                                              \\
+		Estadio IV                                 & 89 (14,4\%)                                               \\
+		Desconocido                                & 23 (3,7\%)                                                \\ \hline
+		\multicolumn{1}{l}{\textbf{Etnia}}         &                                                           \\
+		Hispano o latino                           & 5 (0,8\%)                                                 \\
+		No hispano ni latino                       & 352 (56,8\%)                                              \\
+		Desconocido                                & 263 (42,4\%)                                              \\ \hline
+		\multicolumn{1}{l}{\textbf{Raza}}          &                                                           \\
+		Blanco                                     & 293 (47,3\%)                                              \\
+		Asiático                                   & 13 (2,1\%)                                                \\
+		Negro o afroamericano                      & 65 (10,5\%)                                               \\
+		Desconocido                                & 248 (40\%)                                                \\
+		Indio americano o nativo de Alaska         & 1 (0,2\%)                                                 \\ \hline
+		\multicolumn{1}{l}{\textbf{Estado vital}}  &                                                           \\
+		Vivo                                       & 491 (79,2\%)                                              \\
+		Muerto                                     & 129 (20,8\%)                                              \\ \hline
+	\end{tabular}
+\end{table}
+
+En la \textcolor{red}{Tabla X} se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de chi cuadrado ($\chi^2$) \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el fichero \texttt{analisis\_cr\textbackslash03\_analisis\_datos\_clinicos.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
+
+\textbf{\textcolor{red}{Tabla X}}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, etnia, raza y estado vital.
+
+\begin{table}[H]
+		\centering
+	\begin{tabular}{rrrc}
+		\cline{2-4}
+		\multicolumn{1}{l}{}                           & \multicolumn{1}{c}{\textbf{Vivos}} & \multicolumn{1}{c}{\textbf{Fallecidos}} & \multicolumn{1}{c}{\textbf{p-valor}} \\ \hline
+		\multicolumn{1}{l}{\textbf{Número de tumores}} & 491            & 129                 &                  \\ \hline
+		\multicolumn{1}{l}{\textbf{Sexo}}              &                &                     & 0,993            \\
+		Hombre                                         & 260 (79\%)     & 69 (21,0\%)           &                  \\
+		Mujer                                          & 231 (79,4\%)   & 60 (20,6\%)         &                  \\ \hline
+		\multicolumn{1}{l}{\textbf{Grupo de edad}}     &                &                     & \textless{}0,001 \\
+		$\leq$40 años                                     & 14 (87,5\%)    & 2 (12,5\%)          &                  \\
+		41-50 años                                     & 51 (86,4\%)    & 8 (13,6\%)          &                  \\
+		51-60 años                                     & 85 (84,2\%)    & 16 (15,8\%)         &                  \\
+		61-70 años                                     & 150 (86,7\%)   & 23 (13,3\%)         &                  \\
+		71-80 años                                     & 120 (70,2\%)   & 51 (29,8\%)         &                  \\
+		$>$80 años                                  & 70 (71,4\%)    & 28 (28,6\%)         &                  \\ \hline
+		\multicolumn{1}{l}{\textbf{Estadio}}           &                &                     & \textless{}0,001 \\
+		Estadio I                                      & 98 (93,3\%)    & 7 (6,7\%)           &                  \\
+		Estadio II                                     & 192 (85,3\%)   & 33 (14,7\%)         &                  \\
+		Estadio III                                    & 139 (78,1\%)   & 39 (21,9\%)         &                  \\
+		Estadio IV                                     & 48 (53,9\%)    & 41 (46,1\%)         &                  \\ \hline
+	\end{tabular}
+\end{table}
+
+Para las variables con datos faltantes se ha realizado un análisis de casos completos (exclusión del análisis de los casos con tenían datos faltantes).  La mortalidad es muy similar en hombres y mujeres, sin diferencias significativas (p-valor: 0,993). Se detecta una dependencia entre el estado vital con las variables de grupo de edad y estadio, con p-valores $<$0,001. En mayores de 70 años la mortalidad está cerca del 30\%, el doble de la mortalidad existente en otros grupos de edad. Hay grandes diferencias de mortalidad en función del estadio diagnosticado, que pasa del 6,7\% en el estadio I al 46,1\% en el estadio IV.
+
+\section{Resultados de clasificación biclase para cáncer de hígado}
 
 \subsection{Entrenamiento de modelo}
 
 \subsection{Validación en test}
 
-\section{Resultados: cáncer de colon-recto}
+\section{Resultados de clasificación multiclase para cáncer de hígado}
+
+\section{Resultados de clasificación biclase para cáncer de colon-recto}
+
+\section{Resultados de clasificación multiclase para cáncer de colon-recto}
 
 \textcolor{red}{Completar una vez esté depurado el análisis de cáncer de hígado}
 

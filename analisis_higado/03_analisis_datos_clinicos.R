@@ -71,7 +71,7 @@ round(prop.table(table(clinical2$gedad, clinical2$vital_status, useNA = "always"
 
 chisq.test(clinical2$gedad, clinical2$vital_status)
 
-# Estado vital - gedad
+# Estado vital - estadio
 clinical3 <- clinical %>% filter(is.na(estadio) != T)
 round(table(clinical3$estadio, clinical3$vital_status, useNA = "always"), 1)
 round(prop.table(table(clinical3$estadio, clinical3$vital_status, useNA = "always"), margin = 1) * 100, 1)
