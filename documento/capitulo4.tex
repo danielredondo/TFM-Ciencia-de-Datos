@@ -48,10 +48,10 @@ La plataforma GDC Portal \cite{GDCPortal} permite descargar información clínic
 
 \subsection{Características clínicas para cáncer de hígado}
 
-En la \textcolor{red}{Tabla X} se muestra  la distribución de casos de cáncer de hígado según algunas variables de interés. Los casos se recogieron entre los años 1995 y 2013, con el 67,6\% de los casos recogidos entre los años 2010 y 2013. La mayoría de los casos son hombres (65,3\%) y están diagnosticados en estadios iniciales (70,3\% en estadios I y II). La edad media de diagnóstico es de 60,1 años (mediana: 61,7 años), con un rango de edad que comprende de los 16 a los 87 años. Un 5,0\% de los casos son hispanos o latinos y más de la mitad son blancos (52,5\%), que es la raza más común seguida por asiáticos (39,9\%) y negros o afroamericanos (4,7\%). Aproximadamente dos de cada tres personas estaban vivas en el momento del último contacto realizado (63,6\%).\\
+En la Tabla 9 se muestra  la distribución de casos de cáncer de hígado según algunas variables de interés. Los casos se recogieron entre los años 1995 y 2013, con el 67,6\% de los casos recogidos entre los años 2010 y 2013. La mayoría de los casos son hombres (65,3\%) y están diagnosticados en estadios iniciales (70,3\% en estadios I y II). La edad media de diagnóstico es de 60,1 años (mediana: 61,7 años), con un rango de edad que comprende de los 16 a los 87 años. Un 5,0\% de los casos son hispanos o latinos y más de la mitad son blancos (52,5\%), que es la raza más común seguida por asiáticos (39,9\%) y negros o afroamericanos (4,7\%). Aproximadamente dos de cada tres personas estaban vivas en el momento del último contacto realizado (63,6\%).\\
 
 \newpage
-\textbf{\textcolor{red}{Tabla X}}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, edad, estadio, etnia, raza y estado vital.
+\textbf{Tabla 9}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, edad, estadio, etnia, raza y estado vital.
 
 \begin{table}[H]
 	\centering
@@ -93,9 +93,9 @@ En la \textcolor{red}{Tabla X} se muestra  la distribución de casos de cáncer 
 	\end{tabular}
 \end{table}
 
-En la \textcolor{red}{Tabla X} se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de chi cuadrado ($\chi^2$) \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el fichero \texttt{analisis\_higado\textbackslash03\_analisis\_datos\_clinicos.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
+En la Tabla 10 se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de chi cuadrado ($\chi^2$) \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el fichero \texttt{analisis\_higado\textbackslash03\_analisis\_datos\_clinicos.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
 
-\textbf{\textcolor{red}{Tabla X}}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, etnia, raza y estado vital.
+\textbf{Tabla 10}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, etnia, raza y estado vital.
 
 \begin{table}[H]
 	\centering
@@ -121,14 +121,14 @@ En la \textcolor{red}{Tabla X} se muestran tablas de contingencia del estado vit
 	\end{tabular}
 \end{table}
 
-Para las variables con datos faltantes se ha realizado un análisis de casos completos (exclusión del análisis de los casos con tenían datos faltantes).  La mortalidad entre los casos es el doble en hombres (32,3\%) que en mujeres (16,8\%). La mortalidad aumenta conforme aumenta la edad, desde 29,4\% en menores de 41 años hasta 68,8\% en mayores de 80 años. El estadio es uno de los principales factores pronósticos del cáncer, algo que se refleja en la gran diferencia existente en la supervivencia entre estadios. En los estadios iniciales (I-II) la supervivencia está cerca al 30\% y en los más avanzados (III-IV) más cerca del 55\%. Se detecta una dependencia entre todas las variables consideradas (sexo, grupo de edad y estadio)  y el estado vital, con p-valores $<$0,05 en todos los casos.
+Para las variables con datos faltantes se ha realizado un análisis de casos completos.  La mortalidad entre los casos es el doble en hombres (32,3\%) que en mujeres (16,8\%). La mortalidad aumenta conforme aumenta la edad, desde 29,4\% en menores de 41 años hasta 68,8\% en mayores de 80 años. El estadio es uno de los principales factores pronósticos del cáncer, algo que se refleja en la gran diferencia existente en la supervivencia entre estadios. En los estadios iniciales (I-II) la supervivencia está cerca al 30\% y en los más avanzados (III-IV) más cerca del 55\%. Se detecta una dependencia entre todas las variables consideradas (sexo, grupo de edad y estadio)  y el estado vital, con p-valores $<$0,05 en todos los casos.
 
 \subsection{Características clínicas para cáncer de colon-recto}
 
-En la \textcolor{red}{Tabla X} se muestra  la distribución de casos de cáncer de colon-recto según algunas variables de interés. Los casos se recogieron entre los años 1998 y 2013, con la mayoría de los casos recogidos entre los años 2007 y 2011. La proporción entre hombres y mujeres es similar (53,1\% y 46,9\% respectivamente), y los estadios más comunes son los intermedios (estadio II: 36,3\% y estadio III: 28,7\%). La edad media de diagnóstico es de 66,7 años (mediana: 68,1 años), con un rango de edad de entre 31 y 90 años. Aproximadamente la mitad de los pacientes son blancos (47,3\%), que es la raza más común seguida por negros o afroamericanos (10,5\%) y asiáticos (2,1\%). Se desconoce la raza del 40,0\% de las personas. Aproximadamente cuatro de cada cinco personas estaban vivas en el momento del último contacto realizado (79,2\%), y sólo un 0,8\% de los casos son hispanos o latinos.\\
+En la Tabla 11 se muestra  la distribución de casos de cáncer de colon-recto según algunas variables de interés. Los casos se recogieron entre los años 1998 y 2013, con la mayoría de los casos recogidos entre los años 2007 y 2011. La proporción entre hombres y mujeres es similar (53,1\% y 46,9\% respectivamente), y los estadios más comunes son los intermedios (estadio II: 36,3\% y estadio III: 28,7\%). La edad media de diagnóstico es de 66,7 años (mediana: 68,1 años), con un rango de edad de entre 31 y 90 años. Aproximadamente la mitad de los pacientes son blancos (47,3\%), que es la raza más común seguida por negros o afroamericanos (10,5\%) y asiáticos (2,1\%). Se desconoce la raza del 40,0\% de las personas. Aproximadamente cuatro de cada cinco personas estaban vivas en el momento del último contacto realizado (79,2\%), y sólo un 0,8\% de los casos son hispanos o latinos.\\
 
 \newpage
-\textbf{\textcolor{red}{Tabla X}}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, edad, estadio, etnia, raza y estado vital.
+\textbf{Tabla 11}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, edad, estadio, etnia, raza y estado vital.
 
 \begin{table}[H]
 		\centering
@@ -169,9 +169,9 @@ En la \textcolor{red}{Tabla X} se muestra  la distribución de casos de cáncer 
 	\end{tabular}
 \end{table}
 
-En la \textcolor{red}{Tabla X} se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de chi cuadrado ($\chi^2$) \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el fichero \texttt{analisis\_cr\textbackslash03\_analisis\_datos\_clinicos.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
+En la Tabla 12 se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de chi cuadrado ($\chi^2$) \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el fichero \texttt{analisis\_cr\textbackslash03\_analisis\_datos\_clinicos.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
 
-\textbf{\textcolor{red}{Tabla X}}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, etnia, raza y estado vital.
+\textbf{Tabla 12}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, etnia, raza y estado vital.
 
 \begin{table}[H]
 		\centering
@@ -209,9 +209,11 @@ Para las variables con datos faltantes se ha realizado un análisis de casos com
 
 \section{Resultados de clasificación biclase para cáncer de colon-recto}
 
+\textcolor{red}{Completar una vez esté depurado el análisis de cáncer de hígado.}
+
 \section{Resultados de clasificación multiclase para cáncer de colon-recto}
 
-\textcolor{red}{Completar una vez esté depurado el análisis de cáncer de hígado}
+\textcolor{red}{Completar una vez esté depurado el análisis de cáncer de hígado.}
 
 \section{Conclusiones}
 
