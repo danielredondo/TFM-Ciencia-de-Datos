@@ -40,21 +40,23 @@ ui <- dashboardPage(
     tabItems(
       # Tab 1
       tabItem(tabName = "intro",
-              h2("Abstract"),
+              h1("Epidemiología y detección de biomarcadores en cáncer"),
               
-              h4(tags$b("Introducción")),
+              h3(tags$b("Introducción")),
               "Texto",
-              h4(tags$b("Resultados")),
+              h3(tags$b("Metodología")),
               "Texto",
-              h4(tags$b("Conclusiones")),
+              h3(tags$b("Resultados")),
+              "Texto",
+              h3(tags$b("Conclusiones")),
               "Texto",
               
               h2("Sobre esta aplicación"),
               "Texto",
               # Parte final
               br(), br(), br(),
-              fluidRow(column(6, tags$img(src = "ugr.png", height = "150px")),
-                       column(6, tags$img(src = "knowseq.png", height = "150px")))
+              fluidRow(column(6, tags$img(src = "ugr.png", height = "100px")),
+                       column(6, tags$img(src = "knowseq.png", height = "120px")))
               
       ),
       
@@ -151,7 +153,7 @@ ui <- dashboardPage(
       tabItem(tabName = "codigo",
               h2("Código"),
               tags$h4(
-                "En ", tags$a(href = "https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/Shiny/app.R", "este repositorio de GitHub"),
+                "En ", tags$a(href = "https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/shiny/app.R", "este repositorio de GitHub"),
                 "puedes encontrar el código de la aplicación.")
               )
       ) # Final tabs

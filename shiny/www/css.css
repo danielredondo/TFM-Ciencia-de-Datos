@@ -1,11 +1,15 @@
 body {
   font-family: Calibri, helvetica, sans-serif;
+  background-color: #fff;
 }
 
+.content-wrapper, .right-side {
+                                background-color: #fff;
+}
 h1 {
-  color: #D95032;
+  color: #027368;
   font-weight: bold;
-  font-size: 150%;
+  font-size: 170%;
 }
 
 .title {
@@ -19,6 +23,7 @@ h2 {
 }
 
 h3 {
+  color: #027368;
   font-size: 130%;
   font-weight: bold;
 }
