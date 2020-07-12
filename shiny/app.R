@@ -62,9 +62,9 @@ ui <- dashboardPage(
       
       # Tab 2
       tabItem(tabName = "datos",
-              h2("Carga de datos"),
+              h1("Carga de datos"),
               fileInput(inputId = "archivo_rdata",
-                        label = "Seleccione el archivo .RData a importar",
+                        label = "Seleccione el archivo .RData a importar. Debe contener..",
                         buttonLabel = "Examinar...",
                         accept = ".RData",
                         placeholder = "No se ha seleccionado ningún archivo",
@@ -92,7 +92,7 @@ ui <- dashboardPage(
       
       # Tab 3
       tabItem(tabName = "genes",
-              h2("Selección de genes"),
+              h1("Selección de genes"),
               sliderInput(inputId = "numero_genes", label = "Selecciona el número de genes relevantes", value = 20, min = 0, max = 50, step = 1),
               "Se muestran a continuación los mejores genes seleccionados por cada método de selección de características.",
               br(),
@@ -111,7 +111,7 @@ ui <- dashboardPage(
       
       # Tab 4
       tabItem(tabName = "entrenamiento",
-              h2("Entrenamiento de modelos"),
+              h1("Entrenamiento de modelos"),
               
               # Elegir MRMR/RF/DA, se muestra MRMR por ahora
               selectInput("tipo_entrenamiento",
@@ -137,11 +137,11 @@ ui <- dashboardPage(
       ),
       # Tab 5
       tabItem(tabName = "validacion",
-              h2("Validación de modelos")
+              h1("Validación de modelos")
       ),
       # Tab 6
       tabItem(tabName = "autores",
-              h2("Autores"),
+              h1("Autores"),
               tags$h4(
                 tags$li(tags$b("Daniel Redondo Sánchez")), br(),
                 tags$li(tags$b("Ignacio Rojas")), br(),
@@ -151,7 +151,7 @@ ui <- dashboardPage(
               ),
       # Tab 7
       tabItem(tabName = "codigo",
-              h2("Código"),
+              h1("Código"),
               tags$h4(
                 "En ", tags$a(href = "https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/shiny/app.R", "este repositorio de GitHub"),
                 "puedes encontrar el código de la aplicación.")
