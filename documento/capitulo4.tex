@@ -16,7 +16,7 @@ La fuente de los datos es GDC (Genomic Data Commons) Portal, una plataforma web 
 	\includegraphics[width=1\textwidth]{figuras/funcionamiento_gdc.jpeg} \\
 \end{center}
 
-GDC Portal, a día 22 de Junio, contenía información sobre unos 84.000 casos, 23.000 genes y más de 3 millones de mutaciones de genes \cite{GDCPortal}. Algunos de estos datos son abiertos, mientras que para otros es necesario solicitar acceso. Los datos de los que dispone son muy variados, y se pueden distinguir en tres grandes categorías:
+A día 22 de Junio, GDC Portal contenía información sobre unos 84.000 casos, 23.000 genes y más de 3 millones de mutaciones de genes \cite{GDCPortal}. Algunos de estos datos son abiertos, mientras que para otros es necesario solicitar acceso. La información de la que dispone es muy variada, y se puede distinguir en tres grandes categorías:
 
 \begin{itemize}
 	\item Información clínica, como la edad del sujeto, su sexo o el estadio del cáncer del que ha sido diagnosticado.
@@ -28,7 +28,7 @@ Para el presente trabajo se han descargado de GDC Portal todos los datos que cum
 
 \begin{itemize}
 	\item Son datos transcriptómicos del programa Cancer Genoma Atlas (TCGA), dirigido por dos organismos estadounidenses: el Instituto Nacional del Cáncer (NCI) y el Instituto Nacional para la Investigación del Genoma Humano (NHGRI) \cite{NationalCancerInstitutea}. 
-	\item Contienen información sobre tumores o tejidos sanos de cáncer de hígado, o colon-recto. Se han excluido metástasis en hígado y tumores recurrentes.
+	\item Contienen información sobre tumores o tejidos sanos de cáncer de hígado, o colon-recto. Se han excluido metástasis y tumores recurrentes.
 	\item El tipo de estrategia experimental es RNA-Seq, y el tipo de flujo de trabajo es HTSeq - Counts.
 \end{itemize}
 
@@ -36,7 +36,14 @@ Para cáncer de hígado se han descargado datos sobre 462 pacientes, de los cual
 
 \subsection{Análisis}
 
-Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) \cite{R} y el paquete \texttt{KnowSeq} (v.1.1.19) \cite{KnowSeq}, librería que ha sido desarrollada por los tutores del presente trabajo, y en la que el autor ha contribuido con pequeñas actualizaciones. El paquete está además disponible en Bioconductor, la plataforma de código abierto en R más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
+Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) \cite{R} y \{\texttt{KnowSeq}\} (v.1.1.19) \cite{KnowSeq}, paquete de R que ha sido desarrollado por los tutores del presente trabajo, y en el que el autor ha contribuido con pequeñas actualizaciones:
+
+\begin{itemize}
+	\item{Mantener los parámetros óptimos de SVM (coste y gamma) y kNN (k) encontrados tras tuning en conjunto de entrenamiento para aplicarlos directamente en el modelo para el conjunto de test}
+	\item Pequeñas modificaciones en la documentación de algunas funciones.
+\end{itemize}
+
+El paquete está además disponible en Bioconductor, la plataforma de código abierto en R más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
 
 Todo el código de los análisis está disponible la carpeta \texttt{analisis\_higado} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}. Para asegurar la reproducibilidad de los análisis, en el fichero \texttt{session\_info.txt} del repositorio de GitHub \cite{Redondo-Sanchez2020} se muestran todos los paquetes utilizados y sus versiones como resultado de ejecutar \texttt{devtools::session\_info()}.\\
 
@@ -44,14 +51,14 @@ Se utilizan técnicas de visualización de datos para una mejor comprensión de 
 
 \section{Características clínicas de los tumores}
  
-La plataforma GDC Portal \cite{GDCPortal} permite descargar información clínica sobre los pacientes que tienen casos de cáncer, aunque no sobre los casos sanos.
+A continuación se describe la información clínica de aquellas personas diagnosticadas con cáncer. La plataforma GDC Portal permite descargar información clínica sobre los pacientes que tienen casos de cáncer, aunque no sobre los casos sanos \cite{GDCPortal} . 
 
 \subsection{Características clínicas para cáncer de hígado}
 
-En la Tabla 9 se muestra  la distribución de casos de cáncer de hígado según algunas variables de interés. Los casos se recogieron entre los años 1995 y 2013, con el 67,6\% de los casos recogidos entre los años 2010 y 2013. La mayoría de los casos son hombres (65,3\%) y están diagnosticados en estadios iniciales (70,3\% en estadios I y II). La edad media de diagnóstico es de 60,1 años (mediana: 61,7 años), con un rango de edad que comprende de los 16 a los 87 años. Un 5,0\% de los casos son hispanos o latinos y más de la mitad son blancos (52,5\%), que es la raza más común seguida por asiáticos (39,9\%) y negros o afroamericanos (4,7\%). Aproximadamente dos de cada tres personas estaban vivas en el momento del último contacto realizado (63,6\%).\\
+En la Tabla 9 se muestra  la distribución de casos de cáncer de hígado según algunas variables de interés. Los casos se recogieron entre los años 1995 y 2013, con el 67,6\% de los casos recogidos entre los años 2010 y 2013. La mayoría de los casos son hombres (65,3\%) y están diagnosticados en estadios iniciales (70,3\% en estadios I y II). La edad media de diagnóstico es de 60,1 años (mediana: 61,7 años), con un rango de edad que comprende de los 16 a los 87 años. Más de la mitad de los casos son blancos (52,5\%), que es la raza más común seguida por asiáticos (39,9\%) y negros o afroamericanos (4,7\%). Aproximadamente dos de cada tres personas estaban vivas en el momento del último contacto realizado (63,6\%).\\
 
 \newpage
-\textbf{Tabla 9}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, edad, estadio, etnia, raza y estado vital.
+\textbf{Tabla 9}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, raza y estado vital.
 
 \begin{table}[H]
 	\centering
@@ -76,10 +83,6 @@ En la Tabla 9 se muestra  la distribución de casos de cáncer de hígado según
 		Estadio III                                    & 82 (20,3\%)                                      \\
 		Estadio IV                                     & 7 (1,7\%)                                        \\
 		Desconocido                                    & 31 (7,7\%)                                       \\ \hline
-		\multicolumn{1}{l}{\textbf{Etnia}}             &                                                  \\
-		Hispano o latino                               & 20 (5,0\%)                                         \\
-		No hispano ni latino                           & 365 (90,3\%)                                     \\
-		Desconocido                                    & 19 (4,7\%)                                       \\ \hline
 		\multicolumn{1}{l}{\textbf{Raza}}              &                                                  \\
 		Blanco                                         & 212 (52,5\%)                                     \\
 		Asiático                                       & 161 (39,9\%)                                     \\
@@ -97,7 +100,7 @@ En la Tabla 10 se muestran tablas de contingencia del estado vital según sexo, 
 
 El código completo del análisis se muestra en el fichero \texttt{analisis\_higado/\linebreak01\_analisis\_datos\_clinicos.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
 
-\textbf{Tabla 10}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, etnia, raza y estado vital.
+\textbf{Tabla 10}. Características clínicas de los casos de cáncer de hígado. Distribución de  estado vital según sexo, grupo de edad y estadio.
 
 \begin{table}[H]
 	\centering
@@ -127,10 +130,10 @@ Para las variables con datos faltantes se ha realizado un análisis de casos com
 
 \subsection{Características clínicas para cáncer de colon-recto}
 
-En la Tabla 11 se muestra  la distribución de casos de cáncer de colon-recto según algunas variables de interés. Los casos se recogieron entre los años 1998 y 2013, con la mayoría de los casos recogidos entre los años 2007 y 2011. La proporción entre hombres y mujeres es similar (53,1\% y 46,9\% respectivamente), y los estadios más comunes son los intermedios (estadio II: 36,3\% y estadio III: 28,7\%). La edad media de diagnóstico es de 66,7 años (mediana: 68,1 años), con un rango de edad de entre 31 y 90 años. Aproximadamente la mitad de los pacientes son blancos (47,3\%), que es la raza más común seguida por negros o afroamericanos (10,5\%) y asiáticos (2,1\%). Se desconoce la raza del 40,0\% de las personas. Aproximadamente cuatro de cada cinco personas estaban vivas en el momento del último contacto realizado (79,2\%), y sólo un 0,8\% de los casos son hispanos o latinos.\\
+En la Tabla 11 se muestra  la distribución de casos de cáncer de colon-recto según algunas variables de interés. Los casos se recogieron entre los años 1998 y 2013, con la mayoría de los casos recogidos entre los años 2007 y 2011. La proporción entre hombres y mujeres es similar (53,1\% y 46,9\% respectivamente), y los estadios más comunes son los intermedios (estadio II: 36,3\% y estadio III: 28,7\%). La edad media de diagnóstico es de 66,7 años (mediana: 68,1 años), con un rango de edad de entre 31 y 90 años. Aproximadamente la mitad de los pacientes son blancos (47,3\%), que es la raza más común seguida por negros o afroamericanos (10,5\%) y asiáticos (2,1\%). Se desconoce la raza del 40,0\% de las personas. Aproximadamente cuatro de cada cinco personas estaban vivas en el momento del último contacto realizado (79,2\%).\\
 
 \newpage
-\textbf{Tabla 11}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, edad, estadio, etnia, raza y estado vital.
+\textbf{Tabla 11}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, raza y estado vital.
 
 \begin{table}[H]
 		\centering
@@ -155,10 +158,6 @@ En la Tabla 11 se muestra  la distribución de casos de cáncer de colon-recto s
 		Estadio III                                & 178 (28,7\%)                                              \\
 		Estadio IV                                 & 89 (14,4\%)                                               \\
 		Desconocido                                & 23 (3,7\%)                                                \\ \hline
-		\multicolumn{1}{l}{\textbf{Etnia}}         &                                                           \\
-		Hispano o latino                           & 5 (0,8\%)                                                 \\
-		No hispano ni latino                       & 352 (56,8\%)                                              \\
-		Desconocido                                & 263 (42,4\%)                                              \\ \hline
 		\multicolumn{1}{l}{\textbf{Raza}}          &                                                           \\
 		Blanco                                     & 293 (47,3\%)                                              \\
 		Asiático                                   & 13 (2,1\%)                                                \\
@@ -173,7 +172,7 @@ En la Tabla 11 se muestra  la distribución de casos de cáncer de colon-recto s
 
 En la Tabla 12 se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de chi cuadrado ($\chi^2$) \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el fichero \texttt{analisis\_cr/01\_analisis\_datos\_clinicos.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
 
-\textbf{Tabla 12}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, etnia, raza y estado vital.
+\textbf{Tabla 10}. Características clínicas de los casos de cáncer de colon-recto. Distribución de  estado vital según sexo, grupo de edad y estadio.
 
 \begin{table}[H]
 		\centering
@@ -182,7 +181,7 @@ En la Tabla 12 se muestran tablas de contingencia del estado vital según sexo, 
 		\multicolumn{1}{l}{}                           & \multicolumn{1}{c}{\textbf{Vivos}} & \multicolumn{1}{c}{\textbf{Fallecidos}} & \multicolumn{1}{c}{\textbf{p-valor}} \\ \hline
 		\multicolumn{1}{l}{\textbf{Número de tumores}} & 491            & 129                 &                  \\ \hline
 		\multicolumn{1}{l}{\textbf{Sexo}}              &                &                     & 0,993            \\
-		Hombre                                         & 260 (79\%)     & 69 (21,0\%)           &                  \\
+		Hombre                                         & 260 (79,0\%)     & 69 (21,0\%)           &                  \\
 		Mujer                                          & 231 (79,4\%)   & 60 (20,6\%)         &                  \\ \hline
 		\multicolumn{1}{l}{\textbf{Grupo de edad}}     &                &                     & \textless{}0,001 \\
 		$\leq$40 años                                     & 14 (87,5\%)    & 2 (12,5\%)          &                  \\
@@ -205,6 +204,8 @@ Para las variables con datos faltantes se ha realizado un análisis de casos com
 
 El código completo del análisis se muestra en el fichero \texttt{analisis\_higado/\linebreak03\_analisis\_biclase.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
 
+\textcolor{red}{Tabla 13 con números de casos}
+
 \subsection{Entrenamiento de modelo}
 
 \newpage
@@ -217,15 +218,15 @@ El código completo del análisis se muestra en el fichero \texttt{analisis\_hig
 \subsubsection{SVM}
 
 \textbf{\textcolor{red}{Figura XX}}. F1-Score con SVM en cada fold según método de selección de características y número de genes usados.
-%\begin{center}
-%	\includegraphics[width=.75\textwidth]{figuras/figuras_folds.pdf} \\
-%\end{center}
+\begin{center}
+	\includegraphics[width=.95\textwidth]{figuras/higado_biclase_folds_f1_svm.pdf} \\
+\end{center}
 
 \newpage
 \textbf{\textcolor{red}{Figura XX}}. Precisión con SVM en cada fold según método de selección de características y número de genes usados.
-%\begin{center}
-%	\includegraphics[width=.75\textwidth]{figuras/figuras_folds.pdf} \\
-%\end{center}
+\begin{center}
+	\includegraphics[width=.95\textwidth]{figuras/higado_biclase_folds_acc_svm.pdf} \\
+\end{center}
 
 \newpage
 \textbf{\textcolor{red}{Figura XX}}. Mapa de calor con valores de F1-Score, precisión, sensibilidad y especificidad de SVM según método de selección de características y número de genes usados.
@@ -237,43 +238,42 @@ El código completo del análisis se muestra en el fichero \texttt{analisis\_hig
 \subsubsection{RF}
 
 \textbf{\textcolor{red}{Figura XX}}. F1-Score con RF en cada fold según método de selección de características y número de genes usados.
-%\begin{center}
-%	\includegraphics[width=.75\textwidth]{figuras/figuras_folds.pdf} \\
-%\end{center}
+\begin{center}
+	\includegraphics[width=.95\textwidth]{figuras/higado_biclase_folds_f1_rf.pdf} \\
+\end{center}
 
 \newpage
 \textbf{\textcolor{red}{Figura XX}}. Precisión con RF en cada fold según método de selección de características y número de genes usados.
-%\begin{center}
-%	\includegraphics[width=.75\textwidth]{figuras/figuras_folds.pdf} \\
-%\end{center}
+\begin{center}
+	\includegraphics[width=.95\textwidth]{figuras/higado_biclase_folds_acc_rf.pdf} \\
+\end{center}
 
 \newpage
 \textbf{\textcolor{red}{Figura XX}}. Mapa de calor con valores de F1-Score, precisión, sensibilidad y especificidad de RF según método de selección de características y número de genes usados.
-%\begin{center}
-%	\includegraphics[width=1\textwidth]{figuras/higado_biclase_heatmap_rf.pdf} \\
-%\end{center}
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/higado_biclase_heatmap_rf.pdf} \\
+\end{center}
 
 \newpage
 \subsubsection{kNN}
 
 \textbf{\textcolor{red}{Figura XX}}. F1-Score con kNN en cada fold según método de selección de características y número de genes usados.
-%\begin{center}
-%	\includegraphics[width=.75\textwidth]{figuras/figuras_folds.pdf} \\
-%\end{center}
+\begin{center}
+	\includegraphics[width=.95\textwidth]{figuras/higado_biclase_folds_f1_knn.pdf} \\
+\end{center}
 
 \newpage
 \textbf{\textcolor{red}{Figura XX}}. Precisión con kNN en cada fold según método de selección de características y número de genes usados.
-%\begin{center}
-%	\includegraphics[width=.75\textwidth]{figuras/figuras_folds.pdf} \\
-%\end{center}
-
+\begin{center}
+	\includegraphics[width=.95\textwidth]{figuras/higado_biclase_folds_acc_knn.pdf} \\
+\end{center}
 
 \newpage
 \textbf{\textcolor{red}{Figura XX}}. Mapa de calor con valores de F1-Score, precisión, sensibilidad y especificidad de kNN según método de selección de características y número de genes usados.
-%\begin{center}
-%	\includegraphics[width=1\textwidth]{figuras/higado_biclase_heatmap_knn.pdf} \\
-%\end{center}
-%\newpage
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/higado_biclase_heatmap_knn.pdf} \\
+\end{center}
+\newpage
 
 \subsection{Validación en test}
 
@@ -291,4 +291,5 @@ El código completo del análisis se muestra en el fichero \texttt{analisis\_hig
 
 \section{Conclusiones}
 
-\textcolor{red}{Interpretar resultados con cautela: ver pág. 65 de \cite{CastilloSecilla2020} (referencias 77-79).}\\
+\textcolor{red}{Interpretar resultados con cautela: ver pág. 65 de \cite{CastilloSecilla2020} (referencias 77-79). Puede haber también con validación externa de los resultados.}\\
+
