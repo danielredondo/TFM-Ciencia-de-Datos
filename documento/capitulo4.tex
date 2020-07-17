@@ -36,22 +36,23 @@ Para cáncer de hígado se han descargado datos sobre 462 pacientes, de los cual
 
 \subsection{Análisis}
 
-Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) \cite{R} y \{\texttt{KnowSeq}\} (v.1.1.19) \cite{KnowSeq}, paquete de R que ha sido desarrollado por los tutores del presente trabajo, y en el que el autor ha contribuido con pequeñas actualizaciones:
+Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) \cite{R} y \{\texttt{KnowSeq}\} (v.1.1.19) \cite{KnowSeq}, paquete de \texttt{R} que ha sido desarrollado por los tutores del presente trabajo y en el que el autor ha contribuido con algunas mejoras y actualizaciones (\url{https://github.com/CasedUgr/KnowSeq/commits?author=danielredondo}):
 
 \begin{itemize}
-	\item{Mantener los parámetros óptimos de SVM (coste y gamma) y kNN (k) encontrados tras tuning en conjunto de entrenamiento para aplicarlos directamente en el modelo para el conjunto de test}
-	\item Pequeñas modificaciones en la documentación de algunas funciones.
+	\item Corregir un fallo que hacía que el método de selección de características RF no funcionase correctamente ante problemas de clasificación multiclase.
+	\item Mantener los parámetros óptimos de SVM (coste y gamma) y kNN ($k$) encontrados tras optimización de los parámetros (\textit{tuning}) en conjunto de entrenamiento para aplicarlos directamente en el modelo para el conjunto de test.
+	\item Pequeñas modificaciones en la documentación de funciones.
 \end{itemize}
 
-El paquete está además disponible en Bioconductor, la plataforma de código abierto en R más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
+El paquete está además disponible en Bioconductor, la plataforma de código abierto en \texttt{R} más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
 
 Todo el código de los análisis está disponible la carpeta \texttt{analisis\_higado} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}. Para asegurar la reproducibilidad de los análisis, en el fichero \texttt{session\_info.txt} del repositorio de GitHub \cite{Redondo-Sanchez2020} se muestran todos los paquetes utilizados y sus versiones como resultado de ejecutar \texttt{devtools::session\_info()}.\\
 
-Se utilizan técnicas de visualización de datos para una mejor comprensión de los resultados, utilizando diagramas de Sankey, gráficos de líneas y cajas, y mapas de calor.\\
+Se utilizan técnicas de visualización de datos para una mejor comprensión de los resultados, utilizando diagramas de Sankey, gráficos de líneas y cajas, y mapas de calor.
 
 \section{Características clínicas de los tumores}
  
-A continuación se describe la información clínica de aquellas personas diagnosticadas con cáncer. La plataforma GDC Portal permite descargar información clínica sobre los pacientes que tienen casos de cáncer, aunque no sobre los casos sanos \cite{GDCPortal} . 
+A continuación se describe la información clínica de aquellas personas diagnosticadas con cáncer. La plataforma GDC Portal permite descargar información clínica sobre los pacientes que tienen casos de cáncer, aunque no sobre los casos sanos \cite{GDCPortal}. 
 
 \subsection{Características clínicas para cáncer de hígado}
 
@@ -293,3 +294,4 @@ El código completo del análisis se muestra en el fichero \texttt{analisis\_hig
 
 \textcolor{red}{Interpretar resultados con cautela: ver pág. 65 de \cite{CastilloSecilla2020} (referencias 77-79). Puede haber también con validación externa de los resultados.}\\
 
+\textcolor{red}{No sustituye en ningún caso a médicos, es algo complementario.}

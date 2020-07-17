@@ -30,31 +30,47 @@ El algoritmo mRMR funciona hacia delante: partiendo del conjunto vacío de carac
 
 siendo $I$ la función que mide la información mutua entre dos variables, $Y$ la variable resultado y $S$ el conjunto de variables ya seleccionadas. El proceso se repite hasta alcanzar un cierto número prefijado de variables seleccionadas. El resultado final es un ranking de variables ordenadas en base a su importancia respecto al criterio mRMR.\\
 
-Es un método muy conocido que ha sido utilizado ampliamente en ciencias -ómicas \cite{Ding2005, Yang2013, Galvez2018, Castillo2019, Galvez2020}. En R está implementado mediante la función \texttt{KnowSeq::\linebreak featureSelection(mode = `mrmr')} \cite{KnowSeq}, que a su vez utiliza \texttt{praznik::MRMR} \cite{Kursa2020}.
+Es un método muy conocido que ha sido utilizado ampliamente en ciencias -ómicas \cite{Ding2005, Yang2013, Galvez2018, Castillo2019, Galvez2020}. En \texttt{R}  está implementado mediante la función \texttt{KnowSeq::\linebreak featureSelection(mode = `mrmr')} \cite{KnowSeq}, que a su vez utiliza \texttt{praznik::MRMR} \cite{Kursa2020}.
 
 \subsection{\textit{Random forest} (RF)}
 
 Uno de los resultados del modelo de clasificación \textit{random forest}, detallado en la sección 3.2.2. es un ranking de variables según su importancia. Este método de selección de variables se trata por tanto de un método embebido.\\
 
-La importancia de una variable en el modelo se puede cuantificar usando el descenso medio en precisión del modelo al aleatorizar los valores de la variable manteniendo su distribución \cite{Breiman2001, Breiman2002}. También se puede usar el descenso de índice Gini o de otras medidas de entropía \cite{Louppe2013}.\\
+La importancia de una variable en el modelo se puede cuantificar usando la reducción media en precisión del modelo al aleatorizar los valores de la variable manteniendo su distribución \cite{Breiman2001, Breiman2002}. También se puede usar la reducción media de otras medidas de entropía como el índice de Gini \cite{Louppe2013}.\\
 
-Este algoritmo en R está implementado en \texttt{KnowSeq::featureSelection(mode = `rf')} \cite{KnowSeq} que a su vez utiliza \texttt{randomForest::randomForest} \cite{Liaw2002}.
+Este algoritmo en \texttt{R}  está implementado en \texttt{KnowSeq::featureSelection(mode = `rf')} \cite{KnowSeq} que a su vez utiliza \texttt{randomForest::randomForest} \cite{Liaw2002}.
 
 \subsection{Asociación de enfermedades (DA)}
 
 El método de selección de características mediante asociación de enfermedades (DA, por sus siglas en inglés: \textit{Disease Association}) permite encontrar aquellos genes que están asociados en la literatura científica con una determinada enfermedad. Utiliza para ello la plataforma targetValidation de Open Targets \cite{OpenTargets2020}, que contiene para cada gen una puntuación midiendo la asociación gen-enfermedad en el rango de 0 (no hay asociación) a 1 (la asociación es total). El método DA obtiene esas puntuaciones y las ordena, obteniendo un ranking de genes en base a su asociación con la enfermedad.\\
 
-El método DA  está implementado en R en \texttt{KnowSeq::featureSelection(mode = `da')} \cite{KnowSeq}, que utiliza a su vez la REST API de targetValidation \cite{OpenTargets2020}.
+El método DA  está implementado en \texttt{R}  en \texttt{KnowSeq::featureSelection(mode = `da')} \cite{KnowSeq}, que utiliza a su vez la REST API de targetValidation \cite{OpenTargets2020}.
 
 \section{Algoritmos de clasificación}
 
+\textcolor{red}{Breve descripción del problema de clasificación. Leer la presentación de 01Modelosnolineales.pdf}
+
 \subsection{Máquinas de soporte vectorial (SVM)}
+
+Las máquinas de soporte vectorial (SVM) son uno de los algoritmos más populares de la última década debido a su alta eficacia en problemas con grandes cantidades de datos. Consiste en un caso particular de (\textit{kernel machines}), una familia de métodos en el que el espacio de características se transforma para ser representados en un espacio más complejo, de alta dimensión o incluso infinita. Para ello, utilizan \textit{kernels}: funciones que devuelven el producto escalar entre las transformaciones de dos argumentos, sin tener que especificar de forma explícita la transformación realizada. Resumidamente, en los algoritmos SVM la transformación de los datos en el nuevo espacio permite que las clases sean linealmente separables mediante un hiperplano que separa las clases dejando el máximo margen posible entre ellas \cite{Boser1992}. Aquellas instancias que limitan el margen de ese hiperplano son llamados vectores soporte. Aunque en un principio el algoritmo SVM fue ideado para problemas binarios \cite{Boser1992}, se ha generalizado para problemas multi-clase \cite{Duan2005}.\\
+
+Uno de los \textit{kernel} más comunes para SVM es el de base radial, que viene determinado por dos parámetros: coste ($c$) y gamma ($\gamma$). El coste $c$ mide la permisividad que se permite a la existencia de clases mal clasificadas por el modelo, que podrían ser ejemplos extraños (\textit{outliers}). Un coste alto puede sobreajustar el modelo (\textit{overfitting}), mientras que un coste bajo puede reducir la precisión del modelo en el conjunto de entrenamiento. $\gamma$ mide el nivel de influencia de cada instancia vector soporte para la construcción del hiperplano. Para cada problema se pueden encontrar valores de coste y gamma que optimizan los resultados del algoritmo SVM con base radial, aunque debido a que la búsqueda exhaustiva suele ser costosa computacionalmente se suele realizar una búsqueda de los mejores parámetros dentro de unos posibles valores de $c$ y $\gamma$.\\
+
+Los algoritmos SVM están implementados en varios paquetes de R, siendo el más común \{\texttt{e1071}\} \cite{Meyer2019}.
 
 \subsection{\textit{Random Forest} (RF)}
 
-\textit{Random forest} es uno de los algoritmos de machine learning más usados en la actualidad, y se puede aplicar a tareas de clasificación y regresión. Para clasificación es un método en el que se crean varios árboles de decisión decorrelados entre sí para elegir la clase más votada por los árboles como la clase predicha. Para conseguir esta ausencia de correlación, cada vez que se considera una división en cada árbol se obliga a que la variable que dividirá las instancias tenga que pertenecer a un subconjunto de las variables seleccionado aleatoriamente \cite{Breiman2001, Breiman2002}. Debido a este método de construcción de árboles, es un algoritmo cuya principal desventaja es la ausencia de interpretabilidad. El algoritmo de \textit{random forest} es una mejora del método de \textit{bagging} en árboles de decisión, que consiste en crear árboles basados en una selección aleatoria sin reemplazamiento de las instancias del conjunto de entrenamiento, reduciendo así la varianza de las predicciones \cite{Breiman1996}.
+\textit{Random forest} (RF) es uno de los algoritmos de machine learning más usados en la actualidad, y se puede aplicar a tareas de clasificación y regresión. Para clasificación es un método en el que se crean varios árboles de decisión decorrelados entre sí para elegir la clase más votada por los árboles como la clase predicha. Para conseguir esta ausencia de correlación, cada vez que se considera una división en cada árbol se obliga a que la variable que dividirá las instancias tenga que pertenecer a un subconjunto de las variables seleccionado aleatoriamente \cite{Breiman2001, Breiman2002}. Debido a este método de construcción de árboles, es un algoritmo cuya principal desventaja es la ausencia de interpretabilidad.\\
+
+El algoritmo de RF es una mejora del método de \textit{bagging} en árboles de decisión, que consiste en crear árboles basados en una selección aleatoria sin reemplazamiento de las instancias del conjunto de entrenamiento, reduciendo así la varianza de las predicciones \cite{Breiman1996}.\\
+
+El paquete de \texttt{R} \{\texttt{randomForest}\} implementa el algoritmo RF \cite{Liaw2002}.
 
 \subsection{k-vecinos más cercanos (kNN)}
+
+\textcolor{red}{Optimización de $k$}\\
+
+En este trabajo se utilizará la implementación de kNN realizada en \{\texttt{caret}\} \cite{Kuhn2020}.
 
 \subsection{Medidas de evaluación}
 
