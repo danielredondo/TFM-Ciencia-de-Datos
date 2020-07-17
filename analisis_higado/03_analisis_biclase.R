@@ -15,9 +15,10 @@ setwd("TFM/Analisis_higado/data/")
 # ----- Carga de paquetes -----
 
 library(BiocManager) # Para instalar KnowSeq
-# BiocManager::install("KnowSeq")
+
 # devtools::install_github("CasedUgr/KnowSeq")
 library(KnowSeq)     # Para trabajar con datos de transcriptómica de GDC Portal
+
 library(dplyr)       # Para select, filter, pipes, ...
 library(tictoc)      # Para medir tiempos con tic() y toc() a lo MATLAB 
 library(beepr)       # Para avisar con beeps cuando acaba un proceso
@@ -27,7 +28,7 @@ library(gplots)      # Para heatmaps
 library(reshape2)    # Para melt
 library(ggalluvial)  # Para diagrama de Sankey
 
-# -----  Sobreescribir la función dataPlot con la nueva función que pinta líneas discontinuas -----
+# -----  Sobreescribir la función dataPlot con una nueva función que pinta líneas discontinuas -----
 
 source("../funciones_personalizadas_knowseq/dataPlot.R")
 
@@ -82,7 +83,7 @@ myAnnotation <- getGenesAnnotation(rownames(countsMatrix))
 
 # ----- Cálculo de matriz de expresión de genes -----
 
-tic("calculateGeneExpressionValues") # 110 segundos
+tic("calculateGeneExpressionValues") # 82 segundos
 expressionMatrix <- calculateGeneExpressionValues(countsMatrix, myAnnotation, genesNames = TRUE)
 toc()
 
@@ -104,18 +105,16 @@ dev.off()
 
 # ----- Controlando por el efecto batch -----
 
-tic("batchEffectRemoval") # 235 segundos
+tic("batchEffectRemoval") # 241 segundos
 svaMod <- batchEffectRemoval(expressionMatrix, as.factor(labels), method = "sva")
 toc()
 
 # ----- Extracción de DEG (Expresión Diferencial de Genes) -----
 
-tic("DEGsExtraction") # 20 segundos
+tic("DEGsExtraction") # 13 segundos
 DEGsInformation <- DEGsExtraction(expressionMatrix, as.factor(labels),
                                   # p-valor
                                   pvalue = 0.001,
-                                  # Número de genes
-                                  #number = 12,
                                   # Ajuste por batchEffect
                                   svaCorrection = TRUE, svaMod = svaMod)
 toc()
@@ -261,35 +260,30 @@ rfRanking <- rfRanking[1:10]
 daRanking <- featureSelection(particion.entrenamiento, labels_train, colnames(particion.entrenamiento),
                               mode = "da", disease = "liver cancer")
 
-# Selección de los 10 genes más relevantes. Si hay más de 10 genes con relevancia = 1, se seleccionan
-# todos los que tengan relevancia = 1
-ifelse(sum(daRanking == 1) <= 10,
-       daRanking <- names(daRanking[1:10]),
-       daRanking <- names(daRanking[1:sum(daRanking == 1)]))
+daRanking <- names(daRanking[1:10])
 
-mrmrRanking
-rfRanking
-daRanking
+genes <- cbind(mrmrRanking, rfRanking, daRanking)
+write.csv2(genes, file = "../../03_analisis_biclase_figuras/genes.csv")
 
 # ----- SVM: Resultados con validación cruzada para cada método de selección de características -----
 
 numero_folds <- 5
 
-# mRMR: 24 segundos
+# mRMR: 19 segundos
 tic("svm_mrmr")
-results_cv_svm_mrmr <- svm_CV(particion.entrenamiento, labels_train, mrmrRanking,
+results_cv_svm_mrmr <- svm_trn(particion.entrenamiento, labels_train, mrmrRanking,
                               numFold = numero_folds)
 toc()
 
-# random forest: 22 segundos
+# random forest: 16 segundos
 tic("svm_rf")
-results_cv_svm_rf <- svm_CV(particion.entrenamiento, labels_train, rfRanking,
+results_cv_svm_rf <- svm_trn(particion.entrenamiento, labels_train, rfRanking,
                             numFold = numero_folds)
 toc()
 
-# disease association: 40 segundos
+# disease association: 18 segundos
 tic("svm_da")
-results_cv_svm_da <- svm_CV(particion.entrenamiento, labels_train, daRanking,
+results_cv_svm_da <- svm_trn(particion.entrenamiento, labels_train, daRanking,
                             numFold = numero_folds)
 toc()
 
@@ -298,7 +292,7 @@ mejores_parametros_svm <- rbind("mrmr" = results_cv_svm_mrmr$bestParameters,
                                 "rf" = results_cv_svm_rf$bestParameters,
                                 "da" = results_cv_svm_da$bestParameters)
 
-print(mejores_parametros_svm)
+write.csv2(mejores_parametros_svm, file = "../../03_analisis_biclase_figuras/mejores_parametros_svm.csv")
 
 # ----- SVM: Resultados gráficos de validación cruzada -----
 
@@ -599,15 +593,15 @@ dev.off()
 numero_folds <- 5
 
 # mRMR
-results_cv_rf_mrmr <- rf_CV(particion.entrenamiento, labels_train, mrmrRanking,
+results_cv_rf_mrmr <- rf_trn(particion.entrenamiento, labels_train, mrmrRanking,
                             numFold = numero_folds)
 
 # random forest
-results_cv_rf_rf <- rf_CV(particion.entrenamiento, labels_train, rfRanking,
+results_cv_rf_rf <- rf_trn(particion.entrenamiento, labels_train, rfRanking,
                           numFold = numero_folds)
 
 # disease association
-results_cv_rf_da <- rf_CV(particion.entrenamiento, labels_train, daRanking,
+results_cv_rf_da <- rf_trn(particion.entrenamiento, labels_train, daRanking,
                           numFold = numero_folds)
 
 # ----- RF: Resultados gráficos de validación cruzada -----
@@ -864,7 +858,7 @@ ggsave(filename = "../../03_analisis_biclase_figuras/28_rf_spec.png", width = 8,
 # --- Mejor método en CV basado en F1-score
 
 # El mejor ranking es RF con 20 genes
-mejores_genes_rf <- mrmrRanking[1:6]
+mejores_genes_rf <- mrmrRanking[1:7]
 
 # ----- RF: Resultados gráficos en train con el mejor método ------
 
@@ -896,7 +890,7 @@ results_rf_da <- rf_test(train = particion.entrenamiento, labels_train,
                          test = particion.test, labels_test, daRanking)
 
 # Matriz de confusión mejor clasificador
-tabla <- results_rf_mrmr$cfMats[[6]]$table
+tabla <- results_rf_mrmr$cfMats[[7]]$table
 
 # Gráficamente
 png(filename = "../../03_analisis_biclase_figuras/31_rf_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
@@ -908,19 +902,22 @@ dev.off()
 numero_folds <- 5
 
 # mRMR
-results_cv_knn_mrmr <- knn_CV(particion.entrenamiento, labels_train, mrmrRanking,
+results_cv_knn_mrmr <- knn_trn(particion.entrenamiento, labels_train, mrmrRanking,
                               numFold = numero_folds)
 results_cv_knn_mrmr$bestK
 
 # random forest
-results_cv_knn_rf <- knn_CV(particion.entrenamiento, labels_train, rfRanking,
+results_cv_knn_rf <- knn_trn(particion.entrenamiento, labels_train, rfRanking,
                             numFold = numero_folds)
 results_cv_knn_rf$bestK
 
 # disease association
-results_cv_knn_da <- knn_CV(particion.entrenamiento, labels_train, daRanking,
+results_cv_knn_da <- knn_trn(particion.entrenamiento, labels_train, daRanking,
                             numFold = numero_folds)
 results_cv_knn_da$bestK
+
+mejores_parametros_knn <- cbind(results_cv_knn_mrmr$bestK, results_cv_knn_rf$bestK, results_cv_knn_da$bestK)
+write.csv2(mejores_parametros_knn, file = "../../03_analisis_biclase_figuras/mejores_parametros_knn.csv")
 
 # ----- kNN: Resultados gráficos de validación cruzada -----
 
@@ -1324,4 +1321,4 @@ toc()
 #load("../saved_files/workspace_biclase.RData")
 
 # Session_info para reproducibilidad
-devtools::session_info()
+devtools::session_info()  
