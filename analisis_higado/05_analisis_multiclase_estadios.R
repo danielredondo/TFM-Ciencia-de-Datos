@@ -297,16 +297,11 @@ rfRanking <- rfRanking[1:20]
 daRanking <- featureSelection(particion.entrenamiento, labels_train, colnames(particion.entrenamiento),
                               mode = "da", disease = "liver cancer")
 
-# Selección de los 20 genes más relevantes. Si hay más de 20 genes con relevancia = 1, se seleccionan
-# todos los que tengan relevancia = 1
-ifelse(sum(daRanking == 1) <= 20,
-       daRanking <- names(daRanking[1:20]),
-       daRanking <- names(daRanking[1:sum(daRanking == 1)]))
-      
-# Para la tabla 3
-mrmrRanking
-rfRanking
-daRanking
+
+daRanking <- names(daRanking[1:10])
+
+genes <- cbind(mrmrRanking, rfRanking, daRanking)
+write.csv2(genes, file = "../../05_analisis_multiclase_estadios_figuras/genes.csv")
 
 # ----- SVM: Resultados con validación cruzada para cada método de selección de características -----
 
@@ -314,19 +309,19 @@ numero_folds <- 5
 
 # mRMR: 24 segundos
 tic("svm_mrmr")
-results_cv_svm_mrmr <- svm_CV(particion.entrenamiento, labels_train, mrmrRanking,
+results_cv_svm_mrmr <- svm_trn(particion.entrenamiento, labels_train, mrmrRanking,
                               numFold = numero_folds)
 toc()
 
 # random forest: 22 segundos
 tic("svm_rf")
-results_cv_svm_rf <- svm_CV(particion.entrenamiento, labels_train, rfRanking,
+results_cv_svm_rf <- svm_trn(particion.entrenamiento, labels_train, rfRanking,
                             numFold = numero_folds)
 toc()
 
 # disease association: 40 segundos
 tic("svm_da")
-results_cv_svm_da <- svm_CV(particion.entrenamiento, labels_train, daRanking,
+results_cv_svm_da <- svm_trn(particion.entrenamiento, labels_train, daRanking,
                             numFold = numero_folds)
 toc()
 
@@ -526,15 +521,15 @@ dev.off()
 numero_folds <- 5
 
 # mRMR
-results_cv_rf_mrmr <- rf_CV(particion.entrenamiento, labels_train, mrmrRanking,
+results_cv_rf_mrmr <- rf_trn(particion.entrenamiento, labels_train, mrmrRanking,
                               numFold = numero_folds)
 
 # random forest
-results_cv_rf_rf <- rf_CV(particion.entrenamiento, labels_train, rfRanking,
+results_cv_rf_rf <- rf_trn(particion.entrenamiento, labels_train, rfRanking,
                             numFold = numero_folds)
 
 # disease association
-results_cv_rf_da <- rf_CV(particion.entrenamiento, labels_train, daRanking,
+results_cv_rf_da <- rf_trn(particion.entrenamiento, labels_train, daRanking,
                             numFold = numero_folds)
 
 # ----- RF: Resultados gráficos de validación cruzada -----
@@ -719,17 +714,17 @@ dev.off()
 numero_folds <- 5
 
 # mRMR
-results_cv_knn_mrmr <- knn_CV(particion.entrenamiento, labels_train, mrmrRanking,
+results_cv_knn_mrmr <- knn_trn(particion.entrenamiento, labels_train, mrmrRanking,
                               numFold = numero_folds)
 results_cv_knn_mrmr$bestK
 
 # random forest
-results_cv_knn_rf <- knn_CV(particion.entrenamiento, labels_train, rfRanking,
+results_cv_knn_rf <- knn_trn(particion.entrenamiento, labels_train, rfRanking,
                             numFold = numero_folds)
 results_cv_knn_rf$bestK
 
 # disease association
-results_cv_knn_da <- knn_CV(particion.entrenamiento, labels_train, daRanking,
+results_cv_knn_da <- knn_trn(particion.entrenamiento, labels_train, daRanking,
                             numFold = numero_folds)
 results_cv_knn_da$bestK
 

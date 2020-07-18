@@ -2,6 +2,9 @@
 rm(list = ls())
 set.seed(31415)
 
+# Número de genes a seleccionar por los métodos de selección de características
+numero_de_genes <- 10
+
 # ----- Ruta de trabajo -----
 
 # Windows
@@ -125,26 +128,23 @@ print(nrow(DEGsInformation$DEGsMatrix))
 topTable <- DEGsInformation$Table
 DEGsMatrix <- DEGsInformation$DEGsMatrix
 
-head(topTable) # Si la primera columna es negativa, infraexpresado
-# positiva = gen sobreexpresado
-
 # Se traspone la matriz
 DEGsMatrixML <- t(DEGsMatrix)
 
 # ----- Representación de DEG -----
 
 # Boxplots para todas las muestras de los primeros genes
-png(filename = "../../03_analisis_biclase_figuras/03_boxplot_primeros_10_genes.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase_figuras/03_boxplot_primeros_genes.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(DEGsMatrix[1:10, ], labels, mode = "genesBoxplot", colours = c("red", "green"))
 dev.off()
 
 # Mapa de calor para todas las muestras de los primeros genes
-png(filename = "../../03_analisis_biclase_figuras/04_heatmap_primeros_10_genes.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase_figuras/04_heatmap_primeros_genes.png", width = 13, height = 8, units = "in", res = 300)
 DEGsMatrix_heatmap <- DEGsMatrix[, c(which(SamplesDataFrame$Class == "Primary Tumor"),
                                      which(SamplesDataFrame$Class == "Solid Tissue Normal"))]
 labels_heatmap <- labels[c(which(SamplesDataFrame$Class == "Primary Tumor"),
                            which(SamplesDataFrame$Class == "Solid Tissue Normal"))]
-dataPlot(DEGsMatrix_heatmap[1:10, ], labels_heatmap, mode = "heatmap", colours = c("red", "green"))
+dataPlot(DEGsMatrix_heatmap[1:numero_de_genes, ], labels_heatmap, mode = "heatmap", colours = c("red", "green"))
 dev.off()
 
 # ----- Partición entrenamiento-test -----
@@ -244,23 +244,31 @@ ggplot(data = datos_sankey,
 
 ggsave(filename = "../../03_analisis_biclase_figuras/05_sankey.png", width = 8, height = 7)
 
-# ----- Selección de características: 10 genes más importantes -----
+# ----- Selección de características: numero_de_genes genes más importantes -----
 
 # Método mRMR (mínima redundancia, máxima relevancia)
 mrmrRanking <- featureSelection(particion.entrenamiento, labels_train, colnames(particion.entrenamiento),
                                 mode = "mrmr")
-mrmrRanking <- names(mrmrRanking)[1:10]
+mrmrRanking <- names(mrmrRanking)[1:numero_de_genes]
 
 # Método random forest
 rfRanking <- featureSelection(particion.entrenamiento, labels_train, colnames(particion.entrenamiento),
                               mode = "rf")
-rfRanking <- rfRanking[1:10]
+rfRanking <- rfRanking[1:numero_de_genes]
 
 # Método Disease association ranking (en base a scores obtenidos en la literatura)
+daRanking <- NULL
+
 daRanking <- featureSelection(particion.entrenamiento, labels_train, colnames(particion.entrenamiento),
                               mode = "da", disease = "liver cancer")
 
-daRanking <- names(daRanking[1:10])
+# Si ha habido algún problema en la llamada a la API, se repite tras un descanso de 5 segundos
+while(is.null(daRanking)){
+  Sys.sleep(5)
+  daRanking <- featureSelection(particion.entrenamiento, labels_train, colnames(particion.entrenamiento),
+                                mode = "da", disease = "liver cancer")
+}
+daRanking <- names(daRanking[1:numero_de_genes])
 
 genes <- cbind(mrmrRanking, rfRanking, daRanking)
 write.csv2(genes, file = "../../03_analisis_biclase_figuras/genes.csv")
@@ -297,43 +305,43 @@ write.csv2(mejores_parametros_svm, file = "../../03_analisis_biclase_figuras/mej
 # ----- SVM: Resultados gráficos de validación cruzada -----
 
 png(filename = "../../03_analisis_biclase_figuras/06_svm_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_mrmr$accMatrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_svm_mrmr$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/07_svm_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_rf$accMatrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_svm_rf$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/08_svm_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_da$accMatrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_svm_da$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/09_svm_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_mrmr$f1Matrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_svm_mrmr$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/10_svm_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_rf$f1Matrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_svm_rf$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/11_svm_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_da$f1Matrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_svm_da$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
 # ----- SVM: Mejor método en CV basado en precisión, especificidad, sensibilidad y F1-score -----
-genes_a_usar <- c(1:10)
+genes_a_usar <- c(1:numero_de_genes)
 
 # Precisión
 prec <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
@@ -399,7 +407,7 @@ for(i in 1:length(genes_a_usar)){
 which(sens == max(sens), arr.ind = TRUE)
 
 #F1-Score
-genes_a_usar <- c(1:10)
+genes_a_usar <- c(1:numero_de_genes)
 f1 <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
 l_f1 <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
 colnames(f1) <- c("MRMR", "RF", "DA")
@@ -423,7 +431,7 @@ which(f1 == max(f1), arr.ind = TRUE)
 
 # Gráfico F1
 mejores <- which(f1 == max(f1), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -438,7 +446,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_f1)) +
        fill = "F1-Score",
        title = "F1-Score de SVM según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "F1-Score medio en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -454,7 +462,7 @@ ggsave(filename = "../../03_analisis_biclase_figuras/12_svm_f1_score.png", width
 
 # Gráfico precisión
 mejores <- which(prec == max(prec), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -469,7 +477,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_prec)) +
        fill = "Precisión",
        title = "Precisión de SVM según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "Precisión media en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -485,7 +493,7 @@ ggsave(filename = "../../03_analisis_biclase_figuras/13_svm_accuracy.png", width
 
 # Gráfico sens
 mejores <- which(sens == max(sens), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -500,7 +508,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_sens)) +
        fill = "Sensibilidad",
        title = "Sensibilidad de SVM según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "Sensibilidad media en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -516,7 +524,7 @@ ggsave(filename = "../../03_analisis_biclase_figuras/14_svm_sens.png", width = 8
 
 # Gráfico spec
 mejores <- which(spec == max(spec), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -531,7 +539,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_spec)) +
        fill = "Especificidad",
        title = "Especificidad de SVM según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "Especificidad media en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -607,42 +615,42 @@ results_cv_rf_da <- rf_trn(particion.entrenamiento, labels_train, daRanking,
 # ----- RF: Resultados gráficos de validación cruzada -----
 
 png(filename = "../../03_analisis_biclase_figuras/19_rf_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_mrmr$accMatrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_rf_mrmr$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/20_rf_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_rf$accMatrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_rf_rf$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/21_rf_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_da$accMatrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_rf_da$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/22_rf_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_mrmr$f1Matrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_rf_mrmr$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/23_rf_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_rf$f1Matrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_rf_rf$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/24_rf_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_da$f1Matrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_rf_da$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 # ----- RF: Mejor método en CV basado en precisión, especificidad, sensibilidad y F1-score -----
-genes_a_usar <- c(1:10)
+genes_a_usar <- c(1:numero_de_genes)
 
 # Precisión
 prec <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
@@ -733,7 +741,7 @@ which(f1 == max(f1), arr.ind = TRUE)
 
 # Gráfico f1
 mejores <- which(f1 == max(f1), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -748,7 +756,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_f1)) +
        fill = "F1-Score",
        title = "F1-Score de RF según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "F1-Score medio en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -764,7 +772,7 @@ ggsave(filename = "../../03_analisis_biclase_figuras/25_rf_f1_score.png", width 
 
 # Gráfico precisión
 mejores <- which(prec == max(prec), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -779,7 +787,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_prec)) +
        fill = "Precisión",
        title = "Precisión de RF según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "Precisión media en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -795,7 +803,7 @@ ggsave(filename = "../../03_analisis_biclase_figuras/26_rf_accuracy.png", width 
 
 # Gráfico sens
 mejores <- which(sens == max(sens), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -810,7 +818,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_sens)) +
        fill = "Sensibilidad",
        title = "Sensibilidad de RF según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "Sensibilidad media en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -826,7 +834,7 @@ ggsave(filename = "../../03_analisis_biclase_figuras/27_rf_sens.png", width = 8,
 
 # Gráfico spec
 mejores <- which(spec == max(spec), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -841,7 +849,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_spec)) +
        fill = "Especificidad",
        title = "Especificidad de RF según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "Especificidad media en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -857,7 +865,7 @@ ggsave(filename = "../../03_analisis_biclase_figuras/28_rf_spec.png", width = 8,
 
 # --- Mejor método en CV basado en F1-score
 
-# El mejor ranking es RF con 20 genes
+# El mejor ranking es mRMR con 7 genes
 mejores_genes_rf <- mrmrRanking[1:7]
 
 # ----- RF: Resultados gráficos en train con el mejor método ------
@@ -922,43 +930,43 @@ write.csv2(mejores_parametros_knn, file = "../../03_analisis_biclase_figuras/mej
 # ----- kNN: Resultados gráficos de validación cruzada -----
 
 png(filename = "../../03_analisis_biclase_figuras/32_knn_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_mrmr$accMatrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_knn_mrmr$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/33_knn_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_rf$accMatrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_knn_rf$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/34_knn_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_da$accMatrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_knn_da$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/35_knn_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_mrmr$f1Matrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_knn_mrmr$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "mRMR - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/36_knn_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_rf$f1Matrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_knn_rf$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "RF - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
 png(filename = "../../03_analisis_biclase_figuras/37_knn_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_da$f1Matrix[, 1:10], colours = rainbow(numero_folds),
+dataPlot(results_cv_knn_da$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
          mode = "classResults",
          main = "DA - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
 # ----- kNN: Mejor método en CV basado en precisión, especificidad, sensibilidad y F1-score -----
-genes_a_usar <- c(1:10)
+genes_a_usar <- c(1:numero_de_genes)
 
 # Precisión
 prec <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
@@ -1049,7 +1057,7 @@ which(f1 == max(f1), arr.ind = TRUE)
 
 # Gráfico F1
 mejores <- which(f1 == max(f1), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -1064,7 +1072,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_f1)) +
        fill = "F1-Score",
        title = "F1-Score de kNN según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "F1-Score medio en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -1080,7 +1088,7 @@ ggsave(filename = "../../03_analisis_biclase_figuras/38_knn_f1_score.png", width
 
 # Gráfico precisión
 mejores <- which(prec == max(prec), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -1095,7 +1103,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_prec)) +
        fill = "Precisión",
        title = "Precisión de kNN según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "Precisión media en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -1111,7 +1119,7 @@ ggsave(filename = "../../03_analisis_biclase_figuras/39_knn_accuracy.png", width
 
 # Gráfico sens
 mejores <- which(sens == max(sens), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -1126,7 +1134,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_sens)) +
        fill = "Sensibilidad",
        title = "Sensibilidad de kNN según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "Sensibilidad media en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -1142,7 +1150,7 @@ ggsave(filename = "../../03_analisis_biclase_figuras/40_knn_sens.png", width = 8
 
 # Gráfico spec
 mejores <- which(spec == max(spec), arr.ind = TRUE)
-face_etiquetas <- matrix("plain", nrow = 10, ncol = 3)
+face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
 face_etiquetas <- as.vector(t(face_etiquetas))
 
@@ -1157,7 +1165,7 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_spec)) +
        fill = "Especificidad",
        title = "Especificidad de kNN según método de selección de características\ny número de genes usados en el modelo",
        subtitle = "Especificidad media en los 5 fold (desviación típica)") +
-  scale_y_continuous(breaks = 1:10) + 
+  scale_y_continuous(breaks = 1:numero_de_genes) + 
   geom_label(fontface = face_etiquetas,
              label.size = 0) + 
   theme_minimal() + 
@@ -1245,9 +1253,7 @@ enfermedades
 unique(c(enfermedades[grep(pattern = "cancer", ignore.case = T, x = enfermedades)],
          enfermedades[grep(pattern = "neopl",  ignore.case = T, x = enfermedades)],
          enfermedades[grep(pattern = "liver",  ignore.case = T, x = enfermedades)],
-         enfermedades[grep(pattern = "alcoh",  ignore.case = T, x = enfermedades)]
-)
-)
+         enfermedades[grep(pattern = "alcoh",  ignore.case = T, x = enfermedades)]))
 
 # ----- RF: Descarga de información sobre enfermedades relacionadas con DEGs -----
 
@@ -1276,9 +1282,7 @@ enfermedades
 unique(c(enfermedades[grep(pattern = "cancer", ignore.case = T, x = enfermedades)],
          enfermedades[grep(pattern = "neopl",  ignore.case = T, x = enfermedades)],
          enfermedades[grep(pattern = "liver",  ignore.case = T, x = enfermedades)],
-         enfermedades[grep(pattern = "alcoh",  ignore.case = T, x = enfermedades)]
-)
-)
+         enfermedades[grep(pattern = "alcoh",  ignore.case = T, x = enfermedades)]))
 
 # ----- kNN: Descarga de información sobre enfermedades relacionadas con DEGs -----
 
@@ -1307,18 +1311,13 @@ enfermedades
 unique(c(enfermedades[grep(pattern = "cancer", ignore.case = T, x = enfermedades)],
          enfermedades[grep(pattern = "neopl",  ignore.case = T, x = enfermedades)],
          enfermedades[grep(pattern = "liver",  ignore.case = T, x = enfermedades)],
-         enfermedades[grep(pattern = "alcoh",  ignore.case = T, x = enfermedades)]
-)
-)
+         enfermedades[grep(pattern = "alcoh",  ignore.case = T, x = enfermedades)]))
 
 # ----- Guardar imagen para Shiny -----
 matriz <- rbind(labels, DEGsMatrix)
 save(matriz, file =  "../saved_files/matriz_biclase.RData")
 toc()
 
-# Guardar imagen
-#save.image(file =  "../saved_files/workspace_biclase.RData")
-#load("../saved_files/workspace_biclase.RData")
-
-# Session_info para reproducibilidad
+# session_info para reproducibilidad
 devtools::session_info()  
+writeLines(capture.output(devtools::session_info()), "../../../session_info.txt")
