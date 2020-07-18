@@ -29,14 +29,14 @@ Para el presente trabajo se han descargado de GDC Portal todos los datos que cum
 \begin{itemize}
 	\item Son datos transcriptómicos del programa Cancer Genoma Atlas (TCGA), dirigido por dos organismos estadounidenses: el Instituto Nacional del Cáncer (NCI) y el Instituto Nacional para la Investigación del Genoma Humano (NHGRI) \cite{NationalCancerInstitutea}. 
 	\item Contienen información sobre tumores o tejidos sanos de cáncer de hígado, o colon-recto. Se han excluido metástasis y tumores recurrentes.
-	\item El tipo de estrategia experimental es RNA-Seq, y el tipo de flujo de trabajo es HTSeq - Counts.
+	\item El tipo de estrategia experimental es RNA-Seq, y el tipo de flujo de trabajo es HTSeq - Counts. Esta información es de acceso abierto ya que no permite la identificación de un individuo.
 \end{itemize}
 
-Para cáncer de hígado se han descargado datos sobre 462 pacientes, de los cuales 404 tenían cáncer (87,4\%) y 58 estaban sanos (12,6\%).  Para cáncer de colon-recto, se han descargado datos sobre 695 pacientes: 644 con cáncer (92,7\%) y 58 sanos (7,3\%).
+Para cáncer de hígado se han descargado datos sobre 462 pacientes, de los cuales 404 tenían cáncer (87,4\%) y 58 estaban sanos (12,6\%).  Para cáncer de colon-recto, se han descargado datos sobre 695 pacientes: 644 con cáncer (92,7\%) y 58 sanos (7,3\%). Es relevante destacar el desequilibrio existente entre las dos principales clases del problema, debido a que no a todos los pacientes con cáncer se les secuencia también la parte de tejido sano adyacente al tumor que se suele usar como muestra de control.
 
 \subsection{Análisis}
 
-Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) \cite{R} y \{\texttt{KnowSeq}\} (v.1.1.19) \cite{KnowSeq}, paquete de \texttt{R} que ha sido desarrollado por los tutores del presente trabajo y en el que el autor ha contribuido con algunas mejoras y actualizaciones (\url{https://github.com/CasedUgr/KnowSeq/commits?author=danielredondo}):
+Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) \cite{R} y \{\texttt{KnowSeq}\} (v.1.2.0) \cite{KnowSeq}, paquete de \texttt{R} que ha sido desarrollado por los tutores del presente trabajo y en el que el autor ha contribuido con algunas mejoras y actualizaciones (\url{https://github.com/CasedUgr/KnowSeq/commits?author=danielredondo}):
 
 \begin{itemize}
 	\item Corregir un fallo que hacía que el método de selección de características RF no funcionase correctamente ante problemas de clasificación multiclase.
@@ -44,7 +44,12 @@ Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) 
 	\item Pequeñas modificaciones en la documentación de funciones.
 \end{itemize}
 
-El paquete está además disponible en Bioconductor, la plataforma de código abierto en \texttt{R} más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
+El paquete está además disponible en Docker con el comando \texttt{Docker run -it casedugr/knowseq} y en Bioconductor, la plataforma de código abierto en \texttt{R} más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
+
+\textbf{\textcolor{red}{Figura XX}}. Logo de \{\texttt{KnowSeq}\}.
+\begin{center}
+	\includegraphics[width=.4\textwidth]{figuras/knowseq.png} \\
+\end{center}
 
 Todo el código de los análisis está disponible la carpeta \texttt{analisis\_higado} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}. Para asegurar la reproducibilidad de los análisis, en el fichero \texttt{session\_info.txt} del repositorio de GitHub \cite{Redondo-Sanchez2020} se muestran todos los paquetes utilizados y sus versiones como resultado de ejecutar \texttt{devtools::session\_info()}.\\
 

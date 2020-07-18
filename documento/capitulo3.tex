@@ -5,12 +5,12 @@
 Los algoritmos de selección de características, o variables, consisten en la elección de un subconjunto de variables relevantes que permitan:
 
 \begin{itemize}
-	\item Mejorar la capacidad predictiva de los modelos.
+	\item Obtener predicciones óptimas para un número bajo de genes.
 	\item Proporcionar predictores menos costosos computacionalmente.
 	\item Mejorar la interpretabilidad de los modelos resultantes, y facilitar la visualización de datos.
 \end{itemize} 
 
-La selección de características cuenta con interesantes aplicaciones en la genómica \cite{Xing, Tadist2019}. Si se considera cada gen como una variable, la selección de características consigue reducir los problemas asociados la maldición de la dimensionalidad \cite{Bellman1957, Bellman1961}. \\
+La selección de características cuenta con interesantes aplicaciones en la genómica ya que permite encontrar conjuntos pequeños de biomarcadores que permiten diferenciar con gran precisión entre distintos estados o patologías \cite{Xing, Tadist2019}. Si se considera cada gen como una variable, la selección de características consigue reducir los problemas asociados a la maldición de la dimensionalidad \cite{Bellman1957, Bellman1961}. \\
 
 Se distinguen principalmente 3 tipos de algoritmos de selección de características, descritos en varias referencias \cite{HerreraMaldonado2020, Tadist2019}:
 
@@ -42,9 +42,9 @@ Este algoritmo en \texttt{R}  está implementado en \texttt{KnowSeq::featureSele
 
 \subsection{Asociación de enfermedades (DA)}
 
-El método de selección de características mediante asociación de enfermedades (DA, por sus siglas en inglés: \textit{Disease Association}) permite encontrar aquellos genes que están asociados en la literatura científica con una determinada enfermedad. Utiliza para ello la plataforma targetValidation de Open Targets \cite{OpenTargets2020}, que contiene para cada gen una puntuación midiendo la asociación gen-enfermedad en el rango de 0 (no hay asociación) a 1 (la asociación es total). El método DA obtiene esas puntuaciones y las ordena, obteniendo un ranking de genes en base a su asociación con la enfermedad.\\
+El método de selección de características mediante asociación de enfermedades (DA, por sus siglas en inglés: \textit{Disease Association}) permite encontrar aquellos genes que están asociados en la literatura científica con una determinada enfermedad, en base a evidencias tales como rutas metabólicas afectadas, expresión de RNA o fármacos. Utiliza para ello la plataforma \textit{targetValidation} de \textit{Open Targets} \cite{OpenTargets2020}, que contiene para cada gen una puntuación midiendo la asociación gen-enfermedad en el rango de 0 (no hay asociación) a 1 (la asociación es total). El método DA obtiene esas puntuaciones y las ordena, obteniendo un ranking de genes en base a su asociación con la enfermedad.\\
 
-El método DA  está implementado en \texttt{R}  en \texttt{KnowSeq::featureSelection(mode = `da')} \cite{KnowSeq}, que utiliza a su vez la REST API de targetValidation \cite{OpenTargets2020}.
+El método DA  está implementado en \texttt{R}  en \texttt{KnowSeq::featureSelection(mode = `da')} \cite{KnowSeq}, que utiliza a su vez la REST API de \textit{targetValidation} \cite{OpenTargets2020}.
 
 \section{Algoritmos de clasificación}
 
