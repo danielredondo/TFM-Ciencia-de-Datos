@@ -24,7 +24,8 @@
 #' dataPlot(DEGsMatrix[1:12,],labels,mode = "genesBoxplot",toPNG = TRUE,toPDF = FALSE)
 #' dataPlot(DEGsMatrix[1:12,],labels,mode = "heatmap",toPNG = TRUE,toPDF = TRUE)
 
-dataPlot <- function(data, labels, colours = c("green", "red"), main = "", ylab = "Expression", xlab = "Samples", xgrid = FALSE, ygrid = FALSE, legend = "", mode="boxplot", toPNG = FALSE, toPDF = FALSE){
+dataPlot <- function(data, labels, colours = c("green", "red"), main = "", ylab = "Expression", xlab = "Samples",
+                     xgrid = FALSE, ygrid = FALSE, legend = "", mode="boxplot", toPNG = FALSE, toPDF = FALSE, columnas = 3){
   
   if(!is.logical(toPNG)){stop("toPNG parameter can only take the values TRUE or FALSE.")}
   if(!is.logical(toPDF)){stop("toPDF parameter can only take the values TRUE or FALSE.")}
@@ -126,19 +127,19 @@ dataPlot <- function(data, labels, colours = c("green", "red"), main = "", ylab 
     xx <- melt(meltMatrix[,seq_len(col)])
     names(xx) <- c("Classes", "Gen", "Value")
     
-    print(ggplot(xx, aes(x=as.factor(Classes),y=Value,fill=as.factor(Classes))) + geom_boxplot() + facet_wrap(~Gen, ncol = 3) 
+    print(ggplot(xx, aes(x=as.factor(Classes),y=Value,fill=as.factor(Classes))) + geom_boxplot() + facet_wrap(~Gen, ncol = columnas) 
           + scale_fill_manual(values=colours) + ggtitle(main) + theme_classic() + xlab(xlab) + ylab(ylab) + labs(fill = "Classes"))
     
     if(toPNG){
       cat("Creating PNG...\n")
-      ggplot(xx, aes(x=as.factor(Classes),y=Value,fill=as.factor(Classes))) + geom_boxplot() + facet_wrap(~Gen, ncol = 3) +scale_fill_manual(values=colours) + ggtitle(main) + theme_classic() + xlab(xlab) + ylab(ylab) + labs(fill = "Classes")
+      ggplot(xx, aes(x=as.factor(Classes),y=Value,fill=as.factor(Classes))) + geom_boxplot() + facet_wrap(~Gen, ncol = columnas) +scale_fill_manual(values=colours) + ggtitle(main) + theme_classic() + xlab(xlab) + ylab(ylab) + labs(fill = "Classes")
       
       ggsave("genesBoxplot.png", width = 15, height = 10)
       
     }
     if(toPDF){
       cat("Creating PDF...\n")
-      ggplot(xx, aes(x=as.factor(Classes),y=Value,fill=as.factor(Classes))) + geom_boxplot() + facet_wrap(~Gen, ncol = 3) + scale_fill_manual(values=colours) + ggtitle(main) + xlab(xlab) + ylab(ylab) + labs(fill = "Classes")
+      ggplot(xx, aes(x=as.factor(Classes),y=Value,fill=as.factor(Classes))) + geom_boxplot() + facet_wrap(~Gen, ncol = columnas) + scale_fill_manual(values=colours) + ggtitle(main) + xlab(xlab) + ylab(ylab) + labs(fill = "Classes")
       
       ggsave("genesBoxplot.pdf", width = 15, height = 10)
       

@@ -135,7 +135,7 @@ DEGsMatrixML <- t(DEGsMatrix)
 
 # Boxplots para todas las muestras de los primeros genes
 png(filename = "../../03_analisis_biclase_figuras/03_boxplot_primeros_genes.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(DEGsMatrix[1:10, ], labels, mode = "genesBoxplot", colours = c("red", "green"))
+dataPlot(DEGsMatrix[1:9, ], labels, mode = "genesBoxplot", colours = c("red", "green"))
 dev.off()
 
 # Mapa de calor para todas las muestras de los primeros genes
@@ -148,29 +148,6 @@ dataPlot(DEGsMatrix_heatmap[1:numero_de_genes, ], labels_heatmap, mode = "heatma
 dev.off()
 
 # ----- Partición entrenamiento-test -----
-
-# Nota shiny: de aquí en adelante se usa lo siguiente:
-# labels
-# DEGsMatrix
-#tic("Full proceso shiny")
-# Para Shiny:
-#load("../saved_files/matriz.RData")
-#elementos <- ls()
-#elementos <- elementos[which(elementos != "matriz")]
-#rm(list = elementos)
-#rm(elementos)
-#source("../../Funciones_actualizadas_KnowSeq/dataPlot.R")
-# Extraer labels
-#labels <- matriz[1, ] %>% as.vector
-# Extraer DEGsMatrix
-#DEGsMatrix <- matriz[2:nrow(matriz), ]
-#filas <- rownames(DEGsMatrix)
-#DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
-#rownames(DEGsMatrix) <- filas
-# Crear DEGsMatrixML
-#DEGsMatrixML <- t(DEGsMatrix)
-#rm(matriz)
-#rm(filas)
 
 # Partición 75% / 25% con balanceo de clase
 porcentaje <- .75
