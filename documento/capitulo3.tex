@@ -22,6 +22,8 @@ Se distinguen principalmente 3 tipos de algoritmos de selección de característ
 	\item Algoritmos de selección por envoltura. En estos métodos, el algoritmo de selección de variables está incluido en el propio modelo predictivo y es retroalimentado por él, seleccionando aquel modelo que proporciona mejor efectividad. El principal inconveniente de estos métodos es el elevado coste computacional, aunque como ventaja asegura el mejor rendimiento de entre todas las opciones que se han evaluado. Un ejemplo es MINT, una mejora de mRMR \cite{He2016}.
 \end{itemize}
 
+Se presentan a continuación los algoritmos de selección de variables que se utilizarán en el capítulo 4.
+
 \subsection{Mínima redundancia máxima relevancia (mRMR)}
 
 El método de mínima redundancia máxima relevancia (mRMR) está basado en el concepto de ``información mutua'' \cite{Koller1996}. La información mutua de dos variables se cuantifica como la reducción de incertidumbre sobre una de las variables conocida la otra.\\
@@ -48,13 +50,13 @@ El método DA  está implementado en \texttt{R}  en \texttt{KnowSeq::featureSele
 
 \section{Algoritmos de clasificación}
 
-\textcolor{red}{Breve descripción del problema de clasificación. Leer la presentación de 01Modelosnolineales.pdf}
+Dado un conjunto de datos con varias variables, siendo una de ellas la clase, el problema de clasificación consiste en encontrar un modelo que prediga la clase basándose en el resto de variables. Se presentan a continuación los  algoritmos de clasificación que se utilizarán en el capítulo 4.
 
 \subsection{Máquinas de soporte vectorial (SVM)}
 
 Las máquinas de soporte vectorial (SVM) son uno de los algoritmos más populares de la última década debido a su alta eficacia en problemas con grandes cantidades de datos. Consiste en un caso particular de (\textit{kernel machines}), una familia de métodos en el que el espacio de características se transforma para ser representados en un espacio más complejo, de alta dimensión o incluso infinita. Para ello, utilizan \textit{kernels}: funciones que devuelven el producto escalar entre las transformaciones de dos argumentos, sin tener que especificar de forma explícita la transformación realizada. Resumidamente, en los algoritmos SVM la transformación de los datos en el nuevo espacio permite que las clases sean linealmente separables mediante un hiperplano que separa las clases dejando el máximo margen posible entre ellas \cite{Boser1992}. Aquellas instancias que limitan el margen de ese hiperplano son llamados vectores soporte. Aunque en un principio el algoritmo SVM fue ideado para problemas binarios \cite{Boser1992}, se ha generalizado para problemas multi-clase \cite{Duan2005}.\\
 
-Uno de los \textit{kernel} más comunes para SVM es el de base radial, que viene determinado por dos parámetros: coste ($c$) y gamma ($\gamma$). El coste $c$ mide la permisividad que se permite a la existencia de clases mal clasificadas por el modelo, que podrían ser ejemplos extraños (\textit{outliers}). Un coste alto puede sobreajustar el modelo (\textit{overfitting}), mientras que un coste bajo puede reducir la precisión del modelo en el conjunto de entrenamiento. $\gamma$ mide el nivel de influencia de cada instancia vector soporte para la construcción del hiperplano. Para cada problema se pueden encontrar valores de coste y gamma que optimizan los resultados del algoritmo SVM con base radial, aunque debido a que la búsqueda exhaustiva suele ser costosa computacionalmente se suele realizar una búsqueda de los mejores parámetros dentro de unos posibles valores de $c$ y $\gamma$.\\
+Uno de los \textit{kernel} más comunes para SVM es el de base radial, que viene determinado por dos parámetros: coste ($c$) y gamma ($\gamma$). El coste $c$ mide la permisividad que se permite a la existencia de clases mal clasificadas por el modelo, que podrían ser ejemplos extraños (\textit{outliers}). Un coste alto puede sobreajustar el modelo (\textit{overfitting}), mientras que un coste bajo puede reducir la precisión del modelo en el conjunto de entrenamiento. El parámetro $\gamma$ mide el nivel de influencia de cada vector soporte para la construcción del hiperplano. Para cada problema se pueden encontrar valores de coste y gamma que optimizan los resultados del algoritmo SVM con base radial, aunque debido a que la búsqueda exhaustiva suele ser costosa computacionalmente se suele realizar una búsqueda de los mejores parámetros dentro de unos posibles valores de $c$ y $\gamma$.\\
 
 Los algoritmos SVM están implementados en varios paquetes de R, siendo el más común \{\texttt{e1071}\} \cite{Meyer2019}.
 
@@ -68,7 +70,7 @@ El paquete de \texttt{R} \{\texttt{randomForest}\} implementa el algoritmo RF \c
 
 \subsection{k-vecinos más cercanos (kNN)}
 
-\textcolor{red}{Optimización de $k$}\\
+El algoritmo de los k-vecinos consiste en asignar a cada dato sin clasificar la clase más común entre sus k-vecinos más cercanos \cite{Altman1992}. Aunque la distancia euclídea es la más usual, se pueden utilizar otras distancias para el cálculo de los k-vecinos más cercanos \cite{Hu2016}, y es recomendable normalizar los atributos para que todos tengan el mismo peso. Además, contando con un conjunto de entrenamiento se puede hallar el parámetro $k$ óptimo para el problema.\\
 
 En este trabajo se utilizará la implementación de kNN realizada en \{\texttt{caret}\} \cite{Kuhn2020}.
 
