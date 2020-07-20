@@ -1,7 +1,6 @@
 # Mejoras:
 # Añadir tumores y sanos en la parte derecha del gráfico de Sankey
 # da debe tener en cuenta la enfermedad!!
-# añadir waiter
 
 library(shiny)
 library(shinydashboard)

@@ -1,7 +1,6 @@
 # Mejoras:
 # Añadir tumores y sanos en la parte derecha del gráfico de Sankey
 # da debe tener en cuenta la enfermedad!!
-# añadir waiter
 
 library(shiny)
 library(shinydashboard)
@@ -11,21 +10,33 @@ library(reshape2)
 library(caret)
 library(ggplot2)
 library(ggalluvial)
+library(waiter)
 
 source("www/dataPlot.R")
+
+spinner_abrir <- tagList(
+  spin_chasing_dots(),
+  span(br(), h4("Abriendo la aplicación..."), style="color:white;")
+)
+
+spinner <- tagList(
+  spin_chasing_dots(),
+  span(br(), h4("Loading..."), style="color:white; display: inline-block;")
+)
 
 ui <- dashboardPage(
   
   ## Tema
   skin = "black",
   ## Cabecera
-  dashboardHeader(title = "biomaRcadores"#,titleWidth = 350
+  dashboardHeader(title = "biomarkeR"#,titleWidth = 350
                   ),
   ## Barra lateral
   dashboardSidebar(
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "css.css")
     ),
+    
     sidebarMenu(
       menuItem("Introducción", tabName = "intro", icon = icon("file-alt")),
       menuItem("Carga de datos", tabName = "datos", icon = icon("database")),
@@ -38,21 +49,24 @@ ui <- dashboardPage(
   ),
   ## Cuerpo
   dashboardBody(
+    use_waiter(),
+    waiter_show_on_load(spinner_abrir), # will show on load - no funciona?
+    waiter_on_busy(spinner, color = "#027368"),
     tabItems(
       # Tab 1
       tabItem(tabName = "intro",
-              h1("Epidemiología y detección de biomarcadores en cáncer"),
+              h1("Epidemiology and biomarkers detection in cancer"),
               
-              h3(tags$b("Introducción")),
+              h3(tags$b("Introduction")),
               "Texto",
-              h3(tags$b("Metodología")),
+              h3(tags$b("Methods")),
               "Texto",
-              h3(tags$b("Resultados")),
+              h3(tags$b("Results")),
               "Texto",
-              h3(tags$b("Conclusiones")),
+              h3(tags$b("Conclusions")),
               "Texto",
               
-              h2("Sobre esta aplicación"),
+              h2("About this web application"),
               "Texto",
               # Parte final
               br(), br(), br(),
@@ -63,27 +77,25 @@ ui <- dashboardPage(
       
       # Tab 2
       tabItem(tabName = "datos",
-              h1("Carga de datos"),
+              h1("Data loading"),
               fileInput(inputId = "archivo_rdata",
-                        label = "Seleccione el archivo .RData a importar. Debe contener..",
-                        buttonLabel = "Examinar...",
+                        label = "Select .RData file. (see Example File)",
                         accept = ".RData",
-                        placeholder = "No se ha seleccionado ningún archivo",
                         width = "50%"
               ),
               
               actionButton(inputId = "boton_importar",
-                           label = "Importar archivo",
+                           label = "Import file",
                            icon = icon("fas fa-file-import", lib = "font-awesome"),
                            width = "50%"),
               br(),
               
               tableOutput("tabla1"),
               
-              h2("Partición entrenamiento-test"),
+              h2("Train-test partition"),
               
               sliderInput("porcentaje_entrenamiento",
-                          label = "Porcentaje entrenamiento (%)",
+                          label = "Train percentage (%)",
                           value = 75, min = 5, max = 95, step = 5,
                           width = "50%"
                           ),
@@ -95,6 +107,13 @@ ui <- dashboardPage(
       tabItem(tabName = "genes",
               h1("Selección de genes"),
               sliderInput(inputId = "numero_genes", label = "Selecciona el número de genes relevantes", value = 20, min = 0, max = 50, step = 1),
+              
+              actionButton(inputId = "boton_genes",
+                           label = "Seleccionar genes más relevantes",
+                           icon = icon("fas fa-calculator", lib = "font-awesome"),
+                           width = "50%"),
+              br(),
+              
               "Se muestran a continuación los mejores genes seleccionados por cada método de selección de características.",
               br(),
               tags$i("Puede tardar unos segundos en actualizarse."),
@@ -166,6 +185,9 @@ options(shiny.maxRequestSize = 15*1024^2)
 
 server <- function(input, output){
 
+  # give time for wait screen to show
+  waiter_hide()
+  
   observeEvent(input$boton_importar, {
     
     # Si se ha seleccionado un fichero, se importa
@@ -269,11 +291,39 @@ server <- function(input, output){
             axis.ticks = element_blank(),
             panel.grid = element_blank()) 
     })
+  }) # Cierre botón import
   
   
   # Esto se puede mejorar para que calcule los mejores 50 genes y luego sólo tenga que hacer un subset de esa tabla
   # seleccionando sólo los primeros X elementos, para que reaccione antes la aplicación web.
   
+  observeEvent(input$boton_genes, {
+    
+    # Si se ha seleccionado un fichero, se importa
+    load(input$archivo_rdata$datapath)
+    # Extraer labels
+    labels <- matriz[1, ] %>% as.vector
+    # Extraer matriz
+    DEGsMatrix <- matriz[2:nrow(matriz), ]
+    filas <- rownames(DEGsMatrix)
+    DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
+    rownames(DEGsMatrix) <- filas
+    # Crear DEGsMatrixML
+    DEGsMatrixML <- t(DEGsMatrix)
+    
+    # Partición 75% / 25% con balanceo de clase
+    set.seed(1991)
+    indices <- reactive(createDataPartition(labels, p = input$porcentaje_entrenamiento / 100, list = FALSE))
+    particion <- reactive(list(training = DEGsMatrixML[indices(), ], test = DEGsMatrixML[-indices(), ]))
+    
+    # Conjuntos
+    particion.entrenamiento <- reactive(particion()$training)
+    particion.test <- reactive(particion()$test)
+    
+    # Etiquetas
+    labels_train <- reactive(labels[indices()])
+    labels_test  <- reactive(labels[-indices()])
+    
   output$genes_mrmr <- renderTable({
     # Método mRMR (mínima redundancia, máxima relevancia)
     mrmrRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
@@ -283,6 +333,12 @@ server <- function(input, output){
     
     return(mrmrRanking)
   }, colnames = FALSE)
+  
+  # Leer
+  # https://stackoverflow.com/questions/33671915/r-shiny-server-how-to-keep-variable-value-in-observeevent-function
+  # https://groups.google.com/g/shiny-discuss/c/UVL3uENQ88k
+  # https://shiny.rstudio.com/articles/action-buttons.html
+  # para ejecutar sólo una vez particion.entrenamiento y demás funciones.
   
   output$genes_rf <- renderTable({
     # Método random forest
@@ -298,9 +354,13 @@ server <- function(input, output){
                                   mode = "da", disease = "liver cancer")
     
     daRanking <- names(daRanking)[1:input$numero_genes]
-    
+
     return(daRanking)
   }, colnames = FALSE)
+
+  }) # Cierre botón calcular genes
+  
+  
   
   # Método mRMR (mínima redundancia, máxima relevancia)
   mrmrRanking <- reactive({
@@ -332,7 +392,6 @@ server <- function(input, output){
     
   })
   
-  }) # Cierre botón import
   
   set.seed(122)
   histdata <- rnorm(500)
