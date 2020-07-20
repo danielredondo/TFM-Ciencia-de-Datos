@@ -16,4 +16,4 @@ Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ing
 
 - `epidemiologia`: Datos sobre la epidemiología del cáncer.
 
-- `shiny`: Aplicación web `biomaRcadores`.
+- `shiny`: Aplicación web `biomarkeR`.
