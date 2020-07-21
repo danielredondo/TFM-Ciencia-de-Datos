@@ -11,9 +11,9 @@ El objetivo general consiste en intentar predecir en base a pocos genes si una e
 La fuente de los datos es GDC (Genomic Data Commons) Portal, una plataforma web sobre cáncer del Instituto Nacional del Cáncer de Estados Unidos (\textit{National Cancer Institute}) \cite{GDCPortal, NationalCancerInstitute}. GDC Portal fue desarrollado por el Instituto Nacional del Cáncer de Estados Unidos, la Universidad de Chicago, el Instituto de Ontario para la Investigación del Cáncer y la empresa \textit{Leidos Biomedical Research}, y su principal fortaleza reside en la integración y armonización de diversas fuentes heterogéneas, creando así un sistema de información amplio y robusto \cite{Grossman2016}. \\
 
 \newpage
-\textbf{\textcolor{red}{Figura XX}}. Diagrama de funcionalidad y utilidad de GDC. Extraído de Grossman et al. \cite{Grossman2016}.
+\textbf{Figura 5}. Diagrama de funcionalidad y utilidad de GDC. Extraído de Grossman et al. \cite{Grossman2016}.
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/funcionamiento_gdc.jpeg} \\
+	\includegraphics[width=1\textwidth]{figuras/05_funcionamiento_gdc.jpeg} \\
 \end{center}
 
 A día 22 de Junio, GDC Portal contenía información sobre unos 84.000 casos, 23.000 genes y más de 3 millones de mutaciones de genes \cite{GDCPortal}. Algunos de estos datos son abiertos, mientras que para otros es necesario solicitar acceso. La información de la que dispone es muy variada, y se puede distinguir en tres grandes categorías:
@@ -44,11 +44,11 @@ Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) 
 	\item Pequeñas modificaciones en la documentación de funciones.
 \end{itemize}
 
-El paquete está además disponible en Docker con el comando \texttt{Docker run -it casedugr/knowseq} y en Bioconductor, la plataforma de código abierto en \texttt{R} más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
+\{\texttt{KnowSeq}\} está además disponible en Docker con el comando \texttt{Docker run -it casedugr/knowseq} y en Bioconductor, la plataforma de código abierto en \texttt{R} más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
 
-\textbf{\textcolor{red}{Figura XX}}. Logo de \{\texttt{KnowSeq}\}.
+\textbf{Figura 6}. Logo de \{\texttt{KnowSeq}\}.
 \begin{center}
-	\includegraphics[width=.4\textwidth]{figuras/knowseq.png} \\
+	\includegraphics[width=.4\textwidth]{figuras/06_logo_knowseq.png} \\
 \end{center}
 
 Todo el código de los análisis está disponible la carpeta \texttt{analisis\_higado} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}. Para asegurar la reproducibilidad de los análisis, en el fichero \texttt{session\_info.txt} del repositorio de GitHub \cite{Redondo-Sanchez2020} se muestran todos los paquetes utilizados y sus versiones como resultado de ejecutar \texttt{devtools::session\_info()}.\\
@@ -187,7 +187,7 @@ En la Tabla 11 se muestra  la distribución de casos de cáncer de colon-recto s
 
 En la Tabla 12 se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de chi cuadrado ($\chi^2$) \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el fichero \texttt{analisis\_cr/01\_analisis\_datos\_clinicos.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
 
-\textbf{Tabla 10}. Características clínicas de los casos de cáncer de colon-recto. Distribución de  estado vital según sexo, grupo de edad y estadio.
+\textbf{Tabla 12}. Características clínicas de los casos de cáncer de colon-recto. Distribución de  estado vital según sexo, grupo de edad y estadio.
 
 \begin{table}[H]
 		\centering

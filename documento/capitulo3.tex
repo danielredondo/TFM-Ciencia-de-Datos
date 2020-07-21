@@ -74,6 +74,39 @@ El algoritmo de los k-vecinos consiste en asignar a cada dato sin clasificar la 
 
 En este trabajo se utilizará la implementación de kNN realizada en \{\texttt{caret}\} \cite{Kuhn2020}.
 
-\subsection{Medidas de evaluación}
+\subsection{Medidas de evaluación de algoritmos de clasificación}
 
-\textcolor{red}{precisión (\textit{accuracy}), sensibilidad, especificidad y F1-Score. Validación cruzada.}
+Tras realizar las predicciones con el algoritmo, sus resultados se suelen presentar en una matriz de confusión del siguiente modo:
+
+\begin{table}[H]
+	\centering	
+	\begin{tabular}{cc|c|c|}
+		\cline{3-4}
+		&                   & \multicolumn{2}{c|}{\textbf{Predicción}}              \\ \cline{3-4} 
+		&                   & \textbf{Positivo}         & \textbf{Negativo}         \\ \hline
+		\multicolumn{1}{|c|}{\multirow{2}{*}{\textbf{Clase real}}} & \textbf{Positivo} & Verdaderos positivos (TP) & Falsos negativos (FN)     \\ \cline{2-4} 
+		\multicolumn{1}{|c|}{}                                     & \textbf{Negativo} & Falsos positivos (FP)     & Verdaderos negativos (TN) \\ \hline
+	\end{tabular}
+\end{table}
+
+Partiendo de la matriz de confusión, para evaluar la efectividad de un algoritmo de clasificación se pueden utilizar varios indicadores que miden diferentes aspectos. 
+
+\begin{itemize}
+	\item La precisión (\textit{accuracy} en inglés, no confundir con el término \textit{precision} que indica el valor predictivo positivo: $TP / (TP + FP)$) mide la proporción de predicciones correctas entre el número total de predicciones:
+	$$\text{Precisión} = \dfrac{TP + TN}{TP + FP + TN + FN}$$ 
+	
+	
+	\item La sensibilidad mide la proporción de positivos reales que han sido correctamente identificados como positivos.
+	
+		$$\text{Sensibilidad} = \dfrac{TP}{TP + FN}$$ 
+		
+	\item La especificidad mide la proporción de negativos reales que han sido correctamente identificados como negativos.
+	
+			$$\text{Especificidad} = \dfrac{TN}{TN + FP}$$ 
+			
+	\item El F1-Score es la medida de evaluación más adecuada para problemas no balanceados. Ante este tipo de problemas, muchos clasificadores suelen estan sesgados hacia la clase mayoritaria. F1-Score busca un equilibrio entre valor predictivo positivo ($TP/(TP + FP)$) y sensibilidad ($TP/(TP + FN)$).
+	
+				$$\text{F1-score} = \dfrac{2 * TP}{2 * TP + FP + FN}$$
+\end{itemize}
+
+Estas medidas inicialmente definidas para problemas biclase se pueden extender con facilidad a problemas multiclase \cite{Tharwat2018}.
