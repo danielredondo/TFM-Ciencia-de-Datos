@@ -15,13 +15,13 @@ library(waiter)
 source("www/dataPlot.R")
 
 spinner_abrir <- tagList(
-  spin_chasing_dots(),
-  span("Abriendo la aplicación...", style="color:white;")
+  spin_folding_cube(),
+  span(br(), h4("Loading application..."), style="color:white;")
 )
 
 spinner <- tagList(
   spin_chasing_dots(),
-  span("Ejecutando...", style="color:white;")
+  span(br(), h4("Loading..."), style="color:white; display: inline-block;")
 )
 
 ui <- dashboardPage(
@@ -29,7 +29,7 @@ ui <- dashboardPage(
   ## Tema
   skin = "black",
   ## Cabecera
-  dashboardHeader(title = "biomaRcadores"#,titleWidth = 350
+  dashboardHeader(title = "biomarkeR"#,titleWidth = 350
                   ),
   ## Barra lateral
   dashboardSidebar(
@@ -38,35 +38,36 @@ ui <- dashboardPage(
     ),
     
     sidebarMenu(
-      menuItem("Introducción", tabName = "intro", icon = icon("file-alt")),
-      menuItem("Carga de datos", tabName = "datos", icon = icon("database")),
-      menuItem("Selección de genes", tabName = "genes", icon = icon("dna")),
-      menuItem("Entrenamiento de modelos", tabName = "entrenamiento", icon = icon("play")),
-      menuItem("Validación de modelos", tabName = "validacion", icon = icon("check-circle")),
-      menuItem("Autores", tabName = "autores", icon = icon("id-card")),
-      menuItem("Código", tabName = "codigo", icon = icon("code"))
+      menuItem("Introduction", tabName = "intro", icon = icon("file-alt")),
+      menuItem("Data loading", tabName = "datos", icon = icon("database")),
+      menuItem("Genes selection", tabName = "genes", icon = icon("dna")),
+      menuItem("Model training", tabName = "entrenamiento", icon = icon("play")),
+      menuItem("Model validation", tabName = "validacion", icon = icon("check-circle")),
+      menuItem("Related diseases", tabName = "enfermedades", icon = icon("disease")),
+      menuItem("Authors", tabName = "autores", icon = icon("id-card")),
+      menuItem("Code", tabName = "codigo", icon = icon("code"))
     )
   ),
   ## Cuerpo
   dashboardBody(
     use_waiter(),
-    waiter_show_on_load(spinner_abrir), # will show on load
-    waiter_on_busy(spinner),
+    #waiter_show_on_load(spinner_abrir, color = "#027368"),
+    #waiter_on_busy(spinner, color = "#027368"),
     tabItems(
       # Tab 1
       tabItem(tabName = "intro",
-              h1("Epidemiología y detección de biomarcadores en cáncer"),
+              h1("Epidemiology and biomarkers detection in cancer"),
               
-              h3(tags$b("Introducción")),
+              h3(tags$b("Introduction")),
               "Texto",
-              h3(tags$b("Metodología")),
+              h3(tags$b("Methods")),
               "Texto",
-              h3(tags$b("Resultados")),
+              h3(tags$b("Results")),
               "Texto",
-              h3(tags$b("Conclusiones")),
+              h3(tags$b("Conclusions")),
               "Texto",
               
-              h2("Sobre esta aplicación"),
+              h2("About this web application"),
               "Texto",
               # Parte final
               br(), br(), br(),
@@ -77,27 +78,26 @@ ui <- dashboardPage(
       
       # Tab 2
       tabItem(tabName = "datos",
-              h1("Carga de datos"),
+
+              h1("Data loading"),
               fileInput(inputId = "archivo_rdata",
-                        label = "Seleccione el archivo .RData a importar. Debe contener..",
-                        buttonLabel = "Examinar...",
+                        label = "Select .RData file. (see Example File)",
                         accept = ".RData",
-                        placeholder = "No se ha seleccionado ningún archivo",
                         width = "50%"
               ),
               
               actionButton(inputId = "boton_importar",
-                           label = "Importar archivo",
+                           label = "Import file",
                            icon = icon("fas fa-file-import", lib = "font-awesome"),
                            width = "50%"),
               br(),
               
               tableOutput("tabla1"),
               
-              h2("Partición entrenamiento-test"),
+              h2("Train-test partition"),
               
               sliderInput("porcentaje_entrenamiento",
-                          label = "Porcentaje entrenamiento (%)",
+                          label = "Train percentage (%)",
                           value = 75, min = 5, max = 95, step = 5,
                           width = "50%"
                           ),
@@ -107,11 +107,11 @@ ui <- dashboardPage(
       
       # Tab 3
       tabItem(tabName = "genes",
-              h1("Selección de genes"),
-              sliderInput(inputId = "numero_genes", label = "Selecciona el número de genes relevantes", value = 20, min = 0, max = 50, step = 1),
+              h1("Genes selection"),
+              sliderInput(inputId = "numero_genes", label = "Select the number of genes to use", value = 20, min = 0, max = 50, step = 1),
               
               actionButton(inputId = "boton_genes",
-                           label = "Seleccionar genes más relevantes",
+                           label = "Select most relevant genes",
                            icon = icon("fas fa-calculator", lib = "font-awesome"),
                            width = "50%"),
               br(),
@@ -123,28 +123,24 @@ ui <- dashboardPage(
                 column(4, h4(tags$b("  MRMR")), tableOutput("genes_mrmr")),
                 column(4, h4(tags$b("  RF")), tableOutput("genes_rf")),
                 column(4, h4(tags$b("  DA")), tableOutput("genes_da")),
-              ),
-                
-
-              br(),
-              
-              h2("Enfermedades relacionadas")
+              )
+      
       ),
       
       # Tab 4
       tabItem(tabName = "entrenamiento",
-              h1("Entrenamiento de modelos"),
+              h1("Model training"),
               
               # Elegir MRMR/RF/DA, se muestra MRMR por ahora
               selectInput("tipo_entrenamiento",
-                          label = "Tipo de selección de genes",
+                          label = "Feature selection algorithm",
                           choices = c("mRMR", "rf", "da"),
                           selected = "mRMR",
                           width = "50%"),
               
               # Se puede añadir número de CV que se hacen
               selectInput("numero_folds",
-                          label = "Número de folds",
+                          label = "Number of folds",
                           choices = c(3, 5, 10),
                           selected = 5,
                           width = "50%"),
@@ -157,13 +153,17 @@ ui <- dashboardPage(
 
               
       ),
-      # Tab 5
-      tabItem(tabName = "validacion",
-              h1("Validación de modelos")
-      ),
+
+      
       # Tab 6
+      tabItem(tabName = "enfermedades",
+            h1("Related diseases"),
+            "Aquí irá un campo para poner un gen, y se devolverán los resultados de KnowSeq::DEGsToDiseases"
+      ),
+      
+      # Tab 7
       tabItem(tabName = "autores",
-              h1("Autores"),
+              h1("Authors"),
               tags$h4(
                 tags$li(tags$b("Daniel Redondo Sánchez")), br(),
                 tags$li(tags$b("Ignacio Rojas")), br(),
@@ -173,10 +173,10 @@ ui <- dashboardPage(
               ),
       # Tab 7
       tabItem(tabName = "codigo",
-              h1("Código"),
+              h1("Code"),
               tags$h4(
-                "En ", tags$a(href = "https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/shiny/app.R", "este repositorio de GitHub"),
-                "puedes encontrar el código de la aplicación.")
+                "In ", tags$a(href = "https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/shiny/app.R", "this GitHub repository"),
+                "you can find the code of the web application.")
               )
       ) # Final tabs
   ) # Final dashboard body
@@ -187,8 +187,9 @@ options(shiny.maxRequestSize = 15*1024^2)
 
 server <- function(input, output){
 
+  #Sys.sleep(2)
   # give time for wait screen to show
-  waiter_hide()
+  #waiter_hide()
   
   observeEvent(input$boton_importar, {
     
@@ -299,7 +300,11 @@ server <- function(input, output){
   # Esto se puede mejorar para que calcule los mejores 50 genes y luego sólo tenga que hacer un subset de esa tabla
   # seleccionando sólo los primeros X elementos, para que reaccione antes la aplicación web.
   
+  w <- Waiter$new(html = span(""))
+  
   observeEvent(input$boton_genes, {
+    
+    w$show()
     
     # Si se ha seleccionado un fichero, se importa
     load(input$archivo_rdata$datapath)
@@ -325,13 +330,20 @@ server <- function(input, output){
     # Etiquetas
     labels_train <- reactive(labels[indices()])
     labels_test  <- reactive(labels[-indices()])
+    w$hide()
     
   output$genes_mrmr <- renderTable({
+    w <- Waiter$new(html = tagList(spin_folding_cube(),
+                                   span(br(), h4("Running mRMR algorithm..."),
+                                        style="color:white;")))
+    w$show()
+    
     # Método mRMR (mínima redundancia, máxima relevancia)
     mrmrRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
                                     mode = "mrmr")
     
     mrmrRanking <- names(mrmrRanking)[1:input$numero_genes]
+    w$hide()
     
     return(mrmrRanking)
   }, colnames = FALSE)
@@ -343,23 +355,36 @@ server <- function(input, output){
   # para ejecutar sólo una vez particion.entrenamiento y demás funciones.
   
   output$genes_rf <- renderTable({
+    w <- Waiter$new(html = tagList(spin_folding_cube(),
+                                   span(br(), h4("Running RF algorithm..."),
+                                        style="color:white;")))
+    w$show()
     # Método random forest
     rfRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
                                   mode = "rf")
     rfRanking <- rfRanking[1:input$numero_genes]
+    w$hide()
     
     return(rfRanking)
   }, colnames = FALSE)
   
+  w$update(html = "RF terminado, empezando DA")
+  
   output$genes_da <- renderTable({
+    w <- Waiter$new(html = tagList(spin_folding_cube(),
+                                   span(br(), h4("Running DA algorithm..."),
+                                        style="color:white;")))
+    w$show()
     daRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
                                   mode = "da", disease = "liver cancer")
     
     daRanking <- names(daRanking)[1:input$numero_genes]
 
+    w$hide()
     return(daRanking)
   }, colnames = FALSE)
 
+  w$hide()
   }) # Cierre botón calcular genes
   
   
@@ -372,21 +397,21 @@ server <- function(input, output){
   })
                           
   
-  results_cv <- reactive({
+  results_trn <- reactive({
     # Reestructurar para no calcular dos veces mrmrranking!
 
-    svm_CV(particion.entrenamiento(), labels_train(), mrmrRanking(),
+    svm_trn(particion.entrenamiento(), labels_train(), mrmrRanking(),
            numFold = as.numeric(input$numero_folds))
   })
   
   output$mejores_parametros <- renderTable({
-    as.data.frame(results_cv()$bestParameters)
+    as.data.frame(results_trn()$bestParameters)
     }, rownames = TRUE)
   
   output$resultados_entrenamiento <- renderPlot({
     
     # Quizá mejor con F1
-    dataPlot(results_cv()$accMatrix[, 1:12], colours = rainbow(as.numeric(input$numero_folds)),
+    dataPlot(results_trn()$accMatrix[, 1:12], colours = rainbow(as.numeric(input$numero_folds)),
              mode = "classResults",
              main = "mRMR - Accuracy for each fold",
              xlab = "Genes",
