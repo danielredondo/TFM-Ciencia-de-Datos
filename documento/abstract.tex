@@ -3,14 +3,34 @@
 \markboth{Abstract}{Abstract}
 
 \vspace{-30pt}
-\section*{Abstract}
-\addcontentsline{toc}{chapter}{Abstract}
-
-\textcolor{red}{Abstract en inglés. Keywords.}
 
 \section*{Resumen}
+\addcontentsline{toc}{chapter}{Resumen / Abstract}
 
-\textcolor{red}{Abstract en español. Palabras clave.}
+\textbf{Introducción:} El cáncer es uno de los mayores problemas de salud pública del mundo con más de 17 millones de casos nuevos y 9 millones de defunciones al año. \\
+
+\textbf{Métodos:} Este trabajo se centra en el cáncer de hígado y el cáncer de colon-recto, describiendo sus principales indicadores epidemiológicos y usando \textit{machine learning} para analizar más de 1.100 muestras de RNA-Seq procedentes de pacientes de cáncer. Para clasificación biclase (tumor vs. tejido normal) y multiclase (varios tipos de tumor vs. tejido normal) se identifican los genes más relevantes y se construyen modelos predictivos con los algoritmos SVM, \textit{random forest} y kNN con validación cruzada 5-fold.\\
+
+\textbf{Resultados:} Los mejores clasificadores biclase para cada algoritmo son validados con excelentes resultados para cáncer de hígado (F1-Score en test: 99,5\% para \textit{random forest} con 7 genes) y cáncer de colon-recto (F1-Score: \textcolor{red}{XX\%} para \textcolor{red}{[el mejor algoritmo biclase obtenido en train]} con \textcolor{red}{X} genes). En los mejores modelos para clasificación multiclase se obtienen medidas de evaluación ligeramente inferiores tanto en hígado (F1-Score en test: 91,8\% para SVM con 7 genes) como en colon-recto (F1-Score: \textcolor{red}{XX\%} para \textcolor{red}{[el mejor algoritmo multiclase obtenido en train]} con \textcolor{red}{X} genes).\\
+
+\textbf{Conclusiones:}\\
+
+\textbf{Palabras clave:} epidemiología, transcriptómica, cáncer de hígado, cáncer de colon-recto, RNA-Seq, machine learning, SVM, random forest, kNN.
+
+\newpage
+\thispagestyle{plain}
+
+\section*{Abstract}
+
+\textbf{Introduction:} Cancer is one of the world's largest public health problems with more than 17 million new cases and 9 million deaths every year. \\
+
+\textbf{Methods:} This work focuses on liver cancer and colon-rectum cancer, describing their main epidemiological indicators and using machine learning to analyze more than 1,100 RNA-Seq samples from cancer patients. For binary (tumor vs. normal tissue) and multiclass (various tumor types vs. normal tissue) classification, the most relevant genes are identified and predictive models are constructed with the SVM algorithms, random forest and kNN with 5-fold cross-validation. \\
+
+\textbf{Results:} The best binary classifiers for each algorithm are validated with excellent results for liver cancer (F1-Score in test: 99.5\% for random forest with 7 genes) and cancer of colon-rectum (F1-Score: \textcolor{red}{XX\%} for \textcolor{red}{[best binary algorithm obtained in train]} with \textcolor{red}{X} genes). Slightly lower evaluation measures are obtained in the best models for multiclass classification, both in liver (F1-Score in test: 91.8\% for SVM with 7 genes) and in colon-rectum (F1-Score: \textcolor{red}{XX\%} for \textcolor{red}{[the best multiclass algorithm obtained in train]} with \textcolor{red}{X} genes). \\
+
+\textbf{Conclusions:}\\
+
+\textbf{Keywords:} epidemiology, transcriptomics, liver cancer, colorectal cancer, RNA-Seq, machine learning, SVM, random forest, kNN.
 
 \newpage
 \thispagestyle{empty}
