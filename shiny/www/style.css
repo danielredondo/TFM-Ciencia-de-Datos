@@ -4,8 +4,9 @@ body {
 }
 
 .content-wrapper, .right-side {
-                                background-color: #fff;
+  background-color: #fff;
 }
+
 h1 {
   color: #027368;
   font-weight: bold;

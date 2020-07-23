@@ -24,17 +24,18 @@ spinner <- tagList(
   span(br(), h4("Loading..."), style="color:white; display: inline-block;")
 )
 
-ui <- dashboardPage(
-  
+ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
   ## Tema
   skin = "black",
   ## Cabecera
-  dashboardHeader(title = "biomarkeR"#,titleWidth = 350
-                  ),
+  dashboardHeader(title = span(
+    "biomarkeRs",
+    style = "font-family: Lucida Console; font-weight: bold"
+  )),
   ## Barra lateral
   dashboardSidebar(
     tags$head(
-      tags$link(rel = "stylesheet", type = "text/css", href = "css.css")
+      tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
     ),
     
     sidebarMenu(
@@ -59,16 +60,16 @@ ui <- dashboardPage(
               h1("Epidemiology and biomarkers detection in cancer"),
               
               h3(tags$b("Introduction")),
-              "Texto",
+              "[Text]",
               h3(tags$b("Methods")),
-              "Texto",
+              "[Text]",
               h3(tags$b("Results")),
-              "Texto",
+              "[Text]",
               h3(tags$b("Conclusions")),
-              "Texto",
+              "[Text]",
               
               h2("About this web application"),
-              "Texto",
+              "[Text]",
               # Parte final
               br(), br(), br(),
               fluidRow(column(6, tags$img(src = "ugr.png", height = "100px")),
@@ -92,39 +93,43 @@ ui <- dashboardPage(
                            width = "50%"),
               br(),
               
-              tableOutput("tabla1"),
-              
-              h2("Train-test partition"),
-              
-              sliderInput("porcentaje_entrenamiento",
-                          label = "Train percentage (%)",
-                          value = 75, min = 5, max = 95, step = 5,
-                          width = "50%"
-                          ),
-              
-              plotOutput("sankey", width = "75%")
+              conditionalPanel(condition = "input.boton_importar!=0",
+                tableOutput("tabla1"),
+                
+                h2("Train-test partition"),
+                
+                sliderInput("porcentaje_entrenamiento",
+                            label = "Train percentage (%)",
+                            value = 75, min = 5, max = 95, step = 5,
+                            width = "50%"
+                            ),
+                
+                plotOutput("sankey", width = "50%")
+              )
       ),
       
       # Tab 3
       tabItem(tabName = "genes",
               h1("Genes selection"),
-              sliderInput(inputId = "numero_genes", label = "Select the number of genes to use", value = 20, min = 0, max = 50, step = 1),
+              sliderInput(inputId = "numero_genes", label = "Select the number of genes to use", value = 20, min = 1, max = 51, step = 1),
               
               actionButton(inputId = "boton_genes",
                            label = "Select most relevant genes",
                            icon = icon("fas fa-calculator", lib = "font-awesome"),
                            width = "50%"),
               br(),
-              
-              "Se muestran a continuación los mejores genes seleccionados por cada método de selección de características.",
               br(),
-              tags$i("Puede tardar unos segundos en actualizarse."),
-              fluidRow(
-                column(4, h4(tags$b("  MRMR")), tableOutput("genes_mrmr")),
-                column(4, h4(tags$b("  RF")), tableOutput("genes_rf")),
-                column(4, h4(tags$b("  DA")), tableOutput("genes_da")),
+              conditionalPanel(condition = "input.boton_genes!=0",
+                                 
+                h3("Table of more relevant genes by feature selection method:"),
+                br(),
+                br(),
+                fluidRow(
+                  column(4, h4(tags$b("  MRMR")), tableOutput("genes_mrmr")),
+                  column(4, h4(tags$b("  RF")), tableOutput("genes_rf")),
+                  column(4, h4(tags$b("  DA")), tableOutput("genes_da")),
+                )
               )
-      
       ),
       
       # Tab 4
@@ -150,8 +155,6 @@ ui <- dashboardPage(
               plotOutput("resultados_entrenamiento")
               
               # Falta añadir el F1-score y decir cuál es el mejor método
-
-              
       ),
 
       
@@ -171,7 +174,7 @@ ui <- dashboardPage(
                 tags$li(tags$b("Daniel Castillo"))
                 )
               ),
-      # Tab 7
+      # Tab 8
       tabItem(tabName = "codigo",
               h1("Code"),
               tags$h4(
@@ -216,7 +219,7 @@ server <- function(input, output){
     particion.entrenamiento <- reactive(particion()$training)
     particion.test <- reactive(particion()$test)
     
-    # Etiquetas
+    # Labels
     labels_train <- reactive(labels[indices()])
     labels_test  <- reactive(labels[-indices()])
     
@@ -228,12 +231,12 @@ server <- function(input, output){
       # Mensaje de OK
       showModal(modalDialog(
         h3(icon("check-circle", lib = "font-awesome", class = "fa-1x"),
-           " El archivo se ha importado correctamente"),
+           " File imported"),
         easyClose = TRUE,
         footer = NULL
       ))
     
-      tabla_aux <- as.data.frame(table(labels)) %>% rename(Etiqueta = labels, Frecuencia = Freq)
+      tabla_aux <- as.data.frame(table(labels)) %>% rename(Label = labels, Samples = Freq)
       return(tabla_aux)
     })
   
@@ -251,44 +254,30 @@ server <- function(input, output){
     #table(labels_test)
     test_tum <- table(labels_test())[1]
     test_san <- table(labels_test())[2]
-    # Total
-    #table(labels)
-    
-    # Verificar balanceo de clase en entrenamiento y test
-    # Train
-    #labels_train %>% table %>% prop.table %>% round(3) * 100
-    # Test
-    #labels_test %>% table %>% prop.table %>% round(3) * 100
-    # Total
-    #labels %>% table %>% prop.table %>% round(3) * 100
-    
+
     # Diagrama de Sankey
     datos_sankey <- data.frame(tipo = c(paste0("Tumor\n", entr_tum + test_tum, " casos"), paste0("Tumor\n", entr_tum + test_tum, " casos"),
-                                        paste0("Tejido normal\n", entr_san + test_san, " casos"), paste0("Tejido normal\n", entr_san + test_san, " casos")),
-                               traintest = c("Entrenamiento", "Test", "Entrenamiento", "Test"),
+                                        paste0("Normal tissue\n", entr_san + test_san, " casos"), paste0("Normal tissue\n", entr_san + test_san, " casos")),
+                               traintest = c("Train", "Test", "Train", "Test"),
                                value = c(entr_tum, test_tum, entr_san, test_san))
     
     # Pequeño reorden para que mejorar la presentación de los datos
     datos_sankey$tipo <- factor(datos_sankey$tipo,
-                                levels = c(paste0("Tumor\n", entr_tum + test_tum, " casos"), paste0("Tejido normal\n", entr_san + test_san, " casos")),
+                                levels = c(paste0("Tumor\n", entr_tum + test_tum, " casos"), paste0("Normal tissue\n", entr_san + test_san, " casos")),
                                 ordered = T)
     
-    print(datos_sankey)
-    
     ggplot(data = datos_sankey,
-           aes(axis1 = tipo, axis2 = traintest, y = value)) +
-      scale_x_discrete(limits = c("Tipo de muestra", "Entrenamiento-test"),
+           aes(axis1 = tipo, axis2 = traintest, y = value, label = after_stat(stratum))) +
+      scale_x_discrete(limits = c("Type of sample", "Train-test"),
                        expand = c(.1, .05)) +
       ylab("") +
       geom_alluvium(col = "black", alpha = 1) +
       geom_alluvium(aes(fill = tipo), alpha = .6, show.legend = FALSE) +
       geom_stratum() +
-      geom_text(stat = "stratum", infer.label = TRUE, cex = 3) +
+      geom_text(stat = "stratum", cex = 3) +
       theme_minimal() +
-      ggtitle("Partición en conjuntos de entrenamiento y test",
-              paste0("Reparto ", input$porcentaje_entrenamiento, "% - ", 100 - input$porcentaje_entrenamiento, "% con balanceo de clases")) +
+      ggtitle("Train-test partition") +
       theme(plot.title = element_text(hjust = .5),
-            plot.subtitle = element_text(hjust = .5),
             axis.text = element_text(color = "black", margin = margin(t = -30), size = 12),
             axis.text.y = element_blank(),
             axis.ticks = element_blank(),
@@ -327,7 +316,7 @@ server <- function(input, output){
     particion.entrenamiento <- reactive(particion()$training)
     particion.test <- reactive(particion()$test)
     
-    # Etiquetas
+    # Labels
     labels_train <- reactive(labels[indices()])
     labels_test  <- reactive(labels[-indices()])
     w$hide()
@@ -368,8 +357,6 @@ server <- function(input, output){
     return(rfRanking)
   }, colnames = FALSE)
   
-  w$update(html = "RF terminado, empezando DA")
-  
   output$genes_da <- renderTable({
     w <- Waiter$new(html = tagList(spin_folding_cube(),
                                    span(br(), h4("Running DA algorithm..."),
@@ -386,9 +373,7 @@ server <- function(input, output){
 
   w$hide()
   }) # Cierre botón calcular genes
-  
-  
-  
+
   # Método mRMR (mínima redundancia, máxima relevancia)
   mrmrRanking <- reactive({
     aux <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
