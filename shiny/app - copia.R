@@ -113,6 +113,8 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               h1("Genes selection"),
               sliderInput(inputId = "numero_genes", label = "Select the number of genes to use", value = 20, min = 1, max = 51, step = 1),
               
+              textInput(inputId = "disease_da", label = "Disease for DA algorithm", value = "liver cancer", width = "50%"),
+              
               actionButton(inputId = "boton_genes",
                            label = "Select most relevant genes",
                            icon = icon("fas fa-calculator", lib = "font-awesome"),
@@ -122,7 +124,6 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               conditionalPanel(condition = "input.boton_genes!=0",
                                  
                 h3("Table of more relevant genes by feature selection method:"),
-                br(),
                 br(),
                 fluidRow(
                   column(4, h4(tags$b("  MRMR")), tableOutput("genes_mrmr")),
@@ -211,7 +212,7 @@ server <- function(input, output){
     # Parámetros generales
     
     # Partición 75% / 25% con balanceo de clase
-    set.seed(1991)
+    set.seed(31415)
     indices <- reactive(createDataPartition(labels, p = input$porcentaje_entrenamiento / 100, list = FALSE))
     particion <- reactive(list(training = DEGsMatrixML[indices(), ], test = DEGsMatrixML[-indices(), ]))
     
@@ -308,7 +309,7 @@ server <- function(input, output){
     DEGsMatrixML <- t(DEGsMatrix)
     
     # Partición 75% / 25% con balanceo de clase
-    set.seed(1991)
+    set.seed(31415)
     indices <- reactive(createDataPartition(labels, p = input$porcentaje_entrenamiento / 100, list = FALSE))
     particion <- reactive(list(training = DEGsMatrixML[indices(), ], test = DEGsMatrixML[-indices(), ]))
     
@@ -320,22 +321,51 @@ server <- function(input, output){
     labels_train <- reactive(labels[indices()])
     labels_test  <- reactive(labels[-indices()])
     w$hide()
-    
-  output$genes_mrmr <- renderTable({
-    w <- Waiter$new(html = tagList(spin_folding_cube(),
-                                   span(br(), h4("Running mRMR algorithm..."),
+
+    # Método mRMR (mínima redundancia, máxima relevancia)
+    w <- Waiter$new(html = tagList(spin_loaders(39, color = "white", style = "scale: 4"),
+                                   span(br(), br(), br(), h4("Running mRMR algorithm..."),
                                         style="color:white;")))
     w$show()
-    
-    # Método mRMR (mínima redundancia, máxima relevancia)
     mrmrRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
                                     mode = "mrmr")
-    
-    mrmrRanking <- names(mrmrRanking)[1:input$numero_genes]
     w$hide()
     
+    # Método random forest
+    w <- Waiter$new(html = tagList(spin_loaders(39, color = "white", style = "scale: 4"),
+                                   span(br(), br(), br(), h4("Running RF algorithm..."),
+                                        style="color:white;")))
+    w$show()
+    rfRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
+                                  mode = "rf")
+    w$hide()
+    
+    # Método DA
+    w <- Waiter$new(html = tagList(spin_loaders(39, color = "white", style = "scale: 4"),
+                                   span(br(), br(), br(), h4("Running DA algorithm..."),
+                                        style="color:white;")))
+    w$show()
+    daRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
+                                  mode = "da", disease = input$disease_da)
+    w$hide()
+    
+  output$genes_mrmr <- renderTable({
+    mrmrRanking <- names(mrmrRanking)[1:input$numero_genes]
     return(mrmrRanking)
   }, colnames = FALSE)
+  
+  output$genes_rf <- renderTable({
+    rfRanking <- rfRanking[1:input$numero_genes]
+    return(rfRanking)
+  }, colnames = FALSE)
+  
+  output$genes_da <- renderTable({
+    daRanking <- names(daRanking)[1:input$numero_genes]
+    return(daRanking)
+  }, colnames = FALSE)
+
+  }) # Cierre botón calcular genes
+
   
   # Leer
   # https://stackoverflow.com/questions/33671915/r-shiny-server-how-to-keep-variable-value-in-observeevent-function
@@ -343,37 +373,7 @@ server <- function(input, output){
   # https://shiny.rstudio.com/articles/action-buttons.html
   # para ejecutar sólo una vez particion.entrenamiento y demás funciones.
   
-  output$genes_rf <- renderTable({
-    w <- Waiter$new(html = tagList(spin_folding_cube(),
-                                   span(br(), h4("Running RF algorithm..."),
-                                        style="color:white;")))
-    w$show()
-    # Método random forest
-    rfRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
-                                  mode = "rf")
-    rfRanking <- rfRanking[1:input$numero_genes]
-    w$hide()
-    
-    return(rfRanking)
-  }, colnames = FALSE)
   
-  output$genes_da <- renderTable({
-    w <- Waiter$new(html = tagList(spin_folding_cube(),
-                                   span(br(), h4("Running DA algorithm..."),
-                                        style="color:white;")))
-    w$show()
-    daRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
-                                  mode = "da", disease = "liver cancer")
-    
-    daRanking <- names(daRanking)[1:input$numero_genes]
-
-    w$hide()
-    return(daRanking)
-  }, colnames = FALSE)
-
-  w$hide()
-  }) # Cierre botón calcular genes
-
   # Método mRMR (mínima redundancia, máxima relevancia)
   mrmrRanking <- reactive({
     aux <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
@@ -403,16 +403,6 @@ server <- function(input, output){
              ylab = "Accuracy")
     
   })
-  
-  
-  set.seed(122)
-  histdata <- rnorm(500)
-  
-  output$plot1 <- renderPlot({
-    data <- histdata[seq_len(input$slider)]
-    hist(data)
-  })
-
   
 }
 

@@ -113,6 +113,8 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               h1("Genes selection"),
               sliderInput(inputId = "numero_genes", label = "Select the number of genes to use", value = 20, min = 1, max = 51, step = 1),
               
+              textInput(inputId = "disease_da", label = "Disease for DA algorithm", value = "liver cancer", width = "50%"),
+              
               actionButton(inputId = "boton_genes",
                            label = "Select most relevant genes",
                            icon = icon("fas fa-calculator", lib = "font-awesome"),
@@ -343,8 +345,19 @@ server <- function(input, output){
                                    span(br(), br(), br(), h4("Running DA algorithm..."),
                                         style="color:white;")))
     w$show()
+    daRanking <- NULL
+    
     daRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
-                                  mode = "da", disease = "liver cancer")
+                                  mode = "da", disease = input$disease_da)
+    
+    # Si ha habido algún problema en la llamada a la API, se repite tras un descanso de 5 segundos
+    while(is.null(daRanking)){
+      Sys.sleep(5)
+      daRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
+                                    mode = "da", disease = input$disease_da)
+    }
+    
+
     w$hide()
     
   output$genes_mrmr <- renderTable({
