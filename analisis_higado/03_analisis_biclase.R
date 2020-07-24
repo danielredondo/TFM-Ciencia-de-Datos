@@ -9,6 +9,7 @@ numero_de_genes <- 10
 
 # Windows
 #setwd("C:/Users/dredondo/Dropbox/Transporte_interno/Máster/Ciencia de Datos/")
+
 # Mac
 setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Datos/")
 
@@ -17,11 +18,10 @@ setwd("TFM/Analisis_higado/data/")
 
 # ----- Carga de paquetes -----
 
-library(BiocManager) # Para instalar KnowSeq
-
-# devtools::install_github("CasedUgr/KnowSeq")
+# Instalación de KnowSeq: (es una versión fija de GitHub)
+# devtools::install_github("CasedUgr/KnowSeq", ref = "f59cb9e1cb02702697c208cf2c61c45d6e0b7a08", force = TRUE) 
+# Si hay problemas del tipo "Error: (converted from warning)" : Sys.setenv(R_REMOTES_NO_ERRORS_FROM_WARNINGS="true")
 library(KnowSeq)     # Para trabajar con datos de transcriptómica de GDC Portal
-
 library(dplyr)       # Para select, filter, pipes, ...
 library(tictoc)      # Para medir tiempos con tic() y toc() a lo MATLAB 
 library(beepr)       # Para avisar con beeps cuando acaba un proceso
@@ -92,14 +92,14 @@ toc()
 
 # ----- Boxplots de la expresión para todos los genes -----
 
-png(filename = "../../03_analisis_biclase_figuras/01_boxplot_all.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/01_boxplot_all.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(expressionMatrix, labels, mode = "boxplot", colours = c("red", "green"))
 legend(1, 29, c("Primary Tumor", "Solid Tissue Normal"),
        fill = c("red", "green"), xpd = TRUE)
 title("Boxplot de matriz de expresión para todos los genes")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/02_boxplot_all_ordered.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/02_boxplot_all_ordered.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(expressionMatrix, labels, mode = "orderedBoxplot", colours = c("red", "green"))
 legend(1, 29, c("Primary Tumor", "Solid Tissue Normal"),
        fill = c("red", "green"), xpd = TRUE)
@@ -108,7 +108,7 @@ dev.off()
 
 # ----- Controlando por el efecto batch -----
 
-tic("batchEffectRemoval") # 241 segundos
+tic("batchEffectRemoval") # 230 segundos
 svaMod <- batchEffectRemoval(expressionMatrix, as.factor(labels), method = "sva")
 toc()
 
@@ -134,12 +134,12 @@ DEGsMatrixML <- t(DEGsMatrix)
 # ----- Representación de DEG -----
 
 # Boxplots para todas las muestras de los primeros genes
-png(filename = "../../03_analisis_biclase_figuras/03_boxplot_primeros_genes.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/03_boxplot_primeros_genes.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(DEGsMatrix[1:9, ], labels, mode = "genesBoxplot", colours = c("red", "green"))
 dev.off()
 
 # Mapa de calor para todas las muestras de los primeros genes
-png(filename = "../../03_analisis_biclase_figuras/04_heatmap_primeros_genes.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/04_heatmap_primeros_genes.png", width = 13, height = 8, units = "in", res = 300)
 DEGsMatrix_heatmap <- DEGsMatrix[, c(which(SamplesDataFrame$Class == "Primary Tumor"),
                                      which(SamplesDataFrame$Class == "Solid Tissue Normal"))]
 labels_heatmap <- labels[c(which(SamplesDataFrame$Class == "Primary Tumor"),
@@ -214,12 +214,12 @@ ggplot(data = datos_sankey,
           "Reparto 75% - 25% con balanceo de clases") +
   theme(plot.title = element_text(hjust = .5),
         plot.subtitle = element_text(hjust = .5),
-        axis.text = element_text(color = "black", margin = margin(t = -30), size = 12),
+        axis.text = element_text(color = "black", size = 12),
         axis.text.y = element_blank(),
         axis.ticks = element_blank(),
         panel.grid = element_blank()) 
 
-ggsave(filename = "../../03_analisis_biclase_figuras/05_sankey.png", width = 8, height = 7)
+ggsave(filename = "../../03_analisis_biclase/05_sankey.png", width = 8, height = 7)
 
 # ----- Selección de características: numero_de_genes genes más importantes -----
 
@@ -248,7 +248,7 @@ while(is.null(daRanking)){
 daRanking <- names(daRanking[1:numero_de_genes])
 
 genes <- cbind(mrmrRanking, rfRanking, daRanking)
-write.csv2(genes, file = "../../03_analisis_biclase_figuras/genes.csv")
+write.csv2(genes, file = "../../03_analisis_biclase/genes.csv")
 
 # ----- SVM: Resultados con validación cruzada para cada método de selección de características -----
 
@@ -277,44 +277,44 @@ mejores_parametros_svm <- rbind("mrmr" = results_cv_svm_mrmr$bestParameters,
                                 "rf" = results_cv_svm_rf$bestParameters,
                                 "da" = results_cv_svm_da$bestParameters)
 
-write.csv2(mejores_parametros_svm, file = "../../03_analisis_biclase_figuras/mejores_parametros_svm.csv")
+write.csv2(mejores_parametros_svm, file = "../../03_analisis_biclase/mejores_parametros_svm.csv")
 
 # ----- SVM: Resultados gráficos de validación cruzada -----
 
-png(filename = "../../03_analisis_biclase_figuras/06_svm_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_mrmr$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/06_svm_acc_MRMR.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_svm_mrmr$accuracyInfo$meanAccuracy, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "mRMR - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
+         main = "SVM + mRMR - Accuracy media", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/07_svm_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_rf$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/07_svm_acc_RF.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_svm_rf$accuracyInfo$meanAccuracy, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "RF - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
+         main = "SVM + RF - Accuracy media", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/08_svm_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_da$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/08_svm_acc_DA.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_svm_da$accuracyInfo$meanAccuracy, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "DA - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
+         main = "SVM + DA - Accuracy media", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/09_svm_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_mrmr$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/09_svm_f1_MRMR.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_svm_mrmr$F1Info$meanF1, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "mRMR - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
+         main = "SVM + mRMR - F1-Score medio", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/10_svm_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_rf$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/10_svm_f1_RF.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_svm_mrmr$F1Info$meanF1, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "RF - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
+         main = "SVM + RF - F1-Score medio", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/11_svm_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_svm_da$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/11_svm_f1_DA.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_svm_da$F1Info$meanF1, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "DA - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
+         main = "SVM + DA - F1-Score medio", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
 # ----- SVM: Mejor método en CV basado en precisión, especificidad, sensibilidad y F1-score -----
@@ -326,85 +326,71 @@ l_prec <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
 colnames(prec) <- c("MRMR", "RF", "DA")
 
 for(i in 1:length(genes_a_usar)){
-  prec[i, ] <- 100 * c(mean(results_cv_svm_mrmr$accMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_svm_rf$accMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_svm_da$accMatrix[, genes_a_usar[i]]))
-  l_prec[i, ] <- paste0(sprintf(100 * c(mean(results_cv_svm_mrmr$accMatrix[, genes_a_usar[i]]),
-                     mean(results_cv_svm_rf$accMatrix[, genes_a_usar[i]]),
-                     mean(results_cv_svm_da$accMatrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
+  prec[i, ] <- 100 * c(results_cv_svm_mrmr$accuracyInfo$meanAccuracy[genes_a_usar[i]],
+                       results_cv_svm_rf$accuracyInfo$meanAccuracy[genes_a_usar[i]],
+                       results_cv_svm_da$accuracyInfo$meanAccuracy[genes_a_usar[i]])
+  l_prec[i, ] <- paste0(sprintf(prec[i, ], fmt = '%#.2f'), 
                    " (",
-                   sprintf(100 * c(sd(results_cv_svm_mrmr$accMatrix[, genes_a_usar[i]]),
-                     sd(results_cv_svm_rf$accMatrix[, genes_a_usar[i]]),
-                     sd(results_cv_svm_da$accMatrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
+                   sprintf(100 * c(results_cv_svm_mrmr$accuracyInfo$standardDeviation[i],
+                                   results_cv_svm_rf$accuracyInfo$standardDeviation[i],
+                                   results_cv_svm_da$accuracyInfo$standardDeviation[i]
+                                   ), fmt = '%#.1f'), 
                    ")")
 }
 
-which(prec == max(prec), arr.ind = TRUE)
-
-#Especificidad 
+# Especificidad 
 spec <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
 l_spec <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
 colnames(spec) <- c("MRMR", "RF", "DA")
 
 for(i in 1:length(genes_a_usar)){
-  spec[i, ] <- 100 * c(mean(results_cv_svm_mrmr$specMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_svm_rf$specMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_svm_da$specMatrix[, genes_a_usar[i]]))
-  l_spec[i, ] <- paste0(sprintf(100 * c(mean(results_cv_svm_mrmr$specMatrix[, genes_a_usar[i]]),
-                                   mean(results_cv_svm_rf$specMatrix[, genes_a_usar[i]]),
-                                   mean(results_cv_svm_da$specMatrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
-                   " (",
-                   sprintf(100 * c(sd(results_cv_svm_mrmr$specMatrix[, genes_a_usar[i]]),
-                                   sd(results_cv_svm_rf$specMatrix[, genes_a_usar[i]]),
-                                   sd(results_cv_svm_da$specMatrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
-                   ")")
+  spec[i, ] <- 100 * c(results_cv_svm_mrmr$specificityInfo$meanSpecificity[genes_a_usar[i]],
+                       results_cv_svm_rf$specificityInfo$meanSpecificity[genes_a_usar[i]],
+                       results_cv_svm_da$specificityInfo$meanSpecificity[genes_a_usar[i]])
+  l_spec[i, ] <- paste0(sprintf(spec[i, ], fmt = '%#.2f'), 
+                        " (",
+                        sprintf(100 * c(results_cv_svm_mrmr$specificityInfo$standardDeviation[i],
+                                        results_cv_svm_rf$specificityInfo$standardDeviation[i],
+                                        results_cv_svm_da$specificityInfo$standardDeviation[i]
+                        ), fmt = '%#.1f'), 
+                        ")")
 }
 
-which(spec == max(spec), arr.ind = TRUE)
-
-#Sensibilidad
+# Sensibilidad
 sens <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
 l_sens <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
 colnames(sens) <- c("MRMR", "RF", "DA")
 
 for(i in 1:length(genes_a_usar)){
-  sens[i, ] <- 100 * c(mean(results_cv_svm_mrmr$sensMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_svm_rf$sensMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_svm_da$sensMatrix[, genes_a_usar[i]]))
-  l_sens[i, ] <- paste0(sprintf(100 * c(mean(results_cv_svm_mrmr$sensMatrix[, genes_a_usar[i]]),
-                                   mean(results_cv_svm_rf$sensMatrix[, genes_a_usar[i]]),
-                                   mean(results_cv_svm_da$sensMatrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
-                   " (",
-                   sprintf(100 * c(sd(results_cv_svm_mrmr$sensMatrix[, genes_a_usar[i]]),
-                                   sd(results_cv_svm_rf$sensMatrix[, genes_a_usar[i]]),
-                                   sd(results_cv_svm_da$sensMatrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
-                   ")")
+  sens[i, ] <- 100 * c(results_cv_svm_mrmr$sensitivityInfo$meanSensitivity[genes_a_usar[i]],
+                       results_cv_svm_rf$sensitivityInfo$meanSensitivity[genes_a_usar[i]],
+                       results_cv_svm_da$sensitivityInfo$meanSensitivity[genes_a_usar[i]])
+  l_sens[i, ] <- paste0(sprintf(sens[i, ], fmt = '%#.2f'), 
+                        " (",
+                        sprintf(100 * c(results_cv_svm_mrmr$sensitivityInfo$standardDeviation[i],
+                                        results_cv_svm_rf$sensitivityInfo$standardDeviation[i],
+                                        results_cv_svm_da$sensitivityInfo$standardDeviation[i]
+                        ), fmt = '%#.1f'), 
+                        ")")
 }
 
-which(sens == max(sens), arr.ind = TRUE)
-
 #F1-Score
-genes_a_usar <- c(1:numero_de_genes)
 f1 <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
 l_f1 <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
 colnames(f1) <- c("MRMR", "RF", "DA")
 
 for(i in 1:length(genes_a_usar)){
-  f1[i, ] <- 100 * c(mean(results_cv_svm_mrmr$f1Matrix[, genes_a_usar[i]]),
-                     mean(results_cv_svm_rf$f1Matrix[, genes_a_usar[i]]),
-                     mean(results_cv_svm_da$f1Matrix[, genes_a_usar[i]]))
-  l_f1[i, ] <- paste0(sprintf(100 * c(mean(results_cv_svm_mrmr$f1Matrix[, genes_a_usar[i]]),
-                                   mean(results_cv_svm_rf$f1Matrix[, genes_a_usar[i]]),
-                                   mean(results_cv_svm_da$f1Matrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
-                   " (",
-                   sprintf(100 * c(sd(results_cv_svm_mrmr$f1Matrix[, genes_a_usar[i]]),
-                                   sd(results_cv_svm_rf$f1Matrix[, genes_a_usar[i]]),
-                                   sd(results_cv_svm_da$f1Matrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
-                   ")")
+  f1[i, ] <- 100 * c(results_cv_svm_mrmr$F1Info$meanF1[genes_a_usar[i]],
+                       results_cv_svm_rf$F1Info$meanF1[genes_a_usar[i]],
+                       results_cv_svm_da$F1Info$meanF1[genes_a_usar[i]])
+  l_f1[i, ] <- paste0(sprintf(f1[i, ], fmt = '%#.2f'), 
+                        " (",
+                        sprintf(100 * c(results_cv_svm_mrmr$F1Info$standardDeviation[i],
+                                        results_cv_svm_rf$F1Info$standardDeviation[i],
+                                        results_cv_svm_da$F1Info$standardDeviation[i]
+                        ), fmt = '%#.1f'), 
+                        ")")
 }
-
-which(f1 == max(f1), arr.ind = TRUE)
-# El mejor F1-score se obtiene con 4 genes en RF
 
 # Gráfico F1
 mejores <- which(f1 == max(f1), arr.ind = TRUE)
@@ -431,11 +417,11 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_f1)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/12_svm_f1_score.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/12_svm_f1_score.png", width = 8, height = 8)
 
 # Gráfico precisión
 mejores <- which(prec == max(prec), arr.ind = TRUE)
@@ -462,13 +448,13 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_prec)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/13_svm_accuracy.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/13_svm_accuracy.png", width = 8, height = 8)
 
-# Gráfico sens
+# Gráfico sensibilidad
 mejores <- which(sens == max(sens), arr.ind = TRUE)
 face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
@@ -493,11 +479,11 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_sens)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/14_svm_sens.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/14_svm_sens.png", width = 8, height = 8)
 
 # Gráfico spec
 mejores <- which(spec == max(spec), arr.ind = TRUE)
@@ -524,19 +510,20 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_spec)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/15_svm_spec.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/15_svm_spec.png", width = 8, height = 8)
 
 # ----- SVM: Resultados gráficos en train con el mejor método ------
 
-# El mejor ranking es rf con 4 genes
+which(f1 == max(f1), arr.ind = TRUE)
+# El mejor F1-score se obtiene con 4 genes en RF
 mejores_genes_svm <- rfRanking[1:4]
 
 # Se grafican boxplots y mapas de calor con el mejor método
-png(filename = "../../03_analisis_biclase_figuras/16_svm_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/16_svm_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_svm, c(which(labels == "Primary Tumor"),
                                                       which(labels == "Solid Tissue Normal"))]
 labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
@@ -544,8 +531,8 @@ labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
 dataPlot(DEGsMatrix_heatmap[mejores_genes_svm, ], labels_heatmap, mode = "heatmap", colours = c("red", "green"))
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/17_svm_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(DEGsMatrix[mejores_genes_svm, ], labels, mode = "genesBoxplot", colours = c("red", "green"))
+png(filename = "../../03_analisis_biclase/17_svm_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+dataPlot(DEGsMatrix[mejores_genes_svm, ], labels, mode = "genesBoxplot", colours = c("red", "green"), columnasGenesBoxplot = 2)
 dev.off()
 
 # ----- SVM: Resultados en test del mejor modelo -----
@@ -569,154 +556,144 @@ results_svm_da <- svm_test(train = particion.entrenamiento, labels_train,
 tabla <- results_svm_rf$cfMats[[4]]$table
 
 # Gráficamente
-png(filename = "../../03_analisis_biclase_figuras/18_svm_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(tabla, labels_test,
-         mode = "confusionMatrix")
+png(filename = "../../03_analisis_biclase/18_svm_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+dataPlot(tabla, labels_test, mode = "confusionMatrix")
 dev.off()
+
+# Limpieza de datos de SVM
+rm(f1, l_f1, prec, l_prec, sens, l_sens, spec, l_spec)
+rm(results_cv_svm_mrmr, results_cv_svm_rf, results_cv_svm_da)
+rm(results_svm_mrmr, results_svm_rf, results_svm_da)
 
 # ----- RF: Resultados con validación cruzada para cada método de selección de características -----
 numero_folds <- 5
 
 # mRMR
 results_cv_rf_mrmr <- rf_trn(particion.entrenamiento, labels_train, mrmrRanking,
-                            numFold = numero_folds)
+                             numFold = numero_folds)
 
 # random forest
 results_cv_rf_rf <- rf_trn(particion.entrenamiento, labels_train, rfRanking,
-                          numFold = numero_folds)
+                           numFold = numero_folds)
 
 # disease association
 results_cv_rf_da <- rf_trn(particion.entrenamiento, labels_train, daRanking,
-                          numFold = numero_folds)
+                           numFold = numero_folds)
 
 # ----- RF: Resultados gráficos de validación cruzada -----
 
-png(filename = "../../03_analisis_biclase_figuras/19_rf_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_mrmr$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/19_rf_acc_MRMR.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_rf_mrmr$accuracyInfo$meanAccuracy, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "mRMR - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
+         main = "RF + mRMR - Accuracy media", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/20_rf_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_rf$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/20_rf_acc_RF.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_rf_rf$accuracyInfo$meanAccuracy, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "RF - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
+         main = "RF + RF - Accuracy media", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/21_rf_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_da$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/21_rf_acc_DA.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_rf_da$accuracyInfo$meanAccuracy, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "DA - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
+         main = "RF + DA - Accuracy media", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/22_rf_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_mrmr$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/22_rf_f1_MRMR.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_rf_mrmr$F1Info$meanF1, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "mRMR - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
+         main = "RF + mRMR - F1-Score medio", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/23_rf_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_rf$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/23_rf_f1_RF.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_rf_rf$F1Info$meanF1, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "RF - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
+         main = "RF + RF - F1-Score medio", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/24_rf_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_rf_da$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/24_rf_f1_DA.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_rf_da$F1Info$meanF1, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "DA - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
+         main = "RF + DA - F1-Score medio", xlab = "Genes", ylab = "F1-Score")
 dev.off()
+
 # ----- RF: Mejor método en CV basado en precisión, especificidad, sensibilidad y F1-score -----
 genes_a_usar <- c(1:numero_de_genes)
 
 # Precisión
 prec <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
+l_prec <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
 colnames(prec) <- c("MRMR", "RF", "DA")
 
 for(i in 1:length(genes_a_usar)){
-  prec[i, ] <- 100 * c(mean(results_cv_rf_mrmr$accMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_rf_rf$accMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_rf_da$accMatrix[, genes_a_usar[i]]))
-  l_prec[i, ] <- paste0(sprintf(100 * c(mean(results_cv_rf_mrmr$accMatrix[, genes_a_usar[i]]),
-                                        mean(results_cv_rf_rf$accMatrix[, genes_a_usar[i]]),
-                                        mean(results_cv_rf_da$accMatrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
+  prec[i, ] <- 100 * c(results_cv_rf_mrmr$accuracyInfo$meanAccuracy[genes_a_usar[i]],
+                       results_cv_rf_rf$accuracyInfo$meanAccuracy[genes_a_usar[i]],
+                       results_cv_rf_da$accuracyInfo$meanAccuracy[genes_a_usar[i]])
+  l_prec[i, ] <- paste0(sprintf(prec[i, ], fmt = '%#.2f'), 
                         " (",
-                        sprintf(100 * c(sd(results_cv_rf_mrmr$accMatrix[, genes_a_usar[i]]),
-                                        sd(results_cv_rf_rf$accMatrix[, genes_a_usar[i]]),
-                                        sd(results_cv_rf_da$accMatrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
+                        sprintf(100 * c(results_cv_rf_mrmr$accuracyInfo$standardDeviation[i],
+                                        results_cv_rf_rf$accuracyInfo$standardDeviation[i],
+                                        results_cv_rf_da$accuracyInfo$standardDeviation[i]
+                        ), fmt = '%#.1f'), 
                         ")")
 }
 
-which(prec == max(prec), arr.ind = TRUE)
-
-# Especificidad
+# Especificidad 
 spec <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
+l_spec <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
 colnames(spec) <- c("MRMR", "RF", "DA")
 
 for(i in 1:length(genes_a_usar)){
-  spec[i, ] <- 100 * c(mean(results_cv_rf_mrmr$specMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_rf_rf$specMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_rf_da$specMatrix[, genes_a_usar[i]]))
-  l_spec[i, ] <- paste0(sprintf(100 * c(mean(results_cv_rf_mrmr$specMatrix[, genes_a_usar[i]]),
-                                      mean(results_cv_rf_rf$specMatrix[, genes_a_usar[i]]),
-                                      mean(results_cv_rf_da$specMatrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
-                      " (",
-                      sprintf(100 * c(sd(results_cv_rf_mrmr$specMatrix[, genes_a_usar[i]]),
-                                      sd(results_cv_rf_rf$specMatrix[, genes_a_usar[i]]),
-                                      sd(results_cv_rf_da$specMatrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
-                      ")")
-}
-
-which(spec == max(spec), arr.ind = TRUE)
-
-# Sensibilidad
-sens <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
-colnames(sens) <- c("MRMR", "RF", "DA")
-
-for(i in 1:length(genes_a_usar)){
-  sens[i, ] <- 100 * c(mean(results_cv_rf_mrmr$sensMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_rf_rf$sensMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_rf_da$sensMatrix[, genes_a_usar[i]]))
-  l_sens[i, ] <- paste0(sprintf(100 * c(mean(results_cv_rf_mrmr$sensMatrix[, genes_a_usar[i]]),
-                                      mean(results_cv_rf_rf$sensMatrix[, genes_a_usar[i]]),
-                                      mean(results_cv_rf_da$sensMatrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
-                      " (",
-                      sprintf(100 * c(sd(results_cv_rf_mrmr$sensMatrix[, genes_a_usar[i]]),
-                                      sd(results_cv_rf_rf$sensMatrix[, genes_a_usar[i]]),
-                                      sd(results_cv_rf_da$sensMatrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
-                      ")")
-}
-
-which(sens == max(sens), arr.ind = TRUE)
-
-# F1-Score
-f1 <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
-colnames(f1) <- c("MRMR", "RF", "DA")
-
-for(i in 1:length(genes_a_usar)){
-  f1[i, ] <- 100 * c(mean(results_cv_rf_mrmr$f1Matrix[, genes_a_usar[i]]),
-                     mean(results_cv_rf_rf$f1Matrix[, genes_a_usar[i]]),
-                     mean(results_cv_rf_da$f1Matrix[, genes_a_usar[i]]))
-  l_f1[i, ] <- paste0(sprintf(100 * c(mean(results_cv_rf_mrmr$f1Matrix[, genes_a_usar[i]]),
-                                        mean(results_cv_rf_rf$f1Matrix[, genes_a_usar[i]]),
-                                        mean(results_cv_rf_da$f1Matrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
+  spec[i, ] <- 100 * c(results_cv_rf_mrmr$specificityInfo$meanSpecificity[genes_a_usar[i]],
+                       results_cv_rf_rf$specificityInfo$meanSpecificity[genes_a_usar[i]],
+                       results_cv_rf_da$specificityInfo$meanSpecificity[genes_a_usar[i]])
+  l_spec[i, ] <- paste0(sprintf(spec[i, ], fmt = '%#.2f'), 
                         " (",
-                        sprintf(100 * c(sd(results_cv_rf_mrmr$f1Matrix[, genes_a_usar[i]]),
-                                        sd(results_cv_rf_rf$f1Matrix[, genes_a_usar[i]]),
-                                        sd(results_cv_rf_da$f1Matrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
+                        sprintf(100 * c(results_cv_rf_mrmr$specificityInfo$standardDeviation[i],
+                                        results_cv_rf_rf$specificityInfo$standardDeviation[i],
+                                        results_cv_rf_da$specificityInfo$standardDeviation[i]
+                        ), fmt = '%#.1f'), 
                         ")")
 }
 
-which(f1 == max(f1), arr.ind = TRUE)
-# El mejor F1-score se obtiene con 6, 9 y 10 genes en mrmr -> Se elige el modelo con menos genes: 6
+# Sensibilidad
+sens <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
+l_sens <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
+colnames(sens) <- c("MRMR", "RF", "DA")
 
-# Tablas y gráficos precisión, especificidad, sensibilidad y F1-score
-which(prec == max(prec), arr.ind = TRUE)
-which(spec == max(spec), arr.ind = TRUE)
-which(sens == max(sens), arr.ind = TRUE)
-which(f1 == max(f1), arr.ind = TRUE)
+for(i in 1:length(genes_a_usar)){
+  sens[i, ] <- 100 * c(results_cv_rf_mrmr$sensitivityInfo$meanSensitivity[genes_a_usar[i]],
+                       results_cv_rf_rf$sensitivityInfo$meanSensitivity[genes_a_usar[i]],
+                       results_cv_rf_da$sensitivityInfo$meanSensitivity[genes_a_usar[i]])
+  l_sens[i, ] <- paste0(sprintf(sens[i, ], fmt = '%#.2f'), 
+                        " (",
+                        sprintf(100 * c(results_cv_rf_mrmr$sensitivityInfo$standardDeviation[i],
+                                        results_cv_rf_rf$sensitivityInfo$standardDeviation[i],
+                                        results_cv_rf_da$sensitivityInfo$standardDeviation[i]
+                        ), fmt = '%#.1f'), 
+                        ")")
+}
 
-# Gráfico f1
+#F1-Score
+f1 <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
+l_f1 <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
+colnames(f1) <- c("MRMR", "RF", "DA")
+
+for(i in 1:length(genes_a_usar)){
+  f1[i, ] <- 100 * c(results_cv_rf_mrmr$F1Info$meanF1[genes_a_usar[i]],
+                     results_cv_rf_rf$F1Info$meanF1[genes_a_usar[i]],
+                     results_cv_rf_da$F1Info$meanF1[genes_a_usar[i]])
+  l_f1[i, ] <- paste0(sprintf(f1[i, ], fmt = '%#.2f'), 
+                      " (",
+                      sprintf(100 * c(results_cv_rf_mrmr$F1Info$standardDeviation[i],
+                                      results_cv_rf_rf$F1Info$standardDeviation[i],
+                                      results_cv_rf_da$F1Info$standardDeviation[i]
+                      ), fmt = '%#.1f'), 
+                      ")")
+}
+
+# Gráfico F1
 mejores <- which(f1 == max(f1), arr.ind = TRUE)
 face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
@@ -741,11 +718,11 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_f1)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/25_rf_f1_score.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/25_rf_f1_score.png", width = 8, height = 8)
 
 # Gráfico precisión
 mejores <- which(prec == max(prec), arr.ind = TRUE)
@@ -772,13 +749,13 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_prec)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/26_rf_accuracy.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/26_rf_accuracy.png", width = 8, height = 8)
 
-# Gráfico sens
+# Gráfico sensibilidad
 mejores <- which(sens == max(sens), arr.ind = TRUE)
 face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
@@ -803,11 +780,11 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_sens)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/27_rf_sens.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/27_rf_sens.png", width = 8, height = 8)
 
 # Gráfico spec
 mejores <- which(spec == max(spec), arr.ind = TRUE)
@@ -834,21 +811,22 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_spec)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/28_rf_spec.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/28_rf_spec.png", width = 8, height = 8)
 
 # --- Mejor método en CV basado en F1-score
 
-# El mejor ranking es mRMR con 7 genes
+which(f1 == max(f1), arr.ind = TRUE)
+# El mejor F1 es con mRMR con 7 genes
 mejores_genes_rf <- mrmrRanking[1:7]
 
 # ----- RF: Resultados gráficos en train con el mejor método ------
 
 # Se grafican boxplots y mapas de calor con el mejor método
-png(filename = "../../03_analisis_biclase_figuras/29_rf_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/29_rf_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_rf, c(which(labels == "Primary Tumor"),
                                                      which(labels == "Solid Tissue Normal"))]
 labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
@@ -856,7 +834,7 @@ labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
 dataPlot(DEGsMatrix_heatmap[mejores_genes_rf, ], labels_heatmap, mode = "heatmap", colours = c("red", "green"))
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/30_rf_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/30_rf_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(DEGsMatrix[mejores_genes_rf, ], labels, mode = "genesBoxplot", colours = c("red", "green"))
 dev.off()
 
@@ -878,10 +856,15 @@ results_rf_da <- rf_test(train = particion.entrenamiento, labels_train,
 tabla <- results_rf_mrmr$cfMats[[7]]$table
 
 # Gráficamente
-png(filename = "../../03_analisis_biclase_figuras/31_rf_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/31_rf_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(tabla, labels_test,
          mode = "confusionMatrix")
 dev.off()
+
+# Limpieza de datos de RF
+rm(f1, l_f1, prec, l_prec, sens, l_sens, spec, l_spec)
+rm(results_cv_rf_mrmr, results_cv_rf_rf, results_cv_rf_da)
+rm(results_rf_mrmr, results_rf_rf, results_rf_da)
 
 # ----- kNN: Resultados con validación cruzada para cada método de selección de características -----
 numero_folds <- 5
@@ -902,44 +885,44 @@ results_cv_knn_da <- knn_trn(particion.entrenamiento, labels_train, daRanking,
 results_cv_knn_da$bestK
 
 mejores_parametros_knn <- cbind(results_cv_knn_mrmr$bestK, results_cv_knn_rf$bestK, results_cv_knn_da$bestK)
-write.csv2(mejores_parametros_knn, file = "../../03_analisis_biclase_figuras/mejores_parametros_knn.csv")
+write.csv2(mejores_parametros_knn, file = "../../03_analisis_biclase/mejores_parametros_knn.csv")
 
 # ----- kNN: Resultados gráficos de validación cruzada -----
 
-png(filename = "../../03_analisis_biclase_figuras/32_knn_acc_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_mrmr$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/32_knn_acc_MRMR.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_knn_mrmr$accuracyInfo$meanAccuracy, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "mRMR - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
+         main = "kNN + mRMR - Accuracy media", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/33_knn_acc_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_rf$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/33_knn_acc_RF.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_knn_rf$accuracyInfo$meanAccuracy, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "RF - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
+         main = "kNN + RF - Accuracy media", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/34_knn_acc_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_da$accMatrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/34_knn_acc_DA.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_knn_da$accuracyInfo$meanAccuracy, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "DA - Accuracy para cada fold", xlab = "Genes", ylab = "Accuracy")
+         main = "kNN + DA - Accuracy media", xlab = "Genes", ylab = "Accuracy")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/35_knn_f1_MRMR.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_mrmr$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/35_knn_f1_MRMR.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_knn_mrmr$F1Info$meanF1, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "mRMR - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
+         main = "kNN + mRMR - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/36_knn_f1_RF.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_rf$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/36_knn_f1_RF.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_knn_rf$F1Info$meanF1, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "RF - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
+         main = "kNN + RF - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/37_knn_f1_DA.png", width = 13, height = 8, units = "in", res = 300)
-dataPlot(results_cv_knn_da$f1Matrix[, 1:numero_de_genes], colours = rainbow(numero_folds),
+png(filename = "../../03_analisis_biclase/37_knn_f1_DA.png", width = 13, height = 6, units = "in", res = 300)
+dataPlot(results_cv_knn_da$F1Info$meanF1, colours = c("black", "darkblue"),
          mode = "classResults",
-         main = "DA - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
+         main = "kNN + DA - F1-Score para cada fold", xlab = "Genes", ylab = "F1-Score")
 dev.off()
 
 # ----- kNN: Mejor método en CV basado en precisión, especificidad, sensibilidad y F1-score -----
@@ -947,90 +930,75 @@ genes_a_usar <- c(1:numero_de_genes)
 
 # Precisión
 prec <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
+l_prec <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
 colnames(prec) <- c("MRMR", "RF", "DA")
 
 for(i in 1:length(genes_a_usar)){
-  prec[i, ] <- 100 * c(mean(results_cv_knn_mrmr$accMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_knn_rf$accMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_knn_da$accMatrix[, genes_a_usar[i]]))
-  l_prec[i, ] <- paste0(sprintf(100 * c(mean(results_cv_knn_mrmr$accMatrix[, genes_a_usar[i]]),
-                                      mean(results_cv_knn_rf$accMatrix[, genes_a_usar[i]]),
-                                      mean(results_cv_knn_da$accMatrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
-                      " (",
-                      sprintf(100 * c(sd(results_cv_knn_mrmr$accMatrix[, genes_a_usar[i]]),
-                                      sd(results_cv_knn_rf$accMatrix[, genes_a_usar[i]]),
-                                      sd(results_cv_knn_da$accMatrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
-                      ")")
+  prec[i, ] <- 100 * c(results_cv_knn_mrmr$accuracyInfo$meanAccuracy[genes_a_usar[i]],
+                       results_cv_knn_rf$accuracyInfo$meanAccuracy[genes_a_usar[i]],
+                       results_cv_knn_da$accuracyInfo$meanAccuracy[genes_a_usar[i]])
+  l_prec[i, ] <- paste0(sprintf(prec[i, ], fmt = '%#.2f'), 
+                        " (",
+                        sprintf(100 * c(results_cv_knn_mrmr$accuracyInfo$standardDeviation[i],
+                                        results_cv_knn_rf$accuracyInfo$standardDeviation[i],
+                                        results_cv_knn_da$accuracyInfo$standardDeviation[i]
+                        ), fmt = '%#.1f'), 
+                        ")")
 }
 
-which(prec == max(prec), arr.ind = TRUE)
-
-# Especificidad
+# Especificidad 
 spec <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
+l_spec <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
 colnames(spec) <- c("MRMR", "RF", "DA")
 
 for(i in 1:length(genes_a_usar)){
-  spec[i, ] <- 100 * c(mean(results_cv_knn_mrmr$specMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_knn_rf$specMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_knn_da$specMatrix[, genes_a_usar[i]]))
-  l_spec[i, ] <- paste0(sprintf(100 * c(mean(results_cv_knn_mrmr$specMatrix[, genes_a_usar[i]]),
-                                        mean(results_cv_knn_rf$specMatrix[, genes_a_usar[i]]),
-                                        mean(results_cv_knn_da$specMatrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
+  spec[i, ] <- 100 * c(results_cv_knn_mrmr$specificityInfo$meanSpecificity[genes_a_usar[i]],
+                       results_cv_knn_rf$specificityInfo$meanSpecificity[genes_a_usar[i]],
+                       results_cv_knn_da$specificityInfo$meanSpecificity[genes_a_usar[i]])
+  l_spec[i, ] <- paste0(sprintf(spec[i, ], fmt = '%#.2f'), 
                         " (",
-                        sprintf(100 * c(sd(results_cv_knn_mrmr$specMatrix[, genes_a_usar[i]]),
-                                        sd(results_cv_knn_rf$specMatrix[, genes_a_usar[i]]),
-                                        sd(results_cv_knn_da$specMatrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
+                        sprintf(100 * c(results_cv_knn_mrmr$specificityInfo$standardDeviation[i],
+                                        results_cv_knn_rf$specificityInfo$standardDeviation[i],
+                                        results_cv_knn_da$specificityInfo$standardDeviation[i]
+                        ), fmt = '%#.1f'), 
                         ")")
 }
-
-which(spec == max(spec), arr.ind = TRUE)
 
 # Sensibilidad
 sens <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
+l_sens <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
 colnames(sens) <- c("MRMR", "RF", "DA")
 
 for(i in 1:length(genes_a_usar)){
-  sens[i, ] <- 100 * c(mean(results_cv_knn_mrmr$sensMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_knn_rf$sensMatrix[, genes_a_usar[i]]),
-                       mean(results_cv_knn_da$sensMatrix[, genes_a_usar[i]]))
-  l_sens[i, ] <- paste0(sprintf(100 * c(mean(results_cv_knn_mrmr$sensMatrix[, genes_a_usar[i]]),
-                                        mean(results_cv_knn_rf$sensMatrix[, genes_a_usar[i]]),
-                                        mean(results_cv_knn_da$sensMatrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
+  sens[i, ] <- 100 * c(results_cv_knn_mrmr$sensitivityInfo$meanSensitivity[genes_a_usar[i]],
+                       results_cv_knn_rf$sensitivityInfo$meanSensitivity[genes_a_usar[i]],
+                       results_cv_knn_da$sensitivityInfo$meanSensitivity[genes_a_usar[i]])
+  l_sens[i, ] <- paste0(sprintf(sens[i, ], fmt = '%#.2f'), 
                         " (",
-                        sprintf(100 * c(sd(results_cv_knn_mrmr$sensMatrix[, genes_a_usar[i]]),
-                                        sd(results_cv_knn_rf$sensMatrix[, genes_a_usar[i]]),
-                                        sd(results_cv_knn_da$sensMatrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
+                        sprintf(100 * c(results_cv_knn_mrmr$sensitivityInfo$standardDeviation[i],
+                                        results_cv_knn_rf$sensitivityInfo$standardDeviation[i],
+                                        results_cv_knn_da$sensitivityInfo$standardDeviation[i]
+                        ), fmt = '%#.1f'), 
                         ")")
 }
 
-which(sens == max(sens), arr.ind = TRUE)
-
-# F1-Score
+#F1-Score
 f1 <- matrix(0, nrow = length(genes_a_usar), ncol = 3)
+l_f1 <- matrix("0", nrow = length(genes_a_usar), ncol = 3)
 colnames(f1) <- c("MRMR", "RF", "DA")
 
 for(i in 1:length(genes_a_usar)){
-  f1[i, ] <- 100 * c(mean(results_cv_knn_mrmr$f1Matrix[, genes_a_usar[i]]),
-                     mean(results_cv_knn_rf$f1Matrix[, genes_a_usar[i]]),
-                     mean(results_cv_knn_da$f1Matrix[, genes_a_usar[i]]))
-  l_f1[i, ] <- paste0(sprintf(100 * c(mean(results_cv_knn_mrmr$f1Matrix[, genes_a_usar[i]]),
-                                        mean(results_cv_knn_rf$f1Matrix[, genes_a_usar[i]]),
-                                        mean(results_cv_knn_da$f1Matrix[, genes_a_usar[i]])), fmt = '%#.2f'), 
-                        " (",
-                        sprintf(100 * c(sd(results_cv_knn_mrmr$f1Matrix[, genes_a_usar[i]]),
-                                        sd(results_cv_knn_rf$f1Matrix[, genes_a_usar[i]]),
-                                        sd(results_cv_knn_da$f1Matrix[, genes_a_usar[i]])), fmt = '%#.1f'), 
-                        ")")
+  f1[i, ] <- 100 * c(results_cv_knn_mrmr$F1Info$meanF1[genes_a_usar[i]],
+                     results_cv_knn_rf$F1Info$meanF1[genes_a_usar[i]],
+                     results_cv_knn_da$F1Info$meanF1[genes_a_usar[i]])
+  l_f1[i, ] <- paste0(sprintf(f1[i, ], fmt = '%#.2f'), 
+                      " (",
+                      sprintf(100 * c(results_cv_knn_mrmr$F1Info$standardDeviation[i],
+                                      results_cv_knn_rf$F1Info$standardDeviation[i],
+                                      results_cv_knn_da$F1Info$standardDeviation[i]
+                      ), fmt = '%#.1f'), 
+                      ")")
 }
-
-which(f1 == max(f1), arr.ind = TRUE)
-# El mejor F1-score se obtiene con 2, 3 genes en RF -> Se elige el modelo con menos genes: 2
-
-# Tablas y gráficos precisión, especificidad, sensibilidad y F1-score
-which(prec == max(prec), arr.ind = TRUE)
-which(spec == max(spec), arr.ind = TRUE)
-which(sens == max(sens), arr.ind = TRUE)
-which(f1 == max(f1), arr.ind = TRUE)
 
 # Gráfico F1
 mejores <- which(f1 == max(f1), arr.ind = TRUE)
@@ -1057,11 +1025,11 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_f1)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/38_knn_f1_score.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/38_knn_f1_score.png", width = 8, height = 8)
 
 # Gráfico precisión
 mejores <- which(prec == max(prec), arr.ind = TRUE)
@@ -1088,13 +1056,13 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_prec)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/39_knn_accuracy.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/39_knn_accuracy.png", width = 8, height = 8)
 
-# Gráfico sens
+# Gráfico sensibilidad
 mejores <- which(sens == max(sens), arr.ind = TRUE)
 face_etiquetas <- matrix("plain", nrow = numero_de_genes, ncol = 3)
 for(i in 1:nrow(mejores)) face_etiquetas[mejores[i, 1], mejores[i, 2]] <- "bold"
@@ -1119,11 +1087,11 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_sens)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/40_knn_sens.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/40_knn_sens.png", width = 8, height = 8)
 
 # Gráfico spec
 mejores <- which(spec == max(spec), arr.ind = TRUE)
@@ -1150,21 +1118,22 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_spec)) +
         panel.grid = element_blank(),
         plot.subtitle = element_text(hjust = .5),
         panel.spacing = unit(c(0, 0, 0, 0), "null"),
-        axis.text.x = element_text(size = 11, margin = margin(t = -15)),
+        axis.text.x = element_text(size = 11),
         panel.grid.major.x = element_blank(),
         axis.text = element_text(color = "black"))
 
-ggsave(filename = "../../03_analisis_biclase_figuras/41_knn_spec.png", width = 8, height = 8)
+ggsave(filename = "../../03_analisis_biclase/41_knn_spec.png", width = 8, height = 8)
 
 # --- Mejor método en CV basado en F1-score
 
+which(f1 == max(f1), arr.ind = TRUE)
 # El mejor ranking es RF con 2 genes
 mejores_genes_knn <- rfRanking[1:2]
 
 # ----- kNN: Resultados gráficos en train con el mejor método ------
 
 # Se grafican boxplots y mapas de calor con el mejor método
-png(filename = "../../03_analisis_biclase_figuras/42_knn_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/42_knn_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_knn, c(which(labels == "Primary Tumor"),
                                                       which(labels == "Solid Tissue Normal"))]
 labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
@@ -1172,7 +1141,7 @@ labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
 dataPlot(DEGsMatrix_heatmap[mejores_genes_knn, ], labels_heatmap, mode = "heatmap", colours = c("red", "green"))
 dev.off()
 
-png(filename = "../../03_analisis_biclase_figuras/43_knn_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/43_knn_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(DEGsMatrix[mejores_genes_knn, ], labels, mode = "genesBoxplot", colours = c("red", "green"))
 dev.off()
 
@@ -1197,7 +1166,7 @@ results_knn_da <- knn_test(train = particion.entrenamiento, labels_train,
 tabla <- results_knn_rf$cfMats[[2]]$table
 
 # Gráficamente
-png(filename = "../../03_analisis_biclase_figuras/44_knn_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/44_knn_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(tabla, labels_test,
          mode = "confusionMatrix")
 dev.off()

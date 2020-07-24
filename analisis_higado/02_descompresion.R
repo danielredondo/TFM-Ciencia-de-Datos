@@ -1,10 +1,10 @@
 # ----- Ruta de trabajo -----
 
 # Windows
-#setwd("C:/Users/dredondo/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/Análisis hígado/")
+#setwd("C:/Users/dredondo/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/analisis_higado/")
 
 # Mac
-setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/Análisis_hígado/")
+setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Datos/TFM/analisis_higado/")
 
 # ----- Carga de paquetes -----
 
@@ -25,11 +25,14 @@ nombres <- list.files()
 numero_ficheros <- length(nombres) - 1 # Para quitar el fichero manifest.txt
 
 for(i in 1:numero_ficheros){
+  # Se fija como directorio de trabajo cada una de las carpetas
   setwd(paste0(getwd(), "/", nombres[i]))
+  # Se toma el nombre del fichero comprimido
   nombre_fichero_comprimido <- list.files(pattern = "*.gz")
   # Se descomprime el fichero comprimido y se elimina
   gunzip(nombre_fichero_comprimido, remove = TRUE)
-  # Indicador
+  # Indicador de proceso
   if(i %% 5 == 0) print(paste0(i, "/", numero_ficheros))
+  # Se vuelve a la carpeta principal
   setwd("../")
 }
