@@ -148,14 +148,13 @@ tic("DEGsExtraction") # 1 segundo
 DEGsInformation <- DEGsExtraction(expressionMatrix, as.factor(labels),
                                   # p-valor
                                   pvalue = 0.001,
-                                  # Número de genes
-                                  #number = 12,
                                   # Ajuste por batchEffect
                                   svaCorrection = TRUE, svaMod = svaMod)
 toc()
 
-# Número de genes extraídos: 8533
+# Número de genes extraídos: 8533 de 
 print(nrow(DEGsInformation$DEGsMatrix))
+dim(expressionMatrix)
 
 topTable <- DEGsInformation$Table
 DEGsMatrix <- DEGsInformation$DEGsMatrix
@@ -182,29 +181,6 @@ dataPlot(DEGsMatrix_heatmap[1:numero_de_genes, ], labels_heatmap, mode = "heatma
 dev.off()
 
 # ----- Partición entrenamiento-test -----
-
-# Nota shiny: de aquí en adelante se usa lo siguiente:
-# labels
-# DEGsMatrix
-#tic("Full proceso shiny")
-# Para Shiny:
-#load("../saved_files/matriz.RData")
-#elementos <- ls()
-#elementos <- elementos[which(elementos != "matriz")]
-#rm(list = elementos)
-#rm(elementos)
-#source("../../Funciones_actualizadas_KnowSeq/dataPlot.R")
-# Extraer labels
-#labels <- matriz[1, ] %>% as.vector
-# Extraer DEGsMatrix
-#DEGsMatrix <- matriz[2:nrow(matriz), ]
-#filas <- rownames(DEGsMatrix)
-#DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
-#rownames(DEGsMatrix) <- filas
-# Crear DEGsMatrixML
-#DEGsMatrixML <- t(DEGsMatrix)
-#rm(matriz)
-#rm(filas)
 
 # Partición 75% / 25% con balanceo de clase
 porcentaje <- .75
