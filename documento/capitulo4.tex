@@ -2,24 +2,26 @@
 
 \section{Objetivos}
 
-El objetivo general consiste en intentar predecir en base a pocos genes si una enfermedad padece o no cáncer de hígado, o cáncer de colon-recto. Para ello se usarán distintas técnicas de selección de características: mRMR, RF y DA, así como varios algoritmos de clasificación: SVM, RF y kNN.
+Hay dos objetivos principales:
+\begin{enumerate}
+	\item Describir las características clínicas de los pacientes de cáncer de hígado y colon-recto.
+	\item Predecir en base a unos pocos genes si una persona padece o no cáncer de hígado o cáncer de colon-recto. En clasificación multiclase se predice además el diagnóstico primario de cáncer.
+\end{enumerate}
 
-\section{Metodología}
+\section{Fuente de datos}
 
-\subsection{Fuente de datos}
-
-La fuente de los datos es GDC (Genomic Data Commons) Portal, una plataforma web sobre cáncer del Instituto Nacional del Cáncer de Estados Unidos (\textit{National Cancer Institute}) \cite{GDCPortal, NationalCancerInstitute}. GDC Portal fue desarrollado por el Instituto Nacional del Cáncer de Estados Unidos, la Universidad de Chicago, el Instituto de Ontario para la Investigación del Cáncer y la empresa \textit{Leidos Biomedical Research}, y su principal fortaleza reside en la integración y armonización de diversas fuentes heterogéneas, creando así un sistema de información amplio y robusto \cite{Grossman2016}. \\
+La fuente de los datos es GDC (\textit{Genomic Data Commons}) Portal, una plataforma web sobre cáncer del Instituto Nacional del Cáncer de Estados Unidos (\textit{National Cancer Institute}) \cite{GDCPortal, NationalCancerInstitute}. GDC Portal fue desarrollado por el Instituto Nacional del Cáncer de Estados Unidos, la Universidad de Chicago, el Instituto de Ontario para la Investigación del Cáncer y la empresa \textit{Leidos Biomedical Research}. Su principal fortaleza reside en la integración y armonización de diversas fuentes heterogéneas, creando así un sistema de información amplio y robusto \cite{Grossman2016}. \\
 
 \newpage
 \textbf{Figura 5}. Diagrama de funcionalidad y utilidad de GDC. Extraído de Grossman et al. \cite{Grossman2016}.
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/05_funcionamiento_gdc.jpeg} \\
+	\includegraphics[width=1\textwidth]{figuras/05_funcionamiento_gdc.jpeg} 
 \end{center}
 
-A día 22 de Junio, GDC Portal contenía información sobre unos 84.000 casos, 23.000 genes y más de 3 millones de mutaciones de genes \cite{GDCPortal}. Algunos de estos datos son abiertos, mientras que para otros es necesario solicitar acceso. La información de la que dispone es muy variada, y se puede distinguir en tres grandes categorías:
+A día 22 de Junio, GDC Portal contenía información sobre unos 84.000 casos, 23.000 genes y más de 3 millones de mutaciones de genes \cite{GDCPortal}. Algunos de estos datos son abiertos mientras que para otros es necesario solicitar acceso. La información de la que dispone es muy variada y se puede distinguir en tres grandes categorías:
 
 \begin{itemize}
-	\item Información clínica, como la edad del sujeto, su sexo o el estadio del cáncer del que ha sido diagnosticado.
+	\item Información clínica como la edad del sujeto, su sexo o el estadio del cáncer del que ha sido diagnosticado.
 	\item Información genética y transcriptómica proveniente de diversos proyectos de investigación.
 	\item Imágenes de tejidos tumorales y sanos.
 \end{itemize} 
@@ -28,40 +30,19 @@ Para el presente trabajo se han descargado de GDC Portal todos los datos que cum
 
 \begin{itemize}
 	\item Son datos transcriptómicos del programa Cancer Genoma Atlas (TCGA), dirigido por dos organismos estadounidenses: el Instituto Nacional del Cáncer (NCI) y el Instituto Nacional para la Investigación del Genoma Humano (NHGRI) \cite{NationalCancerInstitutea}. 
-	\item Contienen información sobre tumores o tejidos sanos de cáncer de hígado, o colon-recto. Se han excluido metástasis y tumores recurrentes.
-	\item El tipo de estrategia experimental es RNA-Seq, y el tipo de flujo de trabajo es HTSeq - Counts. Esta información es de acceso abierto ya que no permite la identificación de un individuo.
+	\item Contienen información sobre tumores o tejidos sanos de cáncer de hígado o colon-recto. Se han excluido metástasis y tumores recurrentes.
+	\item El tipo de estrategia experimental es RNA-Seq y el tipo de flujo de trabajo es HTSeq - Counts. Esta información es de acceso abierto ya que no permite la identificación de un individuo.
 \end{itemize}
 
-Para cáncer de hígado se han descargado datos sobre 462 pacientes, de los cuales 404 tenían cáncer (87,4\%) y 58 estaban sanos (12,6\%).  Para cáncer de colon-recto, se han descargado datos sobre 695 pacientes: 644 con cáncer (92,7\%) y 58 sanos (7,3\%). Es relevante destacar el desequilibrio existente entre las dos principales clases del problema, debido a que no a todos los pacientes con cáncer se les secuencia también la parte de tejido sano adyacente al tumor que se suele usar como muestra de control.
-
-\subsection{Análisis}
-
-Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) \cite{R} y \{\texttt{KnowSeq}\} (v.1.2.0) \cite{KnowSeq}, paquete de \texttt{R} que ha sido desarrollado por los tutores del presente trabajo y en el que el autor ha contribuido con algunas mejoras y actualizaciones (\url{https://github.com/CasedUgr/KnowSeq/commits?author=danielredondo}):
-
-\begin{itemize}
-	\item Corregir un fallo que hacía que el método de selección de características RF no funcionase correctamente ante problemas de clasificación multiclase.
-	\item Mantener los parámetros óptimos de SVM (coste y gamma) y kNN ($k$) encontrados tras optimización de los parámetros (\textit{tuning}) en conjunto de entrenamiento para aplicarlos directamente en el modelo para el conjunto de test.
-	\item Pequeñas modificaciones en la documentación de funciones.
-\end{itemize}
-
-\{\texttt{KnowSeq}\} está además disponible en Docker con el comando \texttt{Docker run -it casedugr/knowseq} y en Bioconductor, la plataforma de código abierto en \texttt{R} más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
-
-\textbf{Figura 6}. Logo de \{\texttt{KnowSeq}\}.
-\begin{center}
-	\includegraphics[width=.4\textwidth]{figuras/06_logo_knowseq.png} \\
-\end{center}
-
-Todo el código de los análisis está disponible la carpeta \texttt{analisis\_higado} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}. Para asegurar la reproducibilidad de los análisis, en el fichero \texttt{session\_info.txt} del repositorio de GitHub \cite{Redondo-Sanchez2020} se muestran todos los paquetes utilizados y sus versiones como resultado de ejecutar \texttt{devtools::session\_info()}.\\
-
-Se utilizan técnicas de visualización de datos para una mejor comprensión de los resultados, utilizando diagramas de Sankey, gráficos de líneas y cajas, y mapas de calor.
+Para cáncer de hígado se han descargado datos sobre 462 tejidos de los cuales 404 son cancerosos (87,4\%) y 58 son sanos (12,6\%).  Para cáncer de colon-recto se han descargado datos sobre 695 tejidos: 644 con cáncer (92,7\%) y 51 sanos (7,3\%). Es relevante destacar que las muestras de tejido sano se corresponden a tejido adyacente al tumor no afectado por el cáncer que es extraído del mismo paciente. Como no a todos los pacientes con cáncer se les ha secuenciado también tejido sano, existe un gran desequilibrio entre el número de muestras de las dos principales clases del problema.
 
 \section{Características clínicas de los tumores}
  
-A continuación se describe la información clínica de aquellas personas diagnosticadas con cáncer. La plataforma GDC Portal permite descargar información clínica sobre los pacientes que tienen casos de cáncer, aunque no sobre los casos sanos \cite{GDCPortal}. De cualquier forma, las muestras de tejido sano suelen ser tomadas de tejido adyacente al tumor del mismo paciente.
+A continuación se describe la información clínica de aquellas personas diagnosticadas con cáncer, descargada de la plataforma GDC Portal \cite{GDCPortal}. 
 
 \subsection{Características clínicas para cáncer de hígado}
 
-En la Tabla 9 se muestra  la distribución de casos de cáncer de hígado según algunas variables clínicas de interés. Los casos se recogieron entre los años 1995 y 2013, con el 67,6\% de los casos recogidos entre los años 2010 y 2013. La mayoría de los casos son hombres (65,3\%), están diagnosticados en estadios iniciales (70,3\% en estadios I y II) y son carcinomas hepatocelulares (89,6\%). La edad media de diagnóstico es de 60,1 años (mediana: 61,7 años), con un rango de edad que comprende de los 16 a los 87 años. Más de la mitad de los casos son blancos (52,5\%), que es la raza más común seguida por asiáticos (39,9\%) y negros o afroamericanos (4,7\%). Aproximadamente dos de cada tres personas estaban vivas en el momento del último contacto realizado (63,6\%).\\
+En la Tabla 9 se muestra  la distribución de casos de cáncer de hígado según algunas variables clínicas de interés. Los casos se recogieron entre los años 1995 y 2013, con el 67,6\% de los casos recogidos entre los años 2010 y 2013. La mayoría de los casos son hombres (65,3\%), están diagnosticados en estadios iniciales (70,3\% en estadios I y II) y son carcinomas hepatocelulares (89,6\%). La edad media de diagnóstico es de 60,1 años (mediana: 61,7 años) con un rango de edad que comprende de los 16 a los 87 años. Más de la mitad de los casos son blancos (52,5\%), que es la raza más común seguida por asiáticos (39,9\%) y negros o afroamericanos (4,7\%). Aproximadamente dos de cada tres personas estaban vivas en el momento del último contacto realizado (63,6\%).
 
 \newpage
 \textbf{Tabla 9}. Características clínicas de los casos de cáncer de hígado. Distribución de casos y porcentaje según sexo, grupo de edad, raza, diagnóstico primario, estadio y estado vital.
@@ -143,11 +124,10 @@ Para las variables con datos faltantes se ha realizado un análisis de casos com
 
 \subsection{Características clínicas para cáncer de colon-recto}
 
-\textcolor{red}{Añadir a este análisis descriptivo el diagnóstico primario, o sublocalización colon-recto, tras ver en los análisis multiclase qué se puede detectar mejor.}\\
-
-En la Tabla 11 se muestra  la distribución de casos de cáncer de colon-recto según algunas variables de interés. Los casos se recogieron entre los años 1998 y 2013, con la mayoría de los casos recogidos entre los años 2007 y 2011. La proporción entre hombres y mujeres es similar (53,1\% y 46,9\% respectivamente), y los estadios más comunes son los intermedios (estadio II: 36,3\% y estadio III: 28,7\%). La edad media de diagnóstico es de 66,7 años (mediana: 68,1 años), con un rango de edad de entre 31 y 90 años. Aproximadamente la mitad de los pacientes son blancos (47,3\%), que es la raza más común seguida por negros o afroamericanos (10,5\%) y asiáticos (2,1\%). Se desconoce la raza del 40,0\% de las personas. Aproximadamente cuatro de cada cinco personas estaban vivas en el momento del último contacto realizado (79,2\%).\\
+620 tumores de colon-recto de los 644 descargados tienen disponible información clínica. En la Tabla 11 se muestra  la distribución de casos de cáncer de colon-recto según algunas variables de interés. Los casos se recogieron entre los años 1998 y 2013, con la mayoría de los casos recogidos entre los años 2007 y 2011. La proporción entre hombres y mujeres es similar (53,1\% y 46,9\% respectivamente) y los estadios más comunes son los intermedios (estadio II: 36,3\% y estadio III: 28,7\%). La edad media de diagnóstico es de 66,7 años (mediana: 68,1 años), con un rango de edad de entre 31 y 90 años. Aproximadamente la mitad de los pacientes son blancos (47,3\%), que es la raza más común seguida por negros o afroamericanos (10,5\%) y asiáticos (2,1\%). Se desconoce la raza del 40,0\% de las personas. Aproximadamente cuatro de cada cinco personas estaban vivas en el momento del último contacto realizado (79,2\%).\\
 
 \newpage
+
 \textbf{Tabla 11}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, raza y estado vital.
 
 \begin{table}[H]
@@ -213,13 +193,83 @@ En la Tabla 12 se muestran tablas de contingencia del estado vital según sexo, 
 	\end{tabular}
 \end{table}
 
-Para las variables con datos faltantes se ha realizado un análisis de casos completos (exclusión del análisis de los casos con tenían datos faltantes).  La mortalidad es muy similar en hombres y mujeres, sin diferencias significativas (p-valor: 0,993). Se detecta una dependencia entre el estado vital con las variables de grupo de edad y estadio, con p-valores $<$0,001. En mayores de 70 años la mortalidad está cerca del 30\%, el doble de la mortalidad existente en otros grupos de edad. Hay grandes diferencias de mortalidad en función del estadio diagnosticado, que pasa del 6,7\% en el estadio I al 46,1\% en el estadio IV.
+Para las variables con datos faltantes se ha realizado un análisis de casos completos (exclusión del análisis de los casos con tenían datos faltantes).  La mortalidad es muy similar en hombres y mujeres, sin existir diferencias significativas (p-valor: 0,993). Se detecta una dependencia entre el estado vital con las variables de grupo de edad y estadio con p-valores $<$0,001. En mayores de 70 años la mortalidad está cerca del 30\%, el doble de la mortalidad existente en otros grupos de edad. Hay grandes diferencias de mortalidad en función del estadio diagnosticado, que pasa del 6,7\% en el estadio I al 46,1\% en el estadio IV.
+
+\section{Metodología}
+
+\subsection{Herramientas para el análisis}
+
+Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) \cite{R} y \{\texttt{KnowSeq}\} (v.1.2.0) \cite{KnowSeq}, paquete de \texttt{R} que ha sido desarrollado por los tutores del presente trabajo y en el que el autor ha contribuido con algunas mejoras y actualizaciones (\url{https://github.com/CasedUgr/KnowSeq/commits?author=danielredondo}):
+
+\begin{itemize}
+	\item Corregir un fallo que hacía que el método de selección de características RF no funcionase correctamente ante problemas de clasificación multiclase.
+	\item Mantener los parámetros óptimos de SVM (coste y gamma) y kNN ($k$) encontrados tras optimización de los parámetros (\textit{tuning}) en conjunto de entrenamiento para aplicarlos directamente en el modelo para el conjunto de test.
+	\item Pequeñas modificaciones en la documentación de funciones.
+\end{itemize}
+
+\{\texttt{KnowSeq}\} está además disponible en Docker con el comando \texttt{Docker run -it casedugr/knowseq} y en Bioconductor, la plataforma de código abierto en \texttt{R} más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
+
+\textbf{Figura 6}. Logo de \{\texttt{KnowSeq}\}.
+\begin{center}
+	\includegraphics[width=.3\textwidth]{figuras/06_logo_knowseq.png} 
+\end{center}
+
+Todo el código de los análisis está disponible en las carpetas \texttt{analisis\_higado} y \texttt{analisis\_cr} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}. Además, en el fichero \texttt{session\_info.txt} se muestran todos los paquetes de \texttt{R} utilizados y sus versiones como resultado de ejecutar \texttt{devtools::session\_info()}.\\
+
+Se utilizan técnicas de visualización de datos para una mejor comprensión de los resultados empleando diagramas de Sankey, diagramas de cajas, y mapas de calor.
+
+\subsection{Detección de biomarcadores}
+
+\subsubsection{Preprocesamiento}
+
+Tras descargar los ficheros de GDC Portal y descomprimirlos con \texttt{R} (ficheros \texttt{analisis\_higado/02\_descompresion} y \texttt{analisis\_cr/02\_descompresion}  en GitHub \cite{Redondo-Sanchez2020}), se preprocesa la información para trabajar con matrices y data.frames.
+
+\subsubsection{Extracción de expresión diferencial de genes (DEG)}
+
+Se calcula la matriz de expresión de genes y se extrae la expresión diferencial de genes (DEG, por sus siglas en inglés: \textit{differentially expressed genes}) utilizando un p-valor de p=0,001 y controlando por el efecto batch usando el método SVA (\textit{Surrogate Variable Analysis}) \cite{Leek2012}. El efecto batch es un sesgo que se puede producir al procesar las muestras biológicas por tandas, y puede ocurrir por varias razones como las condiciones del laboratorio, diferencias entre personal, o incluso la hora del día a la que se procesan las muestras \cite{Goh2017, Leek2010}. Para la extracción de DEG se fija además un LFC (\textit{log fold change}) de 1, esto es, un gen sólo se considera un DEG si una de las dos expresiones de genes (ya sea de tumores o tejidos sanos) es al menos el doble que la otra.\\
+
+\textcolor{red}{DUDA: ¿La extracción de genes relevantes (DEG) no debería hacerse sólo con datos de entrenamiento? He visto en la literatura que también se hace como en este trabajo (extracción de DEGs antes de partición train-test) \url{https://www.nature.com/articles/s41598-020-60595-1} pero no entiendo bien el por qué. ¿Cómo se puede justificar?}\\
+
+\subsubsection{Partición entrenamiento-test}
+
+Se realiza una partición entrenamiento-test con equilibrio de clases: el 75\% de las muestras de cada clase pasan a formar parte del conjunto de entrenamiento y el 25\% restante del conjunto de test.
+
+\subsubsection{Genes más relevantes}
+
+Se utiliza el conjunto de entrenamiento para seleccionar los diez genes más relevantes mediante los tres métodos de selección de características detallados en el capítulo anterior: mRMR, RF y DA.
+
+\subsection{Validación cruzada en entrenamiento}
+
+Se realiza validación cruzada 5-fold para tres algoritmos de clasificación: SVM, RF y kNN. Los parámetros de los clasificadores se optimizan (\textit{tuning}) usando los 10 genes más relevantes de cada método de selección de características (mRMR, RF y DA). Para SVM con kernel radial se realiza optimización de los dos parámetros utilizando una rejilla con los valores especificados en la Tabla 13.\\
+
+\textbf{Tabla 13}. Valores de los parámetros que se utilizan para el tuning en rejilla de los parámetros óptimos del algoritmo SVM.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{crrrrrrrrr}
+		\hline
+		\multirow{2}{*}{\textbf{Coste}} & 0    & 0,01 & 0,02         & 0,025                             & 0,03 & 0,04 & 0,05 & 0,06 \\
+		& 0,07 & 0,08 & 0,09         & 0,1                               & 0,25 & 0,5  & 0,75 & 0,9  \\ \hline
+		\multirow{2}{*}{\textbf{Gamma}} & 0,01 & 0,05 & 0,1 & 0,25 & 0,5  &      &      &      \\
+		& 0,75 & 1    & 1,5          & 2                                 & 5    &      &      &      \\ \hline
+	\end{tabular}
+\end{table}
+
+Posteriormente, para cada algoritmo se usan como variables los $k$ genes más relevantes encontrados cada uno de los tres métodos de selección de características con $k = 1, 2, \hdots, 10$. Por tanto, para cada algoritmo de clasificación (SVM, RF, kNN) se crean 30 modelos distintos. Como el problema a resolver tiene un gran desequilibrio de clases, la medida de evaluación de los modelos escogida es el F1-Score medio de los 5 folds. El mejor modelo (aquel con mayor F1-Score) es posteriormente validado en el conjunto de test.
+
+\subsection{Validación en test}
+
+El mejor modelo encontrado en la fase previa para cada clasificador (SVM, RF, kNN) se utiliza para predecir el tipo de muestra del conjunto de test. Se comparan los resultados predichos con los reales, mostrando las matrices de confusión y los indicadores de evaluación F1-Score y precisión.
 
 \section{Resultados de clasificación biclase para cáncer de hígado}
 
-Para la clasificación biclase en cáncer de hígado, se cuenta con 404 tumores y 58 muestras de tejido sano. El código completo del análisis esta disponible en el fichero \texttt{analisis\_higado/03\_analisis\_biclase.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
+El código completo del análisis está disponible en el fichero \texttt{analisis\_higado/\linebreak03\_analisis\_biclase.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.
 
-\textbf{Tabla 13}. Distribución de tipos de muestra para el análisis de cáncer de hígado biclase.
+\subsection{Detección de biomarcadores}
+
+Para la clasificación biclase en cáncer de hígado se cuenta con 404 tumores y 58 muestras de tejido sano. \\
+
+\textbf{Tabla 14}. Distribución de tipos de muestra para el análisis de cáncer de hígado biclase.
 
 \begin{table}[H]
 	\centering
@@ -232,19 +282,9 @@ Para la clasificación biclase en cáncer de hígado, se cuenta con 404 tumores 
 	\end{tabular}
 \end{table}
 
-\subsection{Entrenamiento de modelo}
+De los 24.645 genes presentes en los datos se extraen 2.274 genes que presentan en su expresión diferencias significativas entre las muestras de tumores y las de tejido sano. En la tabla 15 se muestra la partición entrenamiento - test realizada y en la figura 7 se representa en un diagrama de Sankey.\\
 
-\subsubsection{Preprocesamiento}
-
-Tras descargar los ficheros de GDC Portal y descomprimirlos con \texttt{R} (fichero \texttt{analisis\_higado/02\_descompresion}  en GItHub \cite{Redondo-Sanchez2020}), se preprocesa la información para trabajar con matrices y data.frames. Se calcula la matriz de expresión de genes y se extrae la expresión diferencial de genes (DEG, por sus siglas en inglés: \textit{differentially expressed genes}) utilizando un p-valor de p=0,001 y controlando por el efecto batch usando el método SVA (\textit{Surrogate Variable Analysis}) \cite{Leek2012}. El efecto batch es un sesgo que se puede producir al procesar las muestras biológicas por tandas, y puede ocurrir por varias razones como las condiciones del laboratorio, diferencias entre personal, o incluso la hora del día a la que se procesan las muestras \cite{Goh2017, Leek2010}. Para la extracción de DEG se fija además un LFC (\textit{log fold change}) de 1, esto es, un gen sólo se considera un DEG si una de las dos expresiones de genes (ya sea de tumores o tejidos sanos) es al menos el doble que la otra. De los 24.645 genes originales se extraen 2.274 genes que presentan en su expresión diferencias significativas entre las muestras de tumores y las de tejido sano.\\
-
-\textcolor{red}{¿La extracción de genes relevantes (DEG) no debería hacerse sólo con datos de entrenamiento? He visto que en la literatura también se hace como en este trabajo (extracción de DEGs antes de partición train-test) \url{https://www.nature.com/articles/s41598-020-60595-1} pero no entiendo bien el por qué...}\\
-
-\subsubsection{Partición entrenamiento-test}
-
-Se realiza una partición entrenamiento-test con balanceo de clases: 75\% de las muestras de cada clase pasan a formar parte del conjunto de entrenamiento, y el 25\% restante del conjunto de test. En la Tabla \textcolor{red}{Figura X} se muestra la partición realizada en un diagrama de Sankey.\\
-
-\textbf{Tabla 14}. Distribución entrenamiento-test según tipo de muestra y proporción entre clases (tumores/tejido sano) para el análisis de hígado biclase.\\
+\textbf{Tabla 15}. Distribución entrenamiento-test según tipo de muestra y proporción entre clases (tumores/tejido sano) para el análisis de hígado biclase.\\
 
 \begin{table}[H]
 	\centering
@@ -257,16 +297,14 @@ Se realiza una partición entrenamiento-test con balanceo de clases: 75\% de las
 	\end{tabular}
 \end{table}
 
-\textbf{\textcolor{red}{Figura XX}}. Diagrama de Sankey mostrando la partición entrenamiento-test realizada según tipo de muestra para el análisis de hígado biclase.
+\textbf{Figura 7}. Diagrama de Sankey mostrando la partición entrenamiento-test realizada según tipo de muestra para el análisis de hígado biclase.
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/higado_biclase_sankey.png}
+	\includegraphics[width=1\textwidth]{figuras/07_higado_biclase_sankey.png}
 \end{center}
 
-\subsubsection{Genes más relevantes}
+A continuación se muestran los diez genes más relevantes encontrados por cada método de selección de características:\\
 
-A continuación se utiliza el conjunto de entrenamiento para seleccionar los diez genes más relevantes mediante tres métodos distintos de selección de características (mRMR, RF y DA, detallados en el capítulo anterior).\\
-
-\textbf{Tabla 15}. Diez genes más relevantes según los distintos métodos de selección de características para el análisis de hígado biclase.
+\textbf{Tabla 16}. Diez genes más relevantes según los distintos métodos de selección de características para el análisis de hígado biclase.
 
 \begin{table}[H]
 	\centering
@@ -286,47 +324,541 @@ A continuación se utiliza el conjunto de entrenamiento para seleccionar los die
 	\end{tabular}
 \end{table}
 
-\newpage
-\subsubsection{Validación cruzada - SVM}
+Se observa que tres genes han sido valorados como relevantes para los algoritmos de mRMR y RF:  ANGPTL6, ADAMTS13 y GABRD.
 
-\textbf{\textcolor{red}{Figura XX}}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score, precisión, sensibilidad y especificidad de SVM según método de selección de características y número de genes usados.
+\subsection{Validación cruzada en entrenamiento - SVM}
+
+En la Tabla 17 se muestran los parámetros óptimos de SVM obtenidos tras el tuning.\\
+
+\textbf{Tabla 17}. Parámetros óptimos de SVM encontrados para los 10 genes más relevantes de cada método de selección de características.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{cccc}
+		\hline
+		\textbf{Parámetro} & \textbf{mRMR} & \textbf{RF} & \textbf{DA} \\ \hline
+		Coste                &    0,05 &    0,75     &   0,1       \\
+		Gamma               &     0,05    &     0,1   & 0,06        \\ \hline
+	\end{tabular}
+\end{table}
+
+Para estos parámetros óptimos, en la Figura 8 se muestran las medidas de evaluación medias obtenidas en las 5 fold.\\
+
+\newpage
+\textbf{Figura 8}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score, precisión, sensibilidad y especificidad de SVM según método de selección de características y número de genes usados.
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/higado_biclase_heatmap_svm.pdf} \\
+	\includegraphics[width=1\textwidth]{figuras/08_higado_biclase_heatmap_svm.pdf} 
+\end{center}
+
+El mejor F1-Score para SVM se obtiene con 4 genes seleccionados con RF (99,67\%), configuración que obtiene también los mejores valores de precisión (99,42\%), sensibilidad (99,34\%) y especificidad (100\%). Los 4 genes seleccionados son: ANGPTL6, PTH1R, ADAMTS13 y BMPER. Se analiza la expresión de genes de estos 4 genes, utilizando para ello un mapa de calor (Figura 9) y diagramas de caja (Figura 10).
+
+\newpage
+\textbf{Figura 9}. Mapa de calor de expresión de genes por tipo de muestra (columna izquierda: rojo = tumor, verde = tejido sano) en los 4 genes más relevantes encontrados en el mejor modelo de SVM con RF como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/09_higado_biclase_16_svm_heatmap_mejor_metodo.png} 
+\end{center}
+
+En el mapa de calor se observa que en general los genes seleccionados están sobreexpresados en tejidos sanos, e inhibidos en tejidos tumorales.
+
+\newpage
+\textbf{Figura 10}. Diagrama de caja de expresión de genes por tipo de muestra en los 4 genes más relevantes encontrados en el mejor modelo de SVM con RF como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/10_higado_biclase_17_svm_boxplots_mejor_metodo.png} 
+\end{center}
+
+El diagrama de caja aporta cierta información adicional al mapa de calor, ya que en algunos genes se detectan outliers y se observa mejor el posible solapamiento entre la expresión de genes para tumores y tejidos sanos.
+
+\newpage
+\subsection{Validación cruzada en entrenamiento - RF}
+
+En la Figura 11 se muestran las medidas de evaluación medias obtenidas en las 5 fold.\\
+
+\textbf{Figura 11}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score, precisión, sensibilidad y especificidad de RF según método de selección de características y número de genes usados.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/11_higado_biclase_heatmap_rf.pdf} 
+\end{center}
+
+Para random forest el mejor F1-Score (99,68\%) se obtiene con el método mRMR considerando 7, 9 o 10 genes. Se selecciona aquel método que tiene menor número de genes: mRMR con 7 genes. Los 7 genes seleccionados son: ANGPTL6, THY1, ADAMTS13, CELSR3, CCNE1, CDH13 y C14orf180. Se analiza su expresión por tipo de muestra, utilizando para ello un mapa de calor (Figura 12) y diagramas de caja (Figura 13).\\
+
+\textbf{Figura 12}. Mapa de calor de expresión de genes por tipo de muestra (columna izquierda: rojo = tumor, verde = tejido sano) en los 4 genes más relevantes encontrados en el mejor modelo de RF con RF como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/12_higado_biclase_29_rf_heatmap_mejor_metodo.png} 
 \end{center}
 
 \newpage
-\subsubsection{Validación cruzada - RF}
-
-\textbf{\textcolor{red}{Figura XX}}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score, precisión, sensibilidad y especificidad de RF según método de selección de características y número de genes usados.
+\textbf{Figura 13}. Diagrama de caja de expresión de genes por tipo de muestra en los 4 genes más relevantes encontrados en el mejor modelo de RF con RF como método de selección de características.
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/higado_biclase_heatmap_rf.pdf} \\
+	\includegraphics[width=1\textwidth]{figuras/13_higado_biclase_30_rf_boxplots_mejor_metodo.png} 
+\end{center}
+
+\subsection{Validación cruzada en entrenamiento - kNN}
+
+El número óptimo de vecinos para los 10 genes más relevantes es 7 para mRMR y DA y 5 para RF (Tabla 18).\\
+
+\textbf{Tabla 18}. Número óptimo de vecinos encontrado para los 10 genes más relevantes de cada método de selección de características.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{cccc}
+		\cline{2-4}
+		\textbf{} & \textbf{mRMR} & \textbf{RF} & \textbf{DA} \\ \hline
+		k                &    7 &    5     &   7      \\ \hline
+	\end{tabular}
+\end{table}
+
+En la Figura 14 se muestran las medidas de evaluación medias obtenidas en las 5 fold.\\
+
+\newpage
+\textbf{Figura 14}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score, precisión, sensibilidad y especificidad de kNN según método de selección de características y número de genes usados.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/14_higado_biclase_heatmap_knn.pdf} 
+\end{center}
+
+Para kNN, el mejor F1-Score (99,68\%) se obtiene con el método RF para 2 y 3 genes. Se selecciona aquel método que tiene menor número de genes: RF con 2 genes. Los 2 genes seleccionados son: ANGPTL6 y PTH1R. Se analiza su expresión de genes, utilizando para ello un mapa de calor (Figura 15) y diagramas de caja (Figura 16).
+
+\newpage
+\textbf{Figura 15}. Mapa de calor de expresión de genes por tipo de muestra (columna izquierda: rojo = tumor, verde = tejido sano) en los 2 genes más relevantes encontrados en el mejor modelo de kNN con RF como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/15_higado_biclase_42_knn_heatmap_mejor_metodo.png} 
 \end{center}
 
 \newpage
-\subsubsection{Validación cruzada - kNN}
-
-\textbf{\textcolor{red}{Figura XX}}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score, precisión, sensibilidad y especificidad de kNN según método de selección de características y número de genes usados.
+\textbf{Figura 16}. Diagrama de caja de expresión de genes por tipo de muestra en los 2 genes más relevantes encontrados en el mejor modelo de kNN con RF como método de selección de características.
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/higado_biclase_heatmap_knn.pdf} \\
+	\includegraphics[width=1\textwidth]{figuras/16_higado_biclase_43_knn_boxplots_mejor_metodo.png} 
 \end{center}
+
 \newpage
 
 \subsection{Validación en test}
 
+Al validar en el conjunto de test el mejor modelo encontrado para SVM (4 genes con RF), RF (7 genes con mRMR) y kNN (2 genes con RF) se obtiene la misma clasificación: una predicción perfecta a falta de un falso positivo, esto es, una muestra de tejido normal que ha sido clasificada como tumor. El F1-Score en test es de 99,5\% con una precisión de 99,1\%.\\
+
+\textbf{Figura 17}. Matriz de confusión de los mejores modelos encontrados de SVM, RF y kNN en el conjunto de test.
+
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/17_higado_biclase_18_svm_matriz_confusion_mejor_metodo.png} 
+\end{center}
+
+En la tabla 19 se muestra un resumen de los mejores modelos obtenidos y su F1-Score y precisión en conjunto de entrenamiento y conjunto de test.\\
+
+\textbf{Tabla 19}. Resumen de clasificación biclase para cáncer de hígado. Mejor modelo encontrado para SVM, RF y kNN con biomarcadores seleccionados, parámetros optimizados para cada algoritmo, F1-Score y precisión (Acc) en conjunto de entrenamiento y conjunto de test.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{llccccc}
+        \cline{2-7} 
+		& Biomarcadores & Parámetros  & F1 train    & \multicolumn{1}{c|}{Acc train}      & F1 test       & Acc test       \\ \hline
+		SVM & RF 4 genes    & \begin{tabular}[c]{@{}c@{}}$c$ = 0.75\\ $\gamma$ = 0.1\end{tabular} & 99,67          & \multicolumn{1}{c|}{99,42}          & 99,5          & 99,13          \\ \hline
+		RF  & mRMR 7 genes  & --                                                                  & 99,68 & \multicolumn{1}{c|}{99,43} & 99,5 & 99,13 \\ \hline
+		kNN & RF 2 genes    & $k$ = 5                                                             & 99,67          & \multicolumn{1}{c|}{99,42}          & 99,5          & 99,13          \\ \hline
+	\end{tabular}
+\end{table}
+
 \section{Resultados de clasificación multiclase para cáncer de hígado}
 
-El código completo del análisis se muestra en el fichero \texttt{analisis\_higado/\linebreak04\_analisis\_multiclase.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
+El código completo del análisis se muestra en el fichero \texttt{analisis\_higado/\linebreak04\_analisis\_multiclase.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.
+
+\subsection{Detección de biomarcadores}
+
+Para la clasificación multiclase en cáncer de hígado se van a considerar los dos principales tipos de diagnósticos primarios presentes en los datos clínicos de cáncer de hígado: carcinoma hepatocelular y colangiocarcinoma. Se excluyen los tumores con otros diagnósticos primarios (8 casos). En la Tabla 20 se muestra la distribución de muestras.
+
+\textbf{Tabla 20}. Distribución de tipos de muestra para el análisis de cáncer de hígado multiclase.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{lcc}
+		\cline{2-3}
+		& \textbf{Número de casos} & \textbf{Porcentaje} \\ \hline
+		\textbf{Carcinoma hepatocelular}     & 363        & 80,0\%              \\
+		\textbf{Colangiocarcinoma}     & 33        & 7,3\%              \\
+		\textbf{Tejido sano} & 58         & 12,8\%              \\ \hline
+		\textbf{Total}       & 454        & 100\%               \\ \hline
+	\end{tabular}
+\end{table}
+
+Se extraen 8.533 genes que presentan en su expresión diferencias significativas entre las muestras de tumores y las de tejido sano. En la tabla 21 se muestra la partición entrenamiento - test realizada y en la figura 18 se representa en un diagrama de Sankey.\\
+
+\textbf{Tabla 21}. Distribución entrenamiento-test según tipo de muestra y proporción entre clases para el análisis de hígado multiclase.\\
+
+\begin{table}[H]
+	\centering
+\begin{tabular}{lccc}
+	\cline{2-4}
+	\multicolumn{1}{c}{\textbf{}}                                                    & \textbf{Total} & \textbf{Entrenamiento} & \textbf{Test} \\ \hline
+	\textbf{Carcinoma hepatocelular}                                                 & 363 (100\%)    & 273 (75,2\%)           & 90 (24,8\%)   \\
+	\textbf{Colangiocarcinoma}                                                       & 33 (100\%)     & 25 (75,8\%)            & 8 (24,2\%)    \\
+	\textbf{Tejido sano}                                                             & 58 (100\%)     & 44 (75,9\%)            & 14 (24,1\%)   \\ \hline
+	\textbf{\begin{tabular}[c]{@{}l@{}}Proporción\\ carc. hepat./sanos\end{tabular}} & 6,3            & 6,2                    & 6,4           \\
+	\textbf{\begin{tabular}[c]{@{}l@{}}Proporción\\ colang./sanos\end{tabular}}      & 0,6            & 0,6                    & 0,6           \\ \hline
+\end{tabular}
+\end{table}
+
+\textbf{Figura 18}. Diagrama de Sankey mostrando la partición entrenamiento-test realizada según tipo de muestra para el análisis de hígado multiclase.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/18_higado_multiclase_05_sankey.png}
+\end{center}
+
+A continuación se muestran los diez genes más relevantes encontrados por cada método de selección de características:\\
+
+\textbf{Tabla 22}. Diez genes más relevantes según los distintos métodos de selección de características para el análisis de hígado multiclase.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{cccc}
+		\hline
+		\textbf{Ranking} & \multicolumn{1}{c}{\textbf{mRMR}} & \multicolumn{1}{c}{\textbf{RF}} & \multicolumn{1}{c}{\textbf{DA}} \\ \hline
+		1                & ANGPTL6                           & ANGPTL6                         & WWTR1                           \\
+		2                & FTLP3                             & GABRD                           & BIRC3                           \\
+		3                & PLXDC1                            & CDH13                           & CDH1                            \\
+		4                & RAB25                             & STAB2                           & ROS1                            \\
+		5                & WDR66                             & BMPER                           & POLQ                            \\
+		6                & AP2B1                             & ECM1                            & FGFR2                           \\
+		7                & CDH13                             & ADAMTS13                        & KLF6                            \\
+		8                & PTPN13                            & GDF2                            & CBFB                            \\
+		9                & SLC31A1                           & CLEC4G                          & FGFR3                           \\
+		10               & ADAMTS13                          & SPDL1                           & CLTCL1                          \\ \hline
+	\end{tabular}
+\end{table}
+
+Se observa que tres genes han sido valorados como relevantes para los algoritmos de mRMR y RF:  ANGPTL6, CDH13 y ADAMTS13.
+
+\subsection{Validación cruzada en entrenamiento - SVM}
+
+En la Tabla 23 se muestran los parámetros óptimos de SVM obtenidos tras el tuning.\\
+
+\textbf{Tabla 23}. Parámetros óptimos de SVM encontrados para los 10 genes más relevantes de cada método de selección de características.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{cccc}
+		\hline
+		\textbf{Parámetro} & \textbf{mRMR} & \textbf{RF} & \textbf{DA} \\ \hline
+		Coste                &    1 &    5     &   2       \\
+		Gamma               &     0,025    &     0,08   & 0,02        \\ \hline
+	\end{tabular}
+\end{table}
+
+Para estos parámetros óptimos, en la Figura 19 se muestran las medidas de evaluación medias obtenidas en las 5 fold.\\
+
+\newpage
+\textbf{Figura 19}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score, precisión, sensibilidad y especificidad de SVM según método de selección de características y número de genes usados.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/19_higado_multiclase_heatmap_svm.pdf} 
+\end{center}
+
+El mejor F1-Score para SVM se obtiene con 7 genes seleccionados con mRMR (94,99\%), configuración que obtiene también los mejores valores de precisión (97,66\%), sensibilidad (97,50\%) y especificidad (98,52\%). Los 7 genes seleccionados son: ANGPTL6, FTLP3, PLXDC1, RAB25, WDR66, AP2B1 y CDH13. Se analiza la expresión de genes de estos 7 genes, utilizando para ello un mapa de calor (Figura 20) y diagramas de caja (Figura 21).
+
+\newpage
+\textbf{Figura 20}. Mapa de calor de expresión de genes por tipo de muestra (columna izquierda: rojo = carcinoma hepatocelular, naranja = colangiocarcinoma, verde = tejido sano) en los 4 genes más relevantes encontrados en el mejor modelo de SVM con RF como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/20_higado_multiclase_13_svm_heatmap_mejor_metodo.png} 
+\end{center}
+
+En el mapa de calor se observa que hay grandes diferencias entre la expresión de genes de los distintos tipos de tejidos.
+
+\newpage
+\textbf{Figura 21}. Diagrama de caja de expresión de genes por tipo de muestra en los 4 genes más relevantes encontrados en el mejor modelo de SVM con RF como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/21_higado_multiclase_14_svm_boxplots_mejor_metodo.png} 
+\end{center}
+
+\newpage
+\subsection{Validación cruzada en entrenamiento - RF}
+
+En la Figura 22 se muestran las medidas de evaluación medias obtenidas en las 5 fold.\\
+
+\textbf{Figura 22}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score, precisión, sensibilidad y especificidad de RF según método de selección de características y número de genes usados.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/22_higado_multiclase_heatmap_rf.pdf} 
+\end{center}
+
+Para random forest, el mejor F1-Score (94,08\%) se obtiene con el método mRMR, considerando 6 genes. Los 6 genes seleccionados son: ANGPTL6, FTLP3, PLXDC1, RAB25, WDR66
+y AP2B1. Se analiza su expresión de genes, utilizando para ello un mapa de calor (Figura 23) y diagramas de caja (Figura 24).\\
+
+\textbf{Figura 23}. Mapa de calor de expresión de genes por tipo de muestra (columna izquierda: rojo = carcinoma hepatocelular, naranja = colangiocarcinoma, verde = tejido sano) en los 6 genes más relevantes encontrados en el mejor modelo de RF con mRMR como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/23_higado_multiclase_23_rf_heatmap_mejor_metodo.png} 
+\end{center}
+
+\newpage
+\textbf{Figura 24}. Diagrama de caja de expresión de genes por tipo de muestra en los 6 genes más relevantes encontrados en el mejor modelo de RF con mRMR como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/24_higado_multiclase_24_rf_boxplots_mejor_metodo.png} 
+\end{center}
+
+\subsection{Validación cruzada en entrenamiento - kNN}
+
+En la tabla 24 se muestra el número óptimo de vecinos para los 10 genes más relevantes para mRMR, RF y DA.\\
+
+\textbf{Tabla 24}. Número óptimo de vecinos encontrado para los 10 genes más relevantes de cada método de selección de características.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{cccc}
+		\cline{2-4}
+		\textbf{} & \textbf{mRMR} & \textbf{RF} & \textbf{DA} \\ \hline
+		k                &    7 &   9     &   13      \\ \hline
+	\end{tabular}
+\end{table}
+
+En la Figura 25 se muestran las medidas de evaluación medias obtenidas en las 5 fold.\\
+
+\newpage
+\textbf{Figura 25}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score, precisión, sensibilidad y especificidad de kNN según método de selección de características y número de genes usados.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/25_higado_multiclase_heatmap_knn.pdf} 
+\end{center}
+
+Para kNN, el mejor F1-Score (92,98\%) se obtiene con el método mRMR para 7 genes. Los 7 genes seleccionados son: ANGPTL6, FTLP3, PLXDC1, RAB25, WDR66, AP2B1 y CDH13. Se analiza su expresión de genes, utilizando para ello un mapa de calor (Figura 26) y diagramas de caja (Figura 27).
+
+\newpage
+\textbf{Figura 26}. Mapa de calor de expresión de genes por tipo de muestra (columna izquierda: rojo = carcinoma hepatocelular, naranja = colangiocarcinoma, verde = tejido sano) en los 7 genes más relevantes encontrados en el mejor modelo de kNN con mRMR como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/26_higado_multiclase_33_knn_heatmap_mejor_metodo.png} 
+\end{center}
+
+\newpage
+\textbf{Figura 27}. Diagrama de caja de expresión de genes por tipo de muestra en los 7 genes más relevantes encontrados en el mejor modelo de kNN con mRMR como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/27_higado_multiclase_34_knn_boxplots_mejor_metodo.png} 
+\end{center}
+
+\newpage
+
+\subsection{Validación en test}
+
+
+
+Al validar en el conjunto de test el mejor modelo encontrado para SVM y kNN (ambas con 7 genes con mRMR),  se obtiene la misma clasificación, descrita en la Figura 28, con F1-Score en test es de 91,8\% y una precisión de 96,4\%.\\
+
+\textbf{Figura 28}. Matriz de confusión de los mejores modelos encontrados de SVM y kNN en el conjunto de test.
+
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/28_higado_multiclase_15_svm_matriz_confusion_mejor_metodo_mejorado.png} 
+\end{center}
+
+El modelo distingue bien entre tejido tumoral y tejido sano, pero comete 4 errores distinguiendo carcinomas hepatocelulares de colangiocarcinomas.\\
+
+La validación en el conjunto de test del mejor modelo encontrado para RF (6 genes con mRMR) se muestra en la Figura 29, siendo los resultados ligeramente inferiores a los obtenidos con SVM y kNN.\\
+
+\textbf{Figura 29}. Matriz de confusión del mejor modelo encontrado de RF en el conjunto de test.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/29_higado_multiclase_25_rf_matriz_confusion_mejor_metodo_mejorado.png} 
+\end{center}
+
+En la tabla 25 se muestra un resumen de los mejores modelos obtenidos y su F1-Score y precisión en conjunto de entrenamiento y conjunto de test.\\
+
+\textbf{Tabla 25}. Resumen de clasificación multiclase para cáncer de hígado. Mejor modelo encontrado para SVM, RF y kNN con biomarcadores seleccionados, parámetros optimizados para cada algoritmo, F1-Score y precisión (Acc) en conjunto de entrenamiento y conjunto de test.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ccccc|cc}
+		\cline{2-7}
+		& Biomarcadores & Parámetros                                                         & F1 train & Acc train & F1 test & Acc test \\ \hline
+		SVM & mRMR 7 genes  & \begin{tabular}[c]{@{}c@{}}$c$ = 1\\ $\gamma$ = 0.025\end{tabular} & 94,99    & 97,66     & 91,84   & 96,43    \\ \hline
+		RF  & mRMR 6 genes  & --                                                                 & 94,08    & 97,08     & 90,63   & 95,54    \\ \hline
+		kNN & mRmR 7 genes  & k = 7                                                              & 92,98    & 96,79     & 91,84   & 96,43    \\ \hline
+	\end{tabular}
+\end{table}
 
 \section{Resultados de clasificación biclase para cáncer de colon-recto}
 
-\textcolor{red}{Completar una vez esté depurado el análisis de cáncer de hígado.}
+El código completo del análisis se muestra en el fichero \texttt{analisis\_cr/\linebreak03\_analisis\_biclase.R} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.
+
+\subsection{Detección de biomarcadores}
+
+Para la clasificación biclase en cáncer de colon-recto se cuenta con 644 tumores y 51 muestras de tejido sano.\\
+
+\textbf{Tabla 26}. Distribución de tipos de muestra para el análisis de cáncer de colon-recto biclase.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{lcc}
+		\cline{2-3}
+		& \textbf{Número de casos} & \textbf{Porcentaje} \\ \hline
+		\textbf{Tumor}     & 644        & 92,7\%              \\
+		\textbf{Tejido sano} & 51         & 7,3\%              \\ \hline
+		\textbf{Total}       & 695        & 100\%               \\ \hline
+	\end{tabular}
+\end{table}
+
+Se extraen 6.836 genes que presentan en su expresión diferencias significativas entre las muestras de tumor y las de tejido sano. En la tabla 27 se muestra la partición entrenamiento - test realizada y en la figura 30 se representa en un diagrama de Sankey.\\
+
+\textbf{Tabla 27}. Distribución entrenamiento-test según tipo de muestra y proporción entre clases para el análisis de colon-recto biclase.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{lccc}
+		\cline{2-4}
+		\multicolumn{1}{c}{\textbf{}}                                               & \textbf{Total} & \textbf{Entrenamiento} & \textbf{Test} \\ \hline
+		\textbf{Tumores}                                                            & 644 (100\%)    & 483 (75,0\%)           & 161 (25,0\%)  \\
+		\textbf{Tejido sano}                                                        & 51 (100\%)     & 39 (76,5\%)            & 12 (23,5\%)   \\ \hline
+		\textbf{\begin{tabular}[c]{@{}l@{}}Proporción\\ tumores/sanos\end{tabular}} & 12,6           & 12,4                   & 13,4          \\ \hline
+	\end{tabular}
+\end{table}
+
+\textbf{Figura 30}. Diagrama de Sankey mostrando la partición entrenamiento-test realizada según tipo de muestra para el análisis de colon-recto biclase.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/30_cr_biclase_05_sankey.png}
+\end{center}
+
+\newpage
+A continuación se muestran los diez genes más relevantes encontrados por cada método de selección de características:\\
+
+\textbf{Tabla 28}. Diez genes más relevantes según los distintos métodos de selección de características para el análisis de colon-recto biclase.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{clll}
+		\hline
+		\textbf{Ranking} & \multicolumn{1}{c}{\textbf{mRMR}} & \multicolumn{1}{c}{\textbf{RF}} & \multicolumn{1}{c}{\textbf{DA}} \\ \hline
+		1                & BEST4                             & VSTM2A                          & ETV4                            \\
+		2                & MET                               & CA7                             & SCN7A                           \\
+		3                & EPOP                              & COL11A1                         & RSPO2                           \\
+		4                & RXRG                              & GLP2R                           & PHOX2B                          \\
+		5                & C5orf34                           & SLC39A10                        & SALL4                           \\
+		6                & DHRS7C                            & ENC1                            & POU5F1B                         \\
+		7                & NKX2-3                            & ESM1                            & TNFRSF17                        \\
+		8                & ESM1                              & CEMIP                           & SCN9A                           \\
+		9                & SGCG                              & CA2                             & TLX1                            \\
+		10               & MDFI                              & KRT80                           & WT1                             \\ \hline
+	\end{tabular}
+\end{table}
+
+Se observa que el gen ESM1 es el único gen común a dos algoritmos de selección de características: mRMR y RF.
+
+\subsection{Validación cruzada en entrenamiento}
+
+En las Tablas 29 y 30 se muestran los parámetros óptimos de SVM y kNN obtenidos tras el tuning.\\
+
+\textbf{Tabla 29}. Parámetros óptimos de SVM encontrados para los 10 genes más relevantes de cada método de selección de características.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{cccc}
+		\hline
+		\textbf{Parámetro} & \textbf{mRMR} & \textbf{RF} & \textbf{DA} \\ \hline
+		Coste                &    0,05 &    0,05     &  0,05       \\
+		Gamma               &     0,06    &     0,07   & 0,06        \\ \hline
+	\end{tabular}
+\end{table}
+
+\textbf{Tabla 30}. Número óptimo de vecinos encontrado para los 10 genes más relevantes de cada método de selección de características.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{cccc}
+		\cline{2-4}
+		\textbf{} & \textbf{mRMR} & \textbf{RF} & \textbf{DA} \\ \hline
+		k                &   23 &   23     &   23      \\ \hline
+	\end{tabular}
+\end{table}
+
+En la Figura 31 se muestran para SVM, RF y kNN el F1-Score medio obtenido en las 5 fold.\\
+
+\textbf{Figura 31}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score de SVM, RF y kNN según método de selección de características y número de genes usados.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/31_cr_biclase_heatmap_horizontal.pdf} 
+\end{center}
+
+Se alcanzan F1-Score de 100\% en muchos casos. En caso de igualdad de F1-Score, se seleccionará como mejor modelo aquel que emplee el menor número de genes. Por tanto, los mejores modelos son:
+\begin{itemize}
+	\item Para SVM: mRMR ó RF con 3 genes.
+	\item Para RF: mRMR con 4 genes.
+	\item Para kNN: RF con 3 genes.
+\end{itemize}
+
+Se analiza la expresión de 3 genes más relevantes de RF y los 4 más relevantes de mRMR con diagramas de caja (Figuras 32 y 33).
+
+\newpage
+\textbf{Figura 32}. Diagrama de caja de expresión de genes por tipo de muestra en los 3 genes más relevantes con RF como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/32_cr_biclase_43_knn_boxplots_mejor_metodo.png} 
+\end{center}
+
+\textbf{Figura 33}. Diagrama de caja de expresión de genes por tipo de muestra en los 4 genes más relevantes con mRMR como método de selección de características.
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/33_cr_biclase_30_rf_boxplots_mejor_metodo.png} 
+\end{center}
+
+\subsection{Validación en test}
+
+Al validar en el conjunto de test los mejor modelo encontrado para SVM (dos modelos: 3 genes con mRMR y 3 genes con RF), RF (4 genes con mRMR) y kNN (3 genes con RF) se obtiene la misma clasificación: una predicción perfecta en test (F1-Score 100\%, precisión 100\%) como se muestra en la Figura 34.\\
+
+\textbf{Figura 34}. Matriz de confusión de los mejores modelos encontrados de SVM, RF y kNN en el conjunto de test.
+
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/34_cr_biclase_18_svm_matriz_confusion_mejor_metodo.png} 
+\end{center}
+
+En la tabla 31 se muestra un resumen de los mejores modelos obtenidos y su F1-Score y precisión en conjunto de entrenamiento y conjunto de test.\\
+
+\textbf{Tabla 31}. Resumen de clasificación biclase para cáncer de colon-recto. Mejor modelo encontrado para SVM, RF y kNN con biomarcadores seleccionados, parámetros optimizados para cada algoritmo, F1-Score y precisión (Acc) en conjunto de entrenamiento y conjunto de test.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ccccc|cc}
+		\hline
+		& Biomarcadores & Parámetros                                                           & F1 train & Acc train & F1 test & Acc test \\ \hline
+		\multirow{3}{*}{SVM} & mRMR 3 genes  & \begin{tabular}[c]{@{}c@{}}$c$ = 0,05\\ $\gamma$ = 0,06\end{tabular} & 100      & 100       & 100     & 100      \\ \cline{2-7} 
+		& RF 3 genes    & \begin{tabular}[c]{@{}c@{}}$c$ = 0,05\\ $\gamma$ = 0,07\end{tabular} & 100      & 100       & 100     & 100      \\ \hline
+		RF                   & mRMR 4 genes  & --                                                                   & 100      & 100       & 100     & 100      \\ \hline
+		kNN                  & RF 3 genes    & k = 23                                                               & 100      & 100       & 100     & 100      \\ \hline
+	\end{tabular}
+\end{table}
+
 
 \section{Resultados de clasificación multiclase para cáncer de colon-recto}
 
-\textcolor{red}{Completar una vez esté depurado el análisis de cáncer de hígado.}
+\textcolor{red}{Nota: Para esta parte he hecho 2 análisis distintos y debería elegir uno de ellos. Los resumo mucho aquí abajo. Por coherencia con hígado multiclase, quizá debería usar el primero que os muestro (por diagnóstico primario), que además tiene mejores resultados, pero quería comentaros brevemente los resultados de los dos análisis. Y otra cosa... en este análisis he aumentado el número de genes a 20, porque los máximos F1 se suelen encontrar entre 13 y 18 genes. Si limito sólo a 10 genes, el mejor F1 se obtiene siempre para 10 genes.}
+
+\subsection{Por diagnóstico primario: sanos vs adenocarcinoma vs adenocarcinoma mucinoso}
+
+Los dos principales diagnósticos primarios son: adenocarcinoma y adenocarcinoma mucinoso. El resto tienen menos de 10 casos.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		& N   \\ \hline
+		Adenocarcinoma, NOS     & 530 \\ \hline
+		Adenocarcinoma mucinoso & 87  \\ \hline
+		Tejido normal           & 51  \\ \hline
+	\end{tabular}
+\end{table}
+
+La mejor matriz de confusión (RF con 17 genes elegidos con mRMR) es la siguiente:
+
+\begin{center}
+	\includegraphics[width=.7\textwidth]{figuras/auxiliares/cr_04_analisis_multiclase_primary_diagnosis/25_rf_matriz_confusion_mejor_metodo.png} 
+\end{center}
+
+\subsection{Por código: sanos vs colon vs recto + unión rectosigmoidea}
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{|l|l|}
+		\hline
+		& N   \\ \hline
+		Colon (C18)    & 476 \\ \hline
+		Recto + Unión rectosigmoidea (C19-C20) & 163  \\ \hline
+		Tejido normal           & 51  \\ \hline
+	\end{tabular}
+\end{table}
+
+La mejor matriz de confusión (kNN con 14 genes elegidos con RF) es la siguiente:
+
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/auxiliares/cr_04_analisis_multiclase_codigo/35_knn_matriz_confusion_mejor_metodo.png} 
+\end{center}
+
+(Probé también sanos vs C18 vs C19 vs C20, pero los resultados empeoraban mucho).
 
 \section{Conclusiones}
 
-\textcolor{red}{Interpretar resultados con cautela: ver pág. 65 de \cite{CastilloSecilla2020} (referencias 77-79). Puede haber también con validación externa de los resultados.}\\
+mRMR y RF han demostrado ser buenos métodos de selección de características, siempre mejores que DA, aunque carecen del enfoque médico en el que se basa este último método.\\
 
-\textcolor{red}{No sustituye en ningún caso a médicos, es algo complementario.}
+Los 3 algoritmos de clasificación propuestos (SVM, RF y kNN) han obtenido resultados muy similares, tanto para problemas biclase como multiclase. Una de las ventajas de trabajar con varios algoritmos de clasificación es que se puede escoger aquel que utiliza el menor número de genes, por las ventajas que ello conlleva (menor coste computacional, mayor interpretabilidad).\\
+
+Pese a haber encontrado genes que separan correctamente las distintas clases, para considerar que existen evidencias claras gen-enfermedad es necesario contar con una interpretación clínica \cite{Drier2011}. Este razonamiento está en concordancia con el debate existente sobre el uso de p-valores en la ciencia \cite{Evans1988, Goodman1999, Matthews2000}. De igual forma, pese a los excelentes resultados de los modelos encontrados en el conjunto de test, la validez externa de los métodos está por probar \cite{Steckler2008} y sería recomendable comprobar su efectividad en distintos conjuntos de datos.

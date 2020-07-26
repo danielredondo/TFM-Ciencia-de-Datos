@@ -1,10 +1,33 @@
-\chapter{Conclusiones y líneas abiertas de trabajo}
+\chapter{Líneas abiertas de trabajo}
 
-\textcolor{red}{Añadir otros métodos de selección de características como daRed (que tiene en cuenta información redundante entre genes) y otros métodos de clasificación (p.e. SVM con otros núcleos)}\\
+\section{El problema de clasificación}
 
-\textcolor{red}{\texttt{KnowSeqWeb}, interfaz web para acercar el uso de KnowSeq a personas sin conocimientos de programación: personal médico, etc. Resaltar diferencias entre KnowSeqWeb y biomaRcadores: multiclase/biclase, sin preprocesamiento/con, proceso automático/guiado con más capacidad de decisión, ...}\\
+Para el problema de clasificación de muestras de tejidos existen varias líneas abiertas de trabajo:
 
-\textcolor{red}{Más mejoras de KnowSeq}
+\begin{itemize}
+	\item Otros métodos de clasificación. Además de los algoritmos de clasificación SVM, RF y kNN, se pueden emplear otros métodos. Por ejemplo, se puede clasificar usando SVM con núcleos de base no radial o crear un \textit{ensemble} de algoritmos para permitir una estructura más flexible del modelo que se adapte mejor a los datos.
+	\item Otros métodos de selección de características. Para lograr un equilibrio entre resultados numéricos y clínicos, se pueden utilizar algoritmos de selección de características que usan evidencias existentes de relaciones gen-enfermedad y añaden reducción de la redundancia. Es el caso de DARED, un algoritmo en el que están trabajando los tutores de este trabajo y que supone una mejora con respecto al método DA empleado en el capítulo 4.
+\end{itemize}
+
+\section{\{\texttt{KnowSeq}\}}
+
+\{\texttt{KnowSeq}\} es un paquete de \texttt{R} en continua evolución y abierto a la colaboración mediante GitHub \cite{KnowSeq}. Algunas mejoras propuestas por el autor que se pueden implementar a corto plazo son las siguientes:
+
+\begin{itemize}
+	\item Un tuning preciso de los parámetros de los algoritmos de clasificación. Para realizar el tuning de los parámetros óptimos de SVM y kNN se han utilizado los 10 genes más relevantes. Posteriormente, se seleccionaba como mejor modelo aquel que con menor número de genes obtenía el mejor F1-Score. Quizá para este número de genes, menor de 10, existan otros parámetros que puedan optimizar los resultados del algoritmo. Tras implementar este cambio, se podrían obtener parámetros óptimos para cada método de selección de características y número de genes.
+		\item Nuevos gráficos. Dentro de la función \texttt{KnowSeq::dataPlot} se pueden implementar los mapas de calor planteados en el presente trabajo para medir F1-Score, precisión, sensibilidad y especificidad (por ejemplo, Figura 8). En el caso de estas figuras, permiten detectar fácilmente los indicadores más altos debido a los colores empleados y al resaltado en negrita del valor más alto (realizado automáticamente con el código).
+\end{itemize}
+
+\textcolor{red}{Conforme vaya haciendo estos cambios en KnowSeq, puedo ir pasándolos a la parte de análisis donde nombro los cambios que he realizado en el paquete.}\\
+
+\section{\texttt{BiomarkeRs}}
+
+Siguiendo la iniciativa de la aplicación web \texttt{BiomarkeRs} se debe continuar haciendo esfuerzos para acercar el análisis de datos transcriptómicos a personas sin conocimientos previos de programación. En este sentido, el uso de tutoriales o cursos cortos para enseñar a usar la plataforma pueden ser de utilidad. Además, la aplicación web debería aprovechar todo el potencial presente en \{\texttt{KnowSeq}\} y actualizarse con las nuevas funcionalidades que se implementen en el paquete. El hecho de que sea una aplicación de código abierto puede ayudar a esta actualización. \\
+
+\section{Artículo}
+
+Finalmente, como consecuencia de este trabajo se ha desarrollado un artículo presente en el \nameref{anexo1} que será enviado a una revista del campo de la bioinformática. \textcolor{red}{¿Debería nombrar la revista a la que se puede enviar? ¿De qué creéis que debería escribir el artículo? ¿Cáncer de hígado o colon-recto? ¿Sólo biclase o también multiclase?}
+
 
 
 
