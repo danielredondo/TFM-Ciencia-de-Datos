@@ -60,13 +60,23 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               h1("Epidemiology and biomarkers detection in cancer"),
               
               h3(tags$b("Introduction")),
-              "[Text]",
+              "Cancer is one of the world's largest public health problems with more than 17 million new cases and 9 million deaths every year.",
               h3(tags$b("Methods")),
-              "[Text]",
+              "This work focuses on liver cancer and colon-rectum cancer, describing their main epidemiological indicators and using machine learning
+              to analyze more than 1,100 RNA-Seq samples from cancer patients. For binary (tumor vs. normal tissue) and multiclass (various tumor 
+              types vs. normal tissue) classification, the 10 most relevant genes are identified and predictive models are constructed with SVM, 
+              random forest and kNN with 5-fold cross-validation.",
               h3(tags$b("Results")),
-              "[Text]",
+              "The best binary classifiers are validated with excellent results for liver cancer (F1-Score in test: 99.5%) and colon-rectum cancer
+              (F1-Score: 100%). Slightly lower evaluation measures are obtained in the best models for multiclass classification, both in liver
+              (F1-Score: 91.8%) and in colon-rectum (F1-Score: XX%).",
+              br(),
+              "A web application has been developed, BiomarkeRs, that implements transcriptomic analysis and can be useful for people
+              without previous knowledge of programming.",
               h3(tags$b("Conclusions")),
-              "[Text]",
+              "SVM, random forest and kNN obtained very similar results, and managed to correctly distinguish between tumoral and normal tissues
+              with some troubles distinguishing between different types of cancer. External validation and clinical interpretations are necessary
+              to clearly establish a gene-disease association.",
               
               h2("About this web application"),
               "[Text]",
