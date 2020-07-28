@@ -32,7 +32,7 @@ El algoritmo mRMR funciona hacia delante: partiendo del conjunto vacío de carac
 
 siendo $I$ la función que mide la información mutua entre dos variables, $Y$ la variable resultado y $S$ el conjunto de variables ya seleccionadas. El proceso se repite hasta alcanzar un cierto número prefijado de variables seleccionadas. El resultado final es un ranking de variables ordenadas en base a su importancia respecto al criterio mRMR.\\
 
-Es un método muy conocido que ha sido utilizado ampliamente en ciencias -ómicas \cite{Ding2005, Yang2013, Galvez2018, Castillo2019, Galvez2020}. En \texttt{R}  está implementado mediante la función \texttt{KnowSeq::\linebreak featureSelection(mode = `mrmr')} \cite{KnowSeq}, que a su vez utiliza \texttt{praznik::MRMR} \cite{Kursa2020}.
+Es un método muy conocido que ha sido utilizado ampliamente en ciencias -ómicas \cite{Ding2005, Yang2013, Galvez2018, Castillo2019, Galvez2020}. En \texttt{R}  está implementado mediante la función \textit{\texttt{KnowSeq::\linebreak featureSelection(mode = `mrmr')}} \cite{KnowSeq}, que a su vez utiliza \textit{\texttt{praznik::MRMR} \cite{Kursa2020}}.
 
 \subsection{\textit{Random forest} (RF)}
 
@@ -40,13 +40,13 @@ Uno de los resultados del modelo de clasificación \textit{random forest}, detal
 
 La importancia de una variable en el modelo se puede cuantificar usando la reducción media en precisión del modelo al aleatorizar los valores de la variable manteniendo su distribución \cite{Breiman2001, Breiman2002}. También se puede usar la reducción media de otras medidas de entropía como el índice de Gini \cite{Louppe2013}.\\
 
-Este algoritmo en \texttt{R}  está implementado en \texttt{KnowSeq::featureSelection(mode = `rf')} \cite{KnowSeq} que a su vez utiliza \texttt{randomForest::randomForest} \cite{Liaw2002}.
+Este algoritmo en \texttt{R}  está implementado en \textit{\texttt{KnowSeq::featureSelection(mode = `rf')}} \cite{KnowSeq} que a su vez utiliza \textit{\texttt{randomForest::randomForest}} \cite{Liaw2002}.
 
 \subsection{Asociación de enfermedades (DA)}
 
 El método de selección de características mediante asociación de enfermedades (DA, por sus siglas en inglés: \textit{Disease Association}) permite encontrar aquellos genes que están asociados en la literatura científica con una determinada enfermedad, en base a evidencias tales como rutas metabólicas afectadas, expresión de RNA o fármacos. Utiliza para ello la plataforma \textit{targetValidation} de \textit{Open Targets} \cite{OpenTargets2020}, que contiene para cada gen una puntuación midiendo la asociación gen-enfermedad en el rango de 0 (no hay asociación) a 1 (la asociación es total). El método DA obtiene esas puntuaciones y las ordena, obteniendo un ranking de genes en base a su asociación con la enfermedad.\\
 
-El método DA  está implementado en \texttt{R}  en \texttt{KnowSeq::featureSelection(mode = `da')} \cite{KnowSeq}, que utiliza a su vez la REST API de \textit{targetValidation} \cite{OpenTargets2020}.
+El método DA  está implementado en \texttt{R}  en \textit{\texttt{KnowSeq::featureSelection(mode = `da')}} \cite{KnowSeq}, que utiliza a su vez la REST API de \textit{targetValidation} \cite{OpenTargets2020}.
 
 \section{Algoritmos de clasificación}
 
@@ -58,7 +58,7 @@ Las máquinas de soporte vectorial (SVM) son uno de los algoritmos más populare
 
 Uno de los \textit{kernel} más comunes para SVM es el de base radial, que viene determinado por dos parámetros: coste ($c$) y gamma ($\gamma$). El coste $c$ mide la permisividad que se permite a la existencia de clases mal clasificadas por el modelo, que podrían ser ejemplos extraños (\textit{outliers}). Un coste alto puede sobreajustar el modelo (\textit{overfitting}), mientras que un coste bajo puede reducir la precisión del modelo en el conjunto de entrenamiento. El parámetro $\gamma$ mide el nivel de influencia de cada vector soporte para la construcción del hiperplano separador. Para cada problema se pueden encontrar valores de coste y gamma que optimizan los resultados del algoritmo SVM con base radial, aunque debido a que la búsqueda exhaustiva suele ser costosa computacionalmente se suele realizar una búsqueda de los mejores parámetros dentro de unos posibles valores de $c$ y $\gamma$, técnica que se denomina tuning en rejilla.\\
 
-Los algoritmos SVM están implementados en varios paquetes de R, siendo el más común \{\texttt{e1071}\} \cite{Meyer2019}.
+Los algoritmos SVM están implementados en varios paquetes de R, siendo el más común \textit{\{\texttt{e1071}\}} \cite{Meyer2019}.
 
 \subsection{\textit{Random Forest} (RF)}
 
@@ -66,13 +66,13 @@ Los algoritmos SVM están implementados en varios paquetes de R, siendo el más 
 
 El algoritmo de RF es una mejora del método de \textit{bagging} en árboles de decisión, que consiste en crear árboles basados en una selección aleatoria sin reemplazamiento de las instancias del conjunto de entrenamiento, reduciendo así la varianza de las predicciones \cite{Breiman1996}.\\
 
-El paquete de \texttt{R} \{\texttt{randomForest}\} implementa el algoritmo RF \cite{Liaw2002}.
+El paquete de \texttt{R} \textit{\{\texttt{randomForest}\}} implementa el algoritmo RF \cite{Liaw2002}.
 
 \subsection{k-vecinos más cercanos (kNN)}
 
 El algoritmo de los k-vecinos consiste en asignar a cada dato sin clasificar la clase más común entre sus k-vecinos más cercanos \cite{Altman1992}. Aunque la distancia euclídea es la más usual, se pueden utilizar otras distancias para el cálculo de los k-vecinos más cercanos \cite{Hu2016} y es recomendable normalizar los atributos para que todos tengan el mismo peso. Además, contando con un conjunto de entrenamiento se puede hallar el parámetro $k$ óptimo para el problema (\textit{tuning}).\\
 
-En este trabajo se utilizará la implementación de kNN realizada en \{\texttt{caret}\} \cite{Kuhn2020}.
+En este trabajo se utilizará la implementación de kNN realizada en \textit{\{\texttt{caret}\}} \cite{Kuhn2020}.
 
 \subsection{Medidas de evaluación}
 
