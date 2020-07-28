@@ -58,7 +58,7 @@ En la Tabla 9 se muestra  la distribución de casos de cáncer de hígado según
 		Hombre                                            & 264                      & 65,3\%                    \\
 		Mujer                                             & 140                      & 34,7\%                    \\ \hline
 		\multicolumn{1}{l}{\textbf{Grupo de edad}}        &                          &                           \\
-		$\leq$40 años                                         & 34                       & 8,4\%                     \\
+		$\leq$ 40 años                                         & 34                       & 8,4\%                     \\
 		41-50 años                                        & 40                       & 9,9\%                     \\
 		51-60 años                                        & 106                      & 26,2\%                    \\
 		61-70 años                                        & 127                      & 31,4\%                    \\
@@ -92,7 +92,7 @@ En la Tabla 10 se muestran tablas de contingencia del estado vital según sexo, 
 
 El código completo del análisis se muestra en el fichero \textit{\texttt{analisis\_higado/\linebreak01\_analisis\_datos\_clinicos.R}} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
 
-\textbf{Tabla 10}. Características clínicas de los casos de cáncer de hígado. Distribución de  estado vital según sexo, grupo de edad, diagnóstico primario y estadio.
+\textbf{Tabla 10}. Características clínicas de los casos de cáncer de hígado. Distribución de  estado vital según sexo, grupo de edad, estadio y diagnóstico primario.
 
 \begin{table}[H]
 	\centering
@@ -104,13 +104,13 @@ El código completo del análisis se muestra en el fichero \textit{\texttt{anali
 		Hombre                                            & 178 (67,7\%)   & 85 (32,3\%)         &                      \\
 		Mujer                                             & 79 (83,2\%)    & 16 (16,8\%)         &                      \\ \hline
 		\multicolumn{1}{l}{\textbf{Grupo de edad}}        &                &                     & 0,018                \\
-		$\leq$40 años                                         & 24 (70,6\%)    & 10 (29,4\%)         &                      \\
+		$\leq$ 40 años                                         & 24 (70,6\%)    & 10 (29,4\%)         &                      \\
 		41-50 años                                        & 27 (67,5\%)    & 13 (32,5\%)         &                      \\
 		51-60 años                                        & 68 (64,2\%)    & 38 (35,8\%)         &                      \\
 		61-70 años                                        & 89 (70,6\%)    & 37 (29,4\%)         &                      \\
 		71-80 años                                        & 42 (54,5\%)    & 35 (45,5\%)         &                      \\
-		$>$80 años                                   & 5 (31,3\%)     & 11 (68,8\%)         &                      \\ \hline
-		\multicolumn{1}{l}{\textbf{Estadio}}              &                &                     & \textless{}0,001     \\
+		$>$ 80 años                                   & 5 (31,3\%)     & 11 (68,8\%)         &                      \\ \hline
+		\multicolumn{1}{l}{\textbf{Estadio}}              &                &                     & \textless{} 0,001     \\
 		Estadio I                                         & 138 (73,4\%)   & 50 (26,6\%)         &                      \\
 		Estadio II                                        & 64 (67,4\%)    & 31 (32,6\%)         &                      \\
 		Estadio III                                       & 39 (47,6\%)    & 43 (52,4\%)         &                      \\
@@ -126,76 +126,84 @@ Para las variables con datos faltantes se ha realizado un análisis de casos com
 
 \subsection{Características clínicas para cáncer de colon-recto}
 
-620 tumores de colon-recto de los 644 considerados tienen disponible información clínica. En la Tabla 11 se muestra  la distribución de casos de cáncer de colon-recto según algunas variables de interés. Los casos se recogieron entre los años 1998 y 2013, con la mayoría de los casos recogidos entre los años 2007 y 2011. La proporción entre hombres y mujeres es similar (53,1\% y 46,9\% respectivamente) y los estadios más comunes son los intermedios (estadio II: 36,3\% y estadio III: 28,7\%). La edad media de diagnóstico es de 66,7 años (mediana: 68,1 años), con un rango de edad de entre 31 y 90 años. Aproximadamente la mitad de los pacientes son caucásicos (47,3\%), que es la raza más común seguida por afroamericanos (10,5\%) y asiáticos (2,1\%). Se desconoce la raza del 40,0\% de las personas. Aproximadamente cuatro de cada cinco personas estaban vivas en el momento del último contacto realizado (79,2\%).\\
+620 tumores de colon-recto de los 644 considerados tienen disponible información clínica. En la Tabla 11 se muestra  la distribución de casos de cáncer de colon-recto según algunas variables de interés. Los casos se recogieron entre los años 1998 y 2013, con la mayoría de los casos recogidos entre los años 2007 y 2011. La proporción entre hombres y mujeres es similar (53,1\% y 46,9\% respectivamente) y los estadios más comunes son los intermedios (estadio II: 36,3\% y estadio III: 28,7\%). La edad media de diagnóstico es de 66,7 años (mediana: 68,1 años), con un rango de edad de entre 31 y 90 años. Aproximadamente la mitad de los pacientes son caucásicos (47,3\%), que es la raza más común seguida por afroamericanos (10,5\%) y asiáticos (2,1\%). Se desconoce la raza del 40,0\% de las personas. El principal diagnóstico primario es el adenocarcinoma (83,4\%) seguido por el adenocarcinoma mucinoso (12,7\%). Aproximadamente cuatro de cada cinco personas estaban vivas en el momento del último contacto realizado (79,2\%).\\
 
 \newpage
 
-\textbf{Tabla 11}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, raza y estado vital.
+\textbf{Tabla 11}. Características clínicas de los casos de cáncer de colon-recto. Distribución de casos y porcentaje según sexo, grupo de edad, estadio, raza, diagnóstico primario y estado vital.
 
 \begin{table}[H]
 	\centering \small
 	\begin{tabular}{rr}
 		\cline{2-2}
-		\multicolumn{1}{l}{}                       & \multicolumn{1}{c}{\textbf{Número de casos (Porcentaje)}} \\ \hline
-		\multicolumn{1}{l}{\textbf{Total}}         & 620 (100\%)                                               \\ \hline
-		\multicolumn{1}{l}{\textbf{Sexo}}          &                                                           \\
-		Hombre                                     & 329 (53,1\%)                                              \\
-		Mujer                                      & 291 (46,9\%)                                              \\ \hline
-		\multicolumn{1}{l}{\textbf{Grupo de edad}} &                                                           \\
-		$\leq$40 años                                   & 16 (2,6\%)                                                \\
-		41-50 años                                 & 59 (9,5\%)                                                \\
-		51-60 años                                 & 101 (16,3\%)                                              \\
-		61-70 años                                 & 173 (27,9\%)                                              \\
-		71-80 años                                 & 171 (27,6\%)                                              \\
-		$>$80 años                               & 98 (15,8\%)                                               \\
-		Desconocido                                & 2 (0,3\%)                                                 \\ \hline
-		\multicolumn{1}{l}{\textbf{Estadio}}       &                                                           \\
-		Estadio I                                  & 105 (16,9\%)                                              \\
-		Estadio II                                 & 225 (36,3\%)                                              \\
-		Estadio III                                & 178 (28,7\%)                                              \\
-		Estadio IV                                 & 89 (14,4\%)                                               \\
-		Desconocido                                & 23 (3,7\%)                                                \\ \hline
-		\multicolumn{1}{l}{\textbf{Raza}}          &                                                           \\
-		Caucásico                                     & 293 (47,3\%)                                              \\
-		Asiático                                   & 13 (2,1\%)                                                \\
-		Afroamericano                      & 65 (10,5\%)                                               \\
-		Desconocido                                & 248 (40\%)                                                \\
-		Indio americano o nativo de Alaska         & 1 (0,2\%)                                                 \\ \hline
-		\multicolumn{1}{l}{\textbf{Estado vital}}  &                                                           \\
-		Vivo                                       & 491 (79,2\%)                                              \\
-		Muerto                                     & 129 (20,8\%)                                              \\ \hline
+		\multicolumn{1}{l}{}                              & \multicolumn{1}{c}{\textbf{Número de casos (Porcentaje)}} \\ \hline
+		\multicolumn{1}{l}{\textbf{Total}}                & 620 (100\%)                                               \\ \hline
+		\multicolumn{1}{l}{\textbf{Sexo}}                 &                                                           \\
+		Hombre                                            & 329 (53,1\%)                                              \\
+		Mujer                                             & 291 (46,9\%)                                              \\ \hline
+		\multicolumn{1}{l}{\textbf{Grupo de edad}}        &                                                           \\
+		$\leq$ 40 años                                         & 16 (2,6\%)                                                \\
+		41-50 años                                        & 59 (9,5\%)                                                \\
+		51-60 años                                        & 101 (16,3\%)                                              \\
+		61-70 años                                        & 173 (27,9\%)                                              \\
+		71-80 años                                        & 171 (27,6\%)                                              \\
+		$>$ 80 años                                    & 98 (15,8\%)                                               \\
+		Desconocido                                       & 2 (0,3\%)                                                 \\ \hline
+		\multicolumn{1}{l}{\textbf{Raza}}                 &                                                           \\
+		Caucásico                                         & 293 (47,3\%)                                              \\
+		Asiático                                          & 13 (2,1\%)                                                \\
+		Afroamericano                                     & 65 (10,5\%)                                               \\
+		Desconocido                                       & 248 (40,0\%)                                                \\
+		Indio americano o nativo de Alaska                & 1 (0,2\%)                                                 \\ \hline
+		\multicolumn{1}{l}{\textbf{Diagnóstico primario}} & \multicolumn{1}{l}{}                                      \\
+		Adenocarcinoma                                    & 517 (83,4\%)                                              \\
+		Adenocarcinoma mucinoso                           & 79 (12,7\%)                                               \\
+		Otros                                             & 24 (3,9\%)                                                \\ \hline
+		\multicolumn{1}{l}{\textbf{Estadio}}              &                                                           \\
+		Estadio I                                         & 105 (16,9\%)                                              \\
+		Estadio II                                        & 225 (36,3\%)                                              \\
+		Estadio III                                       & 178 (28,7\%)                                              \\
+		Estadio IV                                        & 89 (14,4\%)                                               \\
+		Desconocido                                       & 23 (3,7\%)                                                \\ \hline
+		\multicolumn{1}{l}{\textbf{Estado vital}}         &                                                           \\
+		Vivo                                              & 491 (79,2\%)                                              \\
+		Muerto                                            & 129 (20,8\%)                                              \\ \hline
 	\end{tabular}
 \end{table}
 
 En la Tabla 12 se muestran tablas de contingencia del estado vital según sexo, grupo de edad y estadio. Se han realizado pruebas de chi cuadrado ($\chi^2$) \cite{Pearson1900} para evaluar la independencia o no del estado vital con respecto a las distintas variables, aplicando la corrección de Yates \cite{Yates1934} cuando fue necesario. El código completo del análisis se muestra en el fichero \textit{\texttt{analisis\_cr/01\_analisis\_datos\_clinicos.R}} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.\\
 
-\textbf{Tabla 12}. Características clínicas de los casos de cáncer de colon-recto. Distribución de  estado vital según sexo, grupo de edad y estadio.
+\textbf{Tabla 12}. Características clínicas de los casos de cáncer de colon-recto. Distribución de  estado vital según sexo, grupo de edad, estadio y diagnóstico primario.
 
 \begin{table}[H]
-		\centering
-	\begin{tabular}{rrrc}
+	\centering
+	\begin{tabular}{rccc}
 		\cline{2-4}
-		\multicolumn{1}{l}{}                           & \multicolumn{1}{c}{\textbf{Vivos}} & \multicolumn{1}{c}{\textbf{Fallecidos}} & \multicolumn{1}{c}{\textbf{p-valor}} \\ \hline
-		\multicolumn{1}{l}{\textbf{Número de tumores}} & 491            & 129                 &                  \\ \hline
-		\multicolumn{1}{l}{\textbf{Sexo}}              &                &                     & 0,993            \\
-		Hombre                                         & 260 (79,0\%)     & 69 (21,0\%)           &                  \\
-		Mujer                                          & 231 (79,4\%)   & 60 (20,6\%)         &                  \\ \hline
-		\multicolumn{1}{l}{\textbf{Grupo de edad}}     &                &                     & \textless{}0,001 \\
-		$\leq$40 años                                     & 14 (87,5\%)    & 2 (12,5\%)          &                  \\
-		41-50 años                                     & 51 (86,4\%)    & 8 (13,6\%)          &                  \\
-		51-60 años                                     & 85 (84,2\%)    & 16 (15,8\%)         &                  \\
-		61-70 años                                     & 150 (86,7\%)   & 23 (13,3\%)         &                  \\
-		71-80 años                                     & 120 (70,2\%)   & 51 (29,8\%)         &                  \\
-		$>$80 años                                  & 70 (71,4\%)    & 28 (28,6\%)         &                  \\ \hline
-		\multicolumn{1}{l}{\textbf{Estadio}}           &                &                     & \textless{}0,001 \\
-		Estadio I                                      & 98 (93,3\%)    & 7 (6,7\%)           &                  \\
-		Estadio II                                     & 192 (85,3\%)   & 33 (14,7\%)         &                  \\
-		Estadio III                                    & 139 (78,1\%)   & 39 (21,9\%)         &                  \\
-		Estadio IV                                     & 48 (53,9\%)    & 41 (46,1\%)         &                  \\ \hline
+		\multicolumn{1}{l}{}                              & \textbf{Vivos} & \textbf{Fallecidos} & \textbf{p-valor} \\ \hline
+		\multicolumn{1}{l}{\textbf{Número de tumores}}    & 491            & 129                 &                  \\ \hline
+		\multicolumn{1}{l}{\textbf{Sexo}}                 &                &                     & 0,993            \\
+		Hombre                                            & 260 (79,0\%)     & 69 (21,0\%)           &                  \\
+		Mujer                                             & 231 (79,4\%)   & 60 (20,6\%)         &                  \\ \hline
+		\multicolumn{1}{l}{\textbf{Grupo de edad}}        &                &                     & \textless{} 0,001 \\
+		$\leq$ 40 años                                         & 14 (87,5\%)    & 2 (12,5\%)          &                  \\
+		41-50 años                                        & 51 (86,4\%)    & 8 (13,6\%)          &                  \\
+		51-60 años                                        & 85 (84,2\%)    & 16 (15,8\%)         &                  \\
+		61-70 años                                        & 150 (86,7\%)   & 23 (13,3\%)         &                  \\
+		71-80 años                                        & 120 (70,2\%)   & 51 (29,8\%)         &                  \\
+		$>$ 80 años                                    & 70 (71,4\%)    & 28 (28,6\%)         &                  \\ \hline
+		\multicolumn{1}{l}{\textbf{Estadio}}              &                &                     & \textless{} 0,001 \\
+		Estadio I                                         & 98 (93,3\%)    & 7 (6,7\%)           &                  \\
+		Estadio II                                        & 192 (85,3\%)   & 33 (14,7\%)         &                  \\
+		Estadio III                                       & 139 (78,1\%)   & 39 (21,9\%)         &                  \\
+		Estadio IV                                        & 48 (53,9\%)    & 41 (46,1\%)         &                  \\ \hline
+		\multicolumn{1}{l}{\textbf{Diagnóstico primario}} &                &                     & 0,25             \\
+		Adenocarcinoma                                    & 409 (79,1\%)   & 108 (20,9\%)        &                  \\
+		Adenocarcinoma mucinoso                           & 60 (75,9\%)    & 19 (24,1\%)         &                  \\
+		Otros                                             & 22 (91,7\%)    & 2 (8,3\%)           &                  \\ \hline
 	\end{tabular}
 \end{table}
 
-Para las variables con datos faltantes se ha realizado un análisis de casos completos (exclusión del análisis de los casos con tenían datos faltantes).  La mortalidad es muy similar en hombres y mujeres, sin existir diferencias significativas (p-valor: 0,993). Se detecta una dependencia entre el estado vital con las variables de grupo de edad y estadio con p-valores $<$ 0,001. En mayores de 70 años la mortalidad está cerca del 30\%, el doble de la mortalidad existente en otros grupos de edad. Hay grandes diferencias de mortalidad en función del estadio diagnosticado, que pasa del 6,7\% en el estadio I al 46,1\% en el estadio IV.
+Para las variables con datos faltantes se ha realizado un análisis de casos completos (exclusión del análisis de los casos con tenían datos faltantes).  La mortalidad es muy similar en hombres y mujeres, sin existir diferencias significativas (p-valor: 0,993). Se detecta una dependencia entre el estado vital con las variables de grupo de edad y estadio con p-valores $<$ 0,001. En mayores de 70 años la mortalidad está cerca del 30\%, el doble de la mortalidad existente en otros grupos de edad. Hay grandes diferencias de mortalidad en función del estadio diagnosticado, que pasa del 6,7\% en el estadio I al 46,1\% en el estadio IV. La mortalidad es baja (8,3\%) cuando el diagnóstico primario no es adenocarcinoma ni adenocarcinoma mucinoso.
 
 \section{Metodología}
 
