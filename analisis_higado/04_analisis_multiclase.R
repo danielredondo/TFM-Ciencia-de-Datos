@@ -152,7 +152,7 @@ DEGsInformation <- DEGsExtraction(expressionMatrix, as.factor(labels),
                                   svaCorrection = TRUE, svaMod = svaMod)
 toc()
 
-# Número de genes extraídos: 8533 de 
+# Número de genes extraídos: 8533
 print(nrow(DEGsInformation$DEGsMatrix))
 dim(expressionMatrix)
 
