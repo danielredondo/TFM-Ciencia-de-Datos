@@ -464,7 +464,7 @@ Para kNN, el mejor F1-Score (99,68\%) se obtiene con el método RF para 2 y 3 ge
 
 \subsection{Validación en test}
 
-Al validar en el conjunto de test el mejor modelo encontrado para SVM (4 genes con RF), RF (7 genes con mRMR) y kNN (2 genes con RF) se obtiene la misma clasificación: una predicción perfecta a falta de un falso positivo, esto es, una muestra de tejido normal que ha sido clasificada como tumor. El F1-Score en test es de 99,5\% con una precisión de 99,1\%.\\
+Al validar en el conjunto de test el mejor modelo encontrado para SVM (4 genes con RF), RF (7 genes con mRMR) y kNN (2 genes con RF) se obtiene la misma clasificación: una predicción perfecta a falta de un falso positivo, esto es, una muestra de tejido normal que ha sido clasificada como tumor. El F1-Score en test es de 99,5\% con una precisión de 99,1\%.
 
 \begin{center}
 	\textbf{Figura 17}. Matriz de confusión de los mejores modelos encontrados de SVM, RF y kNN en el conjunto de test.
@@ -488,6 +488,12 @@ En la Tabla 19 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 		kNN & \textbf{2 genes} RF    & $k$ = 5                                                             & 99,67          & \multicolumn{1}{c|}{99,42}          & 99,5          & 99,13          \\ \hline
 	\end{tabular}
 \end{table}
+
+\subsection{Conclusiones}
+
+Los valores de F1-score y precisión son muy altos en la validación cruzada en entrenamiento, superando el 90\% en el mejor modelo de cada algoritmo. Es relevante destacar la alta eficiencia del modelo de kNN, que consigue grandes resultados usando únicamente 2 genes: ANGPTL6 y PTH1R.\\
+
+En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre el gen ANGPTL6 y el cáncer de hígado, aunque está asociado a la cirrosis biliar primaria \cite{Liu2012}, una enfermedad del hígado. Para el gen PTH1R, se encuentran asociaciones con otros tipos de cáncer \cite{Michailidou2017, Michailidou2015} y con algunos factores de riesgo del cáncer de hígado como el consumo de alcohol \cite{biobank} o padecer diabetes tipo II \cite{Xue2018}. Tampoco existe relación directa existente entre el resto de genes seleccionados por los mejores modelos y el cáncer de hígado.\\
 
 \section{Resultados de clasificación multiclase para cáncer de hígado}
 
@@ -694,8 +700,6 @@ Al validar en el conjunto de test el mejor modelo encontrado para SVM y kNN (amb
 	\includegraphics[width=1\textwidth]{figuras/28_higado_multiclase_15_svm_matriz_confusion_mejor_metodo_mejorado.png} 
 \end{center}
 
-El modelo distingue bien entre tejido tumoral y tejido sano, pero comete 4 errores distinguiendo carcinomas hepatocelulares de colangiocarcinomas. Estos errores de clasificación pueden ser debidos a posibles similitudes biológicas entre ambos tipos de cáncer. \\
-
 La validación en el conjunto de test del mejor modelo encontrado para RF (6 genes con mRMR) se muestra en la Figura 29, siendo los resultados ligeramente inferiores a los obtenidos con SVM y kNN.\\
 
 \begin{center}
@@ -720,13 +724,19 @@ En la Tabla 25 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 	\end{tabular}
 \end{table}
 
+\subsection{Conclusiones}
+
+Los mejores modelos de SVM y kNN distinguen bien entre tejido tumoral y tejido sano, pero cometen 4 errores distinguiendo carcinomas hepatocelulares de colangiocarcinomas. Estos errores cometidos en la clasificación pueden ser debidos a similitudes biológicas entre ambos tipos de cáncer. El mejor modelo de RF distingue ligeramente mejor entre los dos tipos de cáncer, aunque predice como tejido normal dos casos de carcinoma hepatocelular.\\
+
+En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre los genes de los mejores modelos (7 mejores genes de mRMR) y el cáncer de hígado. Sin embargo, algunos genes están relacionados con sus factores de riesgo: PLXDC1 y AP2B1 con hábito tabáquico \cite{Liu2019} y CDH13 con consumo de alcohol \cite{Schumann2016}.
+
 \section{Resultados de clasificación biclase para cáncer de colon-recto}
 
 El código completo del análisis se muestra en el fichero \textit{\texttt{analisis\_cr/\linebreak03\_analisis\_biclase.R}} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.
 
 \subsection{Detección de biomarcadores}
 
-Para la clasificación biclase en cáncer de colon-recto se cuenta con 644 tumores y 51 muestras de tejido sano.\\
+Para la clasificación biclase en cáncer de colon-recto se cuenta con 644 tumores y 51 muestras de tejido sano (Tabla 26).\\
 
 \textbf{Tabla 26}. Distribución de tipos de muestra para el análisis de cáncer de colon-recto biclase.
 
@@ -756,7 +766,9 @@ Se extraen 6.836 genes que presentan en su expresión diferencias significativas
 	\end{tabular}
 \end{table}
 
+\begin{center}
 \textbf{Figura 30}. Diagrama de Sankey mostrando la partición entrenamiento-test realizada según tipo de muestra para el análisis de colon-recto biclase.
+\end{center}
 \begin{center}
 	\includegraphics[width=1\textwidth]{figuras/30_cr_biclase_05_sankey.png}
 \end{center}
@@ -874,60 +886,194 @@ En la Tabla 31 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 	\end{tabular}
 \end{table}
 
+\subsection{Conclusiones}
+
+Los mejores modelos de SVM, RF y kNN distinguen perfectamente entre tejido tumoral y tejido sano, sin ningún error, y utilizando menos de 5 genes en todos los casos.\\
+
+En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre los genes de los mejores modelos (4 mejores genes de mRMR y 3 mejores genes de RF) y el cáncer de colon-recto salvo para el gen MET \cite{Jiang1993}. Sin embargo, VSTM2A está relacionado con el cáncer de cérvix \cite{Takeuchi2019} y EPOP con el consumo de alcohol \cite{Liu2019, Brazel2019}. 
 
 \section{Resultados de clasificación multiclase para cáncer de colon-recto}
 
-\textcolor{red}{Nota: Para esta parte he hecho 2 análisis distintos y debería elegir uno de ellos. Los resumo mucho aquí abajo. Por coherencia con hígado multiclase, quizá debería usar el primero que os muestro (por diagnóstico primario), que además tiene mejores resultados, pero quería comentaros brevemente los resultados de los dos análisis. Y otra cosa... en este análisis he aumentado el número de genes a 20, porque los máximos F1 se suelen encontrar entre 13 y 18 genes. Si limito sólo a 10 genes, el mejor F1 se obtiene siempre para 10 genes.}\\
+El código completo del análisis se muestra en el fichero \textit{\texttt{analisis\_cr/\linebreak04\_analisis\_multiclase.R}} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020}.
 
-\textcolor{red}{Mostrar mejor el primero. Importante discutir las similitudes biológicas entre los adenocarcinomas.}\\
+\subsection{Detección de biomarcadores}
 
-\textcolor{red}{Para las conclusiones, comentario de Dani relevante: si tras hacer un análisis de este tipo, la clasificación no es buena, se puede proponer como trabajo futuro combinar expresión con microRNA o alteraciones somáticas para mejorarla.}
+Para la clasificación multiclase en cáncer de colon-recto se cuenta con 530 adenocarcinomas, 87 adenocarcinomas mucinosos y 51 muestras de tejido sano (Tabla 32).\\
 
-\subsection{Por diagnóstico primario: sanos vs adenocarcinoma vs adenocarcinoma mucinoso}
-
-Los dos principales diagnósticos primarios son: adenocarcinoma y adenocarcinoma mucinoso. El resto tienen menos de 10 casos.
+\textbf{Tabla 32}. Distribución de tipos de muestra para el análisis de cáncer de colon-recto multiclase.
 
 \begin{table}[H]
 	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		& N   \\ \hline
-		Adenocarcinoma, NOS     & 530 \\ \hline
-		Adenocarcinoma mucinoso & 87  \\ \hline
-		Tejido normal           & 51  \\ \hline
+	\begin{tabular}{lcc}
+		\cline{2-3}
+		& \textbf{Número de casos} & \textbf{Porcentaje} \\ \hline
+		\textbf{Adenocarc.}          & 530 & 79,3\%  \\
+		\textbf{Adenocarc. muc.} & 87  & 13,0\%  \\
+		\textbf{Tejido normal}           & 51  & 7,6\%   \\ \hline
+		\textbf{Total}                   & 668 & 100,0\%
 	\end{tabular}
 \end{table}
 
-La mejor matriz de confusión (RF con 17 genes elegidos con mRMR) es la siguiente:
+Se extraen 6.848 genes que presentan en su expresión diferencias significativas entre las distintas muestras de tumores y las de tejido sano. En la Tabla 33 se muestra la partición entrenamiento - test realizada y en la figura 35 se representa en un diagrama de Sankey.\\
 
-\begin{center}
-	\includegraphics[width=.7\textwidth]{figuras/auxiliares/cr_04_analisis_multiclase_primary_diagnosis/25_rf_matriz_confusion_mejor_metodo.png} 
-\end{center}
-
-\subsection{Por código: sanos vs colon vs recto + unión rectosigmoidea}
+\textbf{Tabla 33}. Distribución entrenamiento-test según tipo de muestra y proporción entre clases para el análisis de colon-recto multiclase.
 
 \begin{table}[H]
 	\centering
-	\begin{tabular}{|l|l|}
-		\hline
-		& N   \\ \hline
-		Colon (C18)    & 476 \\ \hline
-		Recto + Unión rectosigmoidea (C19-C20) & 163  \\ \hline
-		Tejido normal           & 51  \\ \hline
+	\begin{tabular}{lccc}
+		\cline{2-4}
+		\multicolumn{1}{c}{\textbf{}}                                                    & \textbf{Total} & \textbf{Entrenamiento} & \textbf{Test} \\ \hline
+		\textbf{Adenocarc.}                                                          & 530 (100\%)    & 398 (75,1\%)           & 132 (24,9\%)  \\
+		\textbf{Adenocarc. muc.}       & 87 (100\%)     & 66 (75,9\%)            & 21 (24,1\%)   \\
+		\textbf{Tejido sano}                                                             & 51 (100\%)     & 39 (76,5\%)            & 12 (23,5\%)   \\ \hline
+		\textbf{\begin{tabular}[c]{@{}l@{}}Proporción\\ adenoc./sanos\end{tabular}}      & 10,4           & 10,2                   & 11,0          \\
+		\textbf{\begin{tabular}[c]{@{}l@{}}Proporción\\ adenoc. muc./sanos\end{tabular}} & 1,7            & 1,7                    & 1,8           \\ \hline
 	\end{tabular}
 \end{table}
 
-La mejor matriz de confusión (kNN con 14 genes elegidos con RF) es la siguiente:
-
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/auxiliares/cr_04_analisis_multiclase_codigo/35_knn_matriz_confusion_mejor_metodo.png} 
+\textbf{Figura 35}. Diagrama de Sankey mostrando la partición entrenamiento-test realizada según tipo de muestra para el análisis de colon-recto multiclase.
 \end{center}
 
-(Probé también sanos vs C18 vs C19 vs C20, pero los resultados empeoraban mucho).
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/35_cr_multiclase_05_sankey.png}
+\end{center}
 
-\section{Conclusiones}
+\newpage
+A continuación se muestran los diez genes más relevantes encontrados por cada método de selección de características:\\
 
-mRMR y RF han demostrado ser buenos métodos de selección de características, siempre mejores que DA, aunque carecen del enfoque médico en el que se basa este último método.\\
+\textbf{Tabla 34}. Diez genes más relevantes según los distintos métodos de selección de características para el análisis de colon-recto multiclase.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{clll}
+		\hline
+		Ranking & \multicolumn{1}{c}{mRMR} & \multicolumn{1}{c}{RF} & \multicolumn{1}{c}{DA} \\ \hline
+		1       & GTF2IRD1                 & COL11A1                & CD79B                  \\
+		2       & ESM1                     & GTF2IRD1               & SCN4A                  \\
+		3       & MUC2                     & MUC2                   & BTK                    \\
+		4       & CLEC3B                   & CSE1L                  & BRCA1                  \\
+		5       & KRT80                    & SCGN                   & FAS                    \\
+		6       & SLC11A1                  & CA7                    & ROS1                   \\
+		7       & OSBPL3                   & PVT1                   & TNFRSF17               \\
+		8       & SLC39A10                 & ESM1                   & POLQ                   \\
+		9       & GDPD5                    & CPNE7                  & FGFR2                  \\
+		10      & CDH3                     & MDFI                   & ATP2B3                 \\ \hline
+	\end{tabular}
+\end{table}
+
+Los genes GTF2IRD1, ESM1 y MUC2 son comunes a dos algoritmos de selección de características: mRMR y RF.
+
+\subsection{Validación cruzada en entrenamiento}
+
+En las Tablas 35 y 36 se muestran los parámetros óptimos de SVM y kNN obtenidos tras el tuning.\\
+
+\textbf{Tabla 35}. Parámetros óptimos de SVM encontrados para los 10 genes más relevantes de cada método de selección de características.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{cccc}
+		\hline
+		\textbf{Parámetro} & \textbf{mRMR} & \textbf{RF} & \textbf{DA} \\ \hline
+		Coste                &    0,5 &    5     &  2       \\
+		Gamma               &     0,1   &     0,07   & 0,08        \\ \hline
+	\end{tabular}
+\end{table}
+
+\textbf{Tabla 36}. Número óptimo de vecinos encontrado para los 10 genes más relevantes de cada método de selección de características.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{cccc}
+		\cline{2-4}
+		\textbf{} & \textbf{mRMR} & \textbf{RF} & \textbf{DA} \\ \hline
+		k                &   19 &   7     &   23      \\ \hline
+	\end{tabular}
+\end{table}
+
+En la Figura 36 se muestran para SVM, RF y kNN el F1-Score medio obtenido en las 5 fold.
+
+\begin{center}
+	\textbf{Figura 36}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score de SVM, RF y kNN según método de selección de características y número de genes usados.
+\end{center}
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/36_cr_multiclase_heatmap_horizontal.pdf} 
+\end{center}
+
+El F1-Score es bastante inferior al obtenido en el resto de análisis. Los mejores modelos son:
+\begin{itemize}
+	\item Para SVM y kNN: RF con 3 genes.
+	\item Para RF: mRMR con 9 genes.
+\end{itemize}
+
+Se analiza la expresión de 3 genes más relevantes de RF y los 9 más relevantes de mRMR con diagramas de caja (Figuras 37 y 38).
+
+\newpage
+\begin{center}
+	\textbf{Figura 37}. Diagrama de caja de expresión de genes por tipo de muestra en los 3 genes más relevantes con RF como método de selección de características.
+\end{center}
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/37_cr_multiclase_34_knn_boxplots_mejor_metodo.png} 
+\end{center}
+
+\begin{center}
+	\textbf{Figura 38}. Diagrama de caja de expresión de genes por tipo de muestra en los 9 genes más relevantes con mRMR como método de selección de características.
+\end{center}
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/38_cr_multiclase_24_rf_boxplots_mejor_metodo.png} 
+\end{center}
+
+\subsection{Validación en test}
+
+Al validar en el conjunto de test los mejor modelo encontrado para SVM (3 genes con RF), RF (9 genes con mRMR) y kNN (3 genes con RF) se obtienen las matrices de confusión mostradas en las Figuras 39, 40 y 41.
+
+\begin{center}
+	\textbf{Figura 39}. Matriz de confusión del mejor modelo encontrado de SVM en el conjunto de test.
+\end{center}
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/39_cr_multiclase_15_svm_matriz_confusion_mejor_metodo.png} 
+\end{center}
+
+\newpage
+\begin{center}
+	\textbf{Figura 40}. Matriz de confusión del mejor modelo encontrado de RF en el conjunto de test.
+\end{center}
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/40_cr_multiclase_25_rf_matriz_confusion_mejor_metodo.png} 
+\end{center}
+
+\begin{center}
+	\textbf{Figura 41}. Matriz de confusión del mejor modelo encontrado de kNN en el conjunto de test.
+\end{center}
+
+\begin{center}
+	\includegraphics[width=1\textwidth]{figuras/41_cr_multiclase_35_knn_matriz_confusion_mejor_metodo.png} 
+\end{center}
+
+En la Tabla 37 se muestra un resumen de los mejores modelos obtenidos y su F1-Score y precisión en conjunto de entrenamiento y conjunto de test.\\
+
+\textbf{Tabla 37}. Resumen de clasificación multiclase para cáncer de colon-recto. Mejor modelo encontrado para SVM, RF y kNN con biomarcadores seleccionados, parámetros optimizados para cada algoritmo, F1-Score y precisión (Acc) en conjunto de entrenamiento y conjunto de test.
+
+\begin{table}[H]
+	\centering
+	\begin{tabular}{ccccc|cc}
+		\cline{2-7}
+		& Biomarcadores & Parámetros                                                        & F1 train & Acc train & F1 test & Acc test \\ \hline
+		\multicolumn{1}{l}{SVM} & \textbf{3 genes} RF   & \begin{tabular}[c]{@{}c@{}}$c$ = 5\\ $\gamma$ = 0,07\end{tabular} & 81,61    & 90,25     & 80,29   & 87,27    \\
+		RF                      &  \textbf{9 genes} mRMR  & --                                                                & 83,38    & 90,66     & 79,28   & 84,24    \\
+		kNN                     & \textbf{3 genes} RF  & k = 7                                                             & 82,46    & 90,86     & 78,06   & 84,85    \\ \hline
+	\end{tabular}
+\end{table}
+
+\subsection{Conclusiones}
+
+En el caso de la clasificación multiclase para cáncer de colon-recto, los resultados son los peores de los obtenidos en este trabajo. Se consigue una buena distinción entre tumores y sanos pero no entre los diferentes tipos de tumores, algo que puede deberse a las pocas diferencias biológicas existentes entre adenocarcinomas y adenocarcinomas mucinosos. Los adenocarcinomas mucinosos son aquellos adenocarcinomas en los que se producen grandes cantidades de mucina (proteínas que produce el colon para ayudar a lubricación), y si este proceso de producción de mucina no se traduce en grandes diferencias en la expresión de los genes, es complicado distinguir los dos tipos de cáncer. \\
+
+Se han analizado las enfermedades relacionadas con los mejores genes encontrados (3 genes con RF, 9 genes con mRMR) en la plataforma de Open Targets \cite{OpenTargets2020}. Se encuentra asociación del gen SLC11A1 con cáncer de colon-recto \cite{Law2019, Tanskanen2018, Huyghe2019}, así como con enfermedades intestinales inflamatorias \cite{Jostins2012, DeLange2017}. Dos de los genes están relacionados con otros tipos de cáncer: KRT80 con cáncer de pulmón \cite{Wang2016}  y piel \cite{biobank} y MUC2 con cáncer de mama \cite{Michailidou2017a} y próstata \cite{Schumacher2018}. Genes relacionados con factores de riesgo de cáncer de colon-recto son OSBPL3 con consumo de tabaco \cite{Liu2019} y GTF2IRD1 con consumo de alcohol \cite{biobank}.
+
+\section{Conclusiones finales}
+
+mRMR y RF han demostrado ser buenos métodos de selección de características, siempre mejores que DA, aunque carecen del enfoque médico en el que se basa este último método. Con menos de 10 genes se ha conseguido en general una buena clasificación, a menudo llegando a usar 2 ó 3 genes.\\
 
 Los 3 algoritmos de clasificación propuestos (SVM, RF y kNN) han obtenido resultados muy similares, tanto para problemas biclase como multiclase. Una de las ventajas de trabajar con varios algoritmos de clasificación es que se puede escoger aquel que utiliza el menor número de genes, por las ventajas que ello conlleva (menor coste computacional, mayor interpretabilidad).\\
 

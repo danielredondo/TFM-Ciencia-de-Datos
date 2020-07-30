@@ -1270,4 +1270,4 @@ toc()
 
 # session_info para reproducibilidad
 devtools::session_info()  
-#writeLines(capture.output(devtools::session_info()), "../../../session_info.txt")
+writeLines(capture.output(devtools::session_info()), "../../../session_info.txt")
