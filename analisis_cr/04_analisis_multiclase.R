@@ -13,7 +13,7 @@ numero_de_genes <- 10
 setwd("/Users/daniel/Dropbox/Transporte_interno/Máster/Ciencia de Datos/")
 
 # Carpeta de datos
-setwd("TFM/Analisis_higado/data/")
+setwd("TFM/Analisis_cr/data/")
 
 # ----- Carga de paquetes -----
 
@@ -56,7 +56,9 @@ clinical <- read_delim("../data/clinical.cart.2020-06-11/clinical.tsv", "\t", es
 
 # Anexar morfología
 tumores <- samplesInfo %>% filter(Sample.Type == "Primary Tumor")
-nrow(tumores) == nrow(clinical) # Comprobación: todos los tumores tienen datos clínicos
+nrow(tumores) == nrow(clinical) # Comprobación: no todos los tumores tienen datos clínicos: sólo 620 de 644
+nrow(tumores)
+nrow(clinical)
 
 tumores <- left_join(x = tumores, y = clinical, by = c("Case.ID" = "case_submitter_id"))
 
@@ -65,16 +67,22 @@ samplesInfo <- samplesInfo %>% filter(Sample.Type != "Primary Tumor") %>%
   rbind(tumores)
 
 # Recodificación morfologías
-table(samplesInfo$primary_diagnosis)
-samplesInfo[samplesInfo$primary_diagnosis %in% c("Combined hepatocellular carcinoma and cholangiocarcinoma",
-                                           "Clear cell adenocarcinoma, NOS"), "primary_diagnosis"] <- "otros"
+table(samplesInfo$primary_diagnosis, useNA = "always")
+samplesInfo[samplesInfo$primary_diagnosis %in% c("Adenocarcinoma in tubolovillous adenoma",
+                                                 "Adenocarcinoma with mixed subtypes",
+                                                 "Adenocarcinoma with neuroendocrine differentiation",
+                                                 "Adenosquamous carcinoma",
+                                                 "Carcinoma, NOS",
+                                                 "Dedifferentiated liposarcoma",
+                                                 "Malignant lymphoma, large B-cell, diffuse, NOS",
+                                                 "Papillary adenocarcinoma, NOS",
+                                                 "Tubular adenocarcinoma"), "primary_diagnosis"] <- "otros"
+samplesInfo[is.na(samplesInfo$primary_diagnosis), "primary_diagnosis"] <- "otros"
 samplesInfo[samplesInfo$primary_diagnosis == "Solid Tissue Normal", "primary_diagnosis"] <- "tejido_normal"
-samplesInfo[samplesInfo$primary_diagnosis %in% c("Hepatocellular carcinoma, NOS", "Hepatocellular carcinoma, clear cell type",
-                                                 "Hepatocellular carcinoma, fibrolamellar", "Hepatocellular carcinoma, spindle cell variant"),
-            "primary_diagnosis"] <- "carc_hepatocelular"
-samplesInfo[samplesInfo$primary_diagnosis == "Cholangiocarcinoma", "primary_diagnosis"] <- "colangiocarcinoma"
+samplesInfo[samplesInfo$primary_diagnosis == "Adenocarcinoma, NOS", "primary_diagnosis"] <- "adenocarcinoma"
+samplesInfo[samplesInfo$primary_diagnosis == "Mucinous adenocarcinoma", "primary_diagnosis"] <- "adenocarc_muc"
 
-table(samplesInfo$primary_diagnosis)
+table(samplesInfo$primary_diagnosis, useNA = "always")
 
 # Quitar morfología de clases minoritarias
 samplesInfo <- samplesInfo %>% filter(primary_diagnosis != "otros")
@@ -101,7 +109,7 @@ write.csv(SamplesDataFrame, file = "04_SamplesDataFrame.csv")
 
 # ----- Unificación de ficheros en formato matriz -----
 
-tic("countsToMatrix") # 85 segundos
+tic("countsToMatrix") # 130 segundos
 countsInformation <- countsToMatrix("04_SamplesDataFrame.csv", extension = "counts")
 toc()
 
@@ -124,14 +132,14 @@ toc()
 
 png(filename = "../../04_analisis_multiclase/01_boxplot_all.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(expressionMatrix, labels, mode = "boxplot", colours = c("red", "orange", "green"))
-legend(1, 29, c("colangiocarcinoma", "carc_hepatocelular", "tejido_normal"),
+legend(1, 29, c("adenocarcinoma", "adenocarc_muc", "tejido_normal"),
        fill = c("red", "orange", "green"), xpd = TRUE)
 title("Boxplot de matriz de expresión para todos los genes")
 dev.off()
 
 png(filename = "../../04_analisis_multiclase/02_boxplot_all_ordered.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(expressionMatrix, labels, mode = "orderedBoxplot", colours = c("red", "orange", "green"))
-legend(1, 29, c("colangiocarcinoma", "carc_hepatocelular", "tejido_normal"),
+legend(1, 29, c("adenocarcinoma", "adenocarc_muc", "tejido_normal"),
        fill = c("red", "orange", "green"), xpd = TRUE)
 title("Boxplot de matriz de expresión para todos los genes")
 dev.off()
@@ -152,9 +160,8 @@ DEGsInformation <- DEGsExtraction(expressionMatrix, as.factor(labels),
                                   svaCorrection = TRUE, svaMod = svaMod)
 toc()
 
-# Número de genes extraídos: 8533
+# Número de genes extraídos: 6848
 print(nrow(DEGsInformation$DEGsMatrix))
-dim(expressionMatrix)
 
 topTable <- DEGsInformation$Table
 DEGsMatrix <- DEGsInformation$DEGsMatrix
@@ -171,11 +178,11 @@ dev.off()
 
 # Mapa de calor para todas las muestras de los primeros genes
 png(filename = "../../04_analisis_multiclase/04_heatmap_primeros_genes.png", width = 13, height = 8, units = "in", res = 300)
-DEGsMatrix_heatmap <- DEGsMatrix[, c(which(labels == "colangiocarcinoma"),
-                                     which(labels == "carc_hepatocelular"),
+DEGsMatrix_heatmap <- DEGsMatrix[, c(which(labels == "adenocarc_muc"),
+                                     which(labels == "adenocarcinoma"),
                                      which(labels == "tejido_normal"))]
-labels_heatmap <- labels[c(which(labels == "colangiocarcinoma"),
-                           which(labels == "carc_hepatocelular"),
+labels_heatmap <- labels[c(which(labels == "adenocarc_muc"),
+                           which(labels == "adenocarcinoma"),
                            which(labels == "tejido_normal"))]
 dataPlot(DEGsMatrix_heatmap[1:numero_de_genes, ], labels_heatmap, mode = "heatmap", colours = c("red", "orange", "green"))
 dev.off()
@@ -198,14 +205,14 @@ labels_test  <- labels[-indices]
 # Número de casos
 # Train
 table(labels_train)
-entr_car <- table(labels_train)[1]
-entr_col <- table(labels_train)[2]
+entr_car <- table(labels_train)[2]
+entr_col <- table(labels_train)[1]
 entr_nor <- table(labels_train)[3]
 
 # Test
 table(labels_test)
-test_car <- table(labels_test)[1]
-test_col <- table(labels_test)[2]
+test_car <- table(labels_test)[2]
+test_col <- table(labels_test)[1]
 test_nor <- table(labels_test)[3]
 
 # Total
@@ -220,24 +227,24 @@ labels_test %>% table %>% prop.table %>% round(3) * 100
 labels %>% table %>% prop.table %>% round(3) * 100
 
 # Diagrama de Sankey
-datos_sankey <- data.frame(tipo = c(paste0("Carcinoma hepatocelular\n", entr_car + test_car, " casos"),
-                                    paste0("Carcinoma hepatocelular\n", entr_car + test_car, " casos"),
-                                    paste0("Colangiocarcinoma\n", entr_col + test_col, " casos"),
-                                    paste0("Colangiocarcinoma\n", entr_col + test_col, " casos"),
+datos_sankey <- data.frame(tipo = c(paste0("Adenocarcinoma\n", entr_car + test_car, " casos"),
+                                    paste0("Adenocarcinoma\n", entr_car + test_car, " casos"),
+                                    paste0("Adenocarcinoma mucinoso\n", entr_col + test_col, " casos"),
+                                    paste0("Adenocarcinoma mucinoso\n", entr_col + test_col, " casos"),
                                     paste0("Tejido normal\n", entr_nor + test_nor, " casos"),
                                     paste0("Tejido normal\n", entr_nor + test_nor, " casos")),
-                           traintest = c(paste0("Entrenamiento\n", entr_col, " colangiocarcinoma\n", entr_car, " carcinoma hepatocelular\n", entr_nor, " tejido normal"),
-                                         paste0("Test\n", test_col, " colangiocarcinoma\n", test_car, " carcinoma hepatocelular\n", test_nor, " tejido normal"),
-                                         paste0("Entrenamiento\n", entr_col, " colangiocarcinoma\n", entr_car, " carcinoma hepatocelular\n", entr_nor, " tejido normal"),
-                                         paste0("Test\n", test_col, " colangiocarcinoma\n", test_car, " carcinoma hepatocelular\n", test_nor, " tejido normal"),
-                                         paste0("Entrenamiento\n", entr_col, " colangiocarcinoma\n", entr_car, " carcinoma hepatocelular\n", entr_nor, " tejido normal"),
-                                         paste0("Test\n", test_col, " colangiocarcinoma\n", test_car, " carcinoma hepatocelular\n", test_nor, " tejido normal")),
+                           traintest = c(paste0("Entrenamiento\n", entr_col, " Adenocarcinoma mucinoso\n", entr_car, " Adenocarcinoma\n", entr_nor, " Tejido normal"),
+                                         paste0("Test\n", test_col, " Adenocarcinoma mucinoso\n", test_car, " Adenocarcinoma\n", test_nor, " Tejido normal"),
+                                         paste0("Entrenamiento\n", entr_col, " Adenocarcinoma mucinoso\n", entr_car, " Adenocarcinoma\n", entr_nor, " Tejido normal"),
+                                         paste0("Test\n", test_col, " Adenocarcinoma mucinoso\n", test_car, " Adenocarcinoma\n", test_nor, " Tejido normal"),
+                                         paste0("Entrenamiento\n", entr_col, " Adenocarcinoma mucinoso\n", entr_car, " Adenocarcinoma\n", entr_nor, " Tejido normal"),
+                                         paste0("Test\n", test_col, " Adenocarcinoma mucinoso\n", test_car, " Adenocarcinoma\n", test_nor, " Tejido normal")),
                            value = c(entr_car, test_car, entr_col, test_col, entr_nor, test_nor))
 
 # Pequeño reorden para que mejorar la presentación de los datos
 datos_sankey$tipo <- factor(datos_sankey$tipo,
-                            levels = c(paste0("Colangiocarcinoma\n", entr_col + test_col, " casos"),
-                                       paste0("Carcinoma hepatocelular\n", entr_car + test_car, " casos"),
+                            levels = c(paste0("Adenocarcinoma mucinoso\n", entr_col + test_col, " casos"),
+                                       paste0("Adenocarcinoma\n", entr_car + test_car, " casos"),
                                        paste0("Tejido normal\n", entr_nor + test_nor, " casos")),
                             ordered = T)
 
@@ -279,13 +286,13 @@ rfRanking <- rfRanking[1:numero_de_genes]
 daRanking <- NULL
 
 daRanking <- featureSelection(particion.entrenamiento, labels_train, colnames(particion.entrenamiento),
-                              mode = "da", disease = "liver cancer")
+                              mode = "da", disease = "colorectal cancer")
 
 # Si ha habido algún problema en la llamada a la API, se repite tras un descanso de 5 segundos
 while(is.null(daRanking)){
   Sys.sleep(5)
   daRanking <- featureSelection(particion.entrenamiento, labels_train, colnames(particion.entrenamiento),
-                                mode = "da", disease = "liver cancer")
+                                mode = "da", disease = "colorectal cancer")
 }
 daRanking <- names(daRanking[1:numero_de_genes])
 
@@ -296,13 +303,13 @@ write.csv2(genes, file = "../../04_analisis_multiclase/genes.csv")
 
 numero_folds <- 5
 
-# mRMR: 24 segundos
+# mRMR: 38 segundos
 tic("svm_mrmr")
 results_cv_svm_mrmr <- svm_trn(particion.entrenamiento, labels_train, mrmrRanking,
                                numFold = numero_folds)
 toc()
 
-# random forest: 22 segundos
+# random forest: 36 segundos
 tic("svm_rf")
 results_cv_svm_rf <- svm_trn(particion.entrenamiento, labels_train, rfRanking,
                              numFold = numero_folds)
@@ -420,7 +427,7 @@ for(i in 1:length(genes_a_usar)){
 }
 
 which(f1 == max(f1), arr.ind = TRUE)
-# El mejor F1-score se obtiene con 7 genes en mRMR
+# El mejor F1-score se obtiene con 10 genes en mRMR
 
 # Tablas y gráficos precisión y F1-score
 mejores <- which(f1 == max(f1), arr.ind = TRUE)
@@ -548,15 +555,15 @@ ggsave(filename = "../../04_analisis_multiclase/12_svm_especificidad.png", width
 
 # ----- SVM: Resultados gráficos en train con el mejor método ------
 
-mejores_genes_svm <- mrmrRanking[1:7]
+mejores_genes_svm <- rfRanking[1:3]
 
 # Se grafican boxplots y mapas de calor con el mejor método
 png(filename = "../../04_analisis_multiclase/13_svm_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
-DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_svm, c(which(labels == "colangiocarcinoma"),
-                                                      which(labels == "carc_hepatocelular"),
+DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_svm, c(which(labels == "adenocarc_muc"),
+                                                      which(labels == "adenocarcinoma"),
                                                       which(labels == "tejido_normal"))]
-labels_heatmap <- labels[c(which(labels == "colangiocarcinoma"),
-                           which(labels == "carc_hepatocelular"),
+labels_heatmap <- labels[c(which(labels == "adenocarc_muc"),
+                           which(labels == "adenocarcinoma"),
                            which(labels == "tejido_normal"))]
 dataPlot(DEGsMatrix_heatmap[mejores_genes_svm, ], labels_heatmap, mode = "heatmap", colours = c("red", "orange", "green"))
 dev.off()
@@ -583,7 +590,7 @@ results_svm_da <- svm_test(train = particion.entrenamiento, labels_train,
                            bestParameters = results_cv_svm_da$bestParameters)
 
 # Matriz de confusión mejor clasificador
-tabla <- results_svm_mrmr$cfMats[[7]]$table
+tabla <- results_svm_rf$cfMats[[3]]$table
 
 # Gráficamente
 png(filename = "../../04_analisis_multiclase/15_svm_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
@@ -695,15 +702,15 @@ colnames(f1) <- c("MRMR", "RF", "DA")
 
 for(i in 1:length(genes_a_usar)){
   f1[i, ] <- 100 * c(results_cv_rf_mrmr$F1Info$meanF1[genes_a_usar[i]],
-                       results_cv_rf_rf$F1Info$meanF1[genes_a_usar[i]],
-                       results_cv_rf_da$F1Info$meanF1[genes_a_usar[i]])
+                     results_cv_rf_rf$F1Info$meanF1[genes_a_usar[i]],
+                     results_cv_rf_da$F1Info$meanF1[genes_a_usar[i]])
   l_f1[i, ] <- paste0(sprintf(f1[i, ], fmt = '%#.2f'), 
-                        " (",
-                        sprintf(100 * c(results_cv_rf_mrmr$F1Info$standardDeviation[i],
-                                        results_cv_rf_rf$F1Info$standardDeviation[i],
-                                        results_cv_rf_da$F1Info$standardDeviation[i]
-                        ), fmt = '%#.1f'), 
-                        ")")
+                      " (",
+                      sprintf(100 * c(results_cv_rf_mrmr$F1Info$standardDeviation[i],
+                                      results_cv_rf_rf$F1Info$standardDeviation[i],
+                                      results_cv_rf_da$F1Info$standardDeviation[i]
+                      ), fmt = '%#.1f'), 
+                      ")")
 }
 
 which(f1 == max(f1), arr.ind = TRUE)
@@ -838,18 +845,18 @@ ggplot(data, aes(Var1, Var2, fill = value, label = l_spec)) +
 
 ggsave(filename = "../../04_analisis_multiclase/22_rf_especificidad.png", width = 8, height = 8)
 
-# El mejor ranking es mRMR con 6 genes
-mejores_genes_rf <- mrmrRanking[1:6]
+# El mejor ranking es mRMR con 9 genes
+mejores_genes_rf <- mrmrRanking[1:9]
 
 # ----- RF: Resultados gráficos en train con el mejor método ------
 
 # Se grafican boxplots y mapas de calor con el mejor método
 png(filename = "../../04_analisis_multiclase/23_rf_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
-DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_rf, c(which(labels == "colangiocarcinoma"),
-                                                     which(labels == "carc_hepatocelular"),
+DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_rf, c(which(labels == "adenocarc_muc"),
+                                                     which(labels == "adenocarcinoma"),
                                                      which(labels == "tejido_normal"))]
-labels_heatmap <- labels[c(which(labels == "colangiocarcinoma"),
-                           which(labels == "carc_hepatocelular"),
+labels_heatmap <- labels[c(which(labels == "adenocarc_muc"),
+                           which(labels == "adenocarcinoma"),
                            which(labels == "tejido_normal"))]
 dataPlot(DEGsMatrix_heatmap[mejores_genes_rf, ], labels_heatmap, mode = "heatmap", colours = c("red", "orange", "green"))
 dev.off()
@@ -873,7 +880,7 @@ results_rf_da <- rf_test(train = particion.entrenamiento, labels_train,
                          test = particion.test, labels_test, daRanking)
 
 # Matriz de confusión mejor clasificador
-tabla <- results_rf_mrmr$cfMats[[6]]$table
+tabla <- results_rf_mrmr$cfMats[[9]]$table
 
 # Gráficamente
 png(filename = "../../04_analisis_multiclase/25_rf_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
@@ -1136,18 +1143,18 @@ ggsave(filename = "../../04_analisis_multiclase/32_knn_especificidad.png", width
 
 # --- Mejor método en CV basado en F1-score
 
-# El mejor ranking es mrmr con 7 genes
-mejores_genes_knn <- mrmrRanking[1:7]
+# El mejor ranking es mrmr con 9 genes
+mejores_genes_knn <- rfRanking[1:3]
 
 # ----- kNN: Resultados gráficos en train con el mejor método ------
 
 # Se grafican boxplots y mapas de calor con el mejor método
 png(filename = "../../04_analisis_multiclase/33_knn_heatmap_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
-DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_knn, c(which(labels == "colangiocarcinoma"),
-                                                      which(labels == "carc_hepatocelular"),
+DEGsMatrix_heatmap <- DEGsMatrix[mejores_genes_knn, c(which(labels == "adenocarc_muc"),
+                                                      which(labels == "adenocarcinoma"),
                                                       which(labels == "tejido_normal"))]
-labels_heatmap <- labels[c(which(labels == "colangiocarcinoma"),
-                           which(labels == "carc_hepatocelular"),
+labels_heatmap <- labels[c(which(labels == "adenocarc_muc"),
+                           which(labels == "adenocarcinoma"),
                            which(labels == "tejido_normal"))]
 dataPlot(DEGsMatrix_heatmap[mejores_genes_knn, ], labels_heatmap, mode = "heatmap", colours = c("red", "orange", "green"))
 dev.off()
@@ -1174,7 +1181,7 @@ results_knn_da <- knn_test(train = particion.entrenamiento, labels_train,
                            bestK = results_cv_knn_da$bestK)
 
 # Matriz de confusión mejor clasificador
-tabla <- results_knn_mrmr$cfMats[[7]]$table
+tabla <- results_knn_rf$cfMats[[3]]$table
 
 # Gráficamente
 png(filename = "../../04_analisis_multiclase/35_knn_matriz_confusion_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)

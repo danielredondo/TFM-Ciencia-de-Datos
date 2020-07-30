@@ -531,7 +531,7 @@ labels_heatmap <- labels[c(which(labels == "Primary Tumor"),
 dataPlot(DEGsMatrix_heatmap[mejores_genes_svm, ], labels_heatmap, mode = "heatmap", colours = c("red", "green"))
 dev.off()
 
-png(filename = "../../03_analisis_biclase/17_svm_boxplots_mejor_metodo.png", width = 13, height = z, units = "in", res = 300)
+png(filename = "../../03_analisis_biclase/17_svm_boxplots_mejor_metodo.png", width = 13, height = 8, units = "in", res = 300)
 dataPlot(DEGsMatrix[mejores_genes_svm, ], labels, mode = "genesBoxplot", colours = c("red", "green"), columnasGenesBoxplot = 2)
 dev.off()
 
@@ -1266,4 +1266,4 @@ toc()
 
 # session_info para reproducibilidad
 devtools::session_info()  
-writeLines(capture.output(devtools::session_info()), "../../../session_info.txt")
+# writeLines(capture.output(devtools::session_info()), "../../../session_info.txt")
