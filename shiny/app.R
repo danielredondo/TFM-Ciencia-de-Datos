@@ -1,6 +1,5 @@
 # Mejoras:
 # Añadir tumores y sanos en la parte derecha del gráfico de Sankey
-# da debe tener en cuenta la enfermedad!!
 
 library(shiny)
 library(shinydashboard)
@@ -68,9 +67,9 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               random forest and kNN with 5-fold cross-validation.",
               h3(tags$b("Results")),
               "The best binary classifiers are validated with excellent results for liver cancer (F1-Score in test: 99.5%) and colon-rectum cancer
-              (F1-Score: 100%). Slightly lower evaluation measures are obtained in the best models for multiclass classification, both in liver
-              (F1-Score: 91.8%) and in colon-rectum (F1-Score: XX%).",
-              br(),
+              (F1-Score: 100%). Lower evaluation measures are obtained in the best models for multiclass classification, both in liver (F1-Score:
+              91.8%) and in colon-rectum (F1-Score: 79.3%). ",
+              br(), br(),
               "A web application has been developed, BiomarkeRs, that implements transcriptomic analysis and can be useful for people
               without previous knowledge of programming.",
               h3(tags$b("Conclusions")),
@@ -127,7 +126,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               
               actionButton(inputId = "boton_genes",
                            label = "Select most relevant genes",
-                           icon = icon("fas fa-calculator", lib = "font-awesome"),
+                           icon = icon("dna", lib = "font-awesome"),
                            width = "50%"),
               br(),
               br(),
@@ -148,20 +147,31 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               h1("Model training"),
               
               # Elegir MRMR/RF/DA, se muestra MRMR por ahora
-              selectInput("tipo_entrenamiento",
+              selectInput("fs_algorithm",
                           label = "Feature selection algorithm",
-                          choices = c("mRMR", "rf", "da"),
+                          choices = c("mRMR", "RF", "DA"),
                           selected = "mRMR",
                           width = "50%"),
               
+              # Método de clasificación
+              selectInput("cl_algorithm",
+                          label = "Classification algorithm",
+                          choices = c("SVM", "RF", "kNN"),
+                          selected = "SVM",
+                          width = "50%"),
+              
               # Se puede añadir número de CV que se hacen
-              selectInput("numero_folds",
+              selectInput("number_folds",
                           label = "Number of folds",
                           choices = c(3, 5, 10),
                           selected = 5,
                           width = "50%"),
               
-              tableOutput("mejores_parametros"),
+              actionButton(inputId = "boton_model_training",
+                           label 
+                           = "Train model",
+                           icon = icon("play", lib = "font-awesome"),
+                           width = "50%"),
               
               plotOutput("resultados_entrenamiento")
               
@@ -172,7 +182,9 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
       # Tab 6
       tabItem(tabName = "enfermedades",
             h1("Related diseases"),
-            "Aquí irá un campo para poner un gen, y se devolverán los resultados de KnowSeq::DEGsToDiseases"
+            textInput(inputId = "gene_for_disease", label = "Gene", value = "TERT", width = "50%"),
+            
+            dataTableOutput("gene_for_disease_table")
       ),
       
       # Tab 7
@@ -201,9 +213,9 @@ options(shiny.maxRequestSize = 15*1024^2)
 
 server <- function(input, output){
 
-  #Sys.sleep(2)
-  # give time for wait screen to show
-  #waiter_hide()
+  values <- reactiveValues(ranking = NULL)
+  
+  # Server of tab: Data loading ------
   
   observeEvent(input$boton_importar, {
     
@@ -297,8 +309,7 @@ server <- function(input, output){
   }) # Cierre botón import
   
   
-  # Esto se puede mejorar para que calcule los mejores 50 genes y luego sólo tenga que hacer un subset de esa tabla
-  # seleccionando sólo los primeros X elementos, para que reaccione antes la aplicación web.
+  # Server of tab: Genes selection ------
   
   w <- Waiter$new(html = span(""))
   
@@ -333,16 +344,17 @@ server <- function(input, output){
     w$hide()
 
     # Método mRMR (mínima redundancia, máxima relevancia)
-    w <- Waiter$new(html = tagList(spin_loaders(39, color = "white", style = "scale: 4"),
+    w <- Waiter$new(html = tagList(spin_folding_cube(),
                                    span(br(), br(), br(), h4("Running mRMR algorithm..."),
                                         style="color:white;")))
     w$show()
     mrmrRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
                                     mode = "mrmr")
+    mrmrRanking <- names(mrmrRanking)
     w$hide()
     
     # Método random forest
-    w <- Waiter$new(html = tagList(spin_loaders(39, color = "white", style = "scale: 4"),
+    w <- Waiter$new(html = tagList(spin_folding_cube(),
                                    span(br(), br(), br(), h4("Running RF algorithm..."),
                                         style="color:white;")))
     w$show()
@@ -351,7 +363,7 @@ server <- function(input, output){
     w$hide()
     
     # Método DA
-    w <- Waiter$new(html = tagList(spin_loaders(39, color = "white", style = "scale: 4"),
+    w <- Waiter$new(html = tagList(spin_folding_cube(),
                                    span(br(), br(), br(), h4("Running DA algorithm..."),
                                         style="color:white;")))
     w$show()
@@ -359,19 +371,25 @@ server <- function(input, output){
     
     daRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
                                   mode = "da", disease = input$disease_da)
+    daRanking <- names(daRanking)
     
-    # Si ha habido algún problema en la llamada a la API, se repite tras un descanso de 5 segundos
+    # Si ha habido algún problema en la llamada a la API, se repite tras un descanso de 3 segundos
     while(is.null(daRanking)){
-      Sys.sleep(5)
+      Sys.sleep(3)
       daRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
                                     mode = "da", disease = input$disease_da)
+      daRanking <- names(daRanking)
     }
-    
-
+  
     w$hide()
     
+    
+  values$ranking <- cbind(mrmrRanking, rfRanking, daRanking)
+    
+  # Rankings: extracción del número de genes especificado por el usuario
+    
   output$genes_mrmr <- renderTable({
-    mrmrRanking <- names(mrmrRanking)[1:input$numero_genes]
+    mrmrRanking <- mrmrRanking[1:input$numero_genes]
     return(mrmrRanking)
   }, colnames = FALSE)
   
@@ -381,49 +399,98 @@ server <- function(input, output){
   }, colnames = FALSE)
   
   output$genes_da <- renderTable({
-    daRanking <- names(daRanking)[1:input$numero_genes]
+    daRanking <- daRanking[1:input$numero_genes]
     return(daRanking)
   }, colnames = FALSE)
 
   }) # Cierre botón calcular genes
 
-  
   # Leer
+  # https://stackoverflow.com/questions/29716868/r-shiny-how-to-get-an-reactive-data-frame-updated-each-time-pressing-an-actionb
   # https://stackoverflow.com/questions/33671915/r-shiny-server-how-to-keep-variable-value-in-observeevent-function
   # https://groups.google.com/g/shiny-discuss/c/UVL3uENQ88k
   # https://shiny.rstudio.com/articles/action-buttons.html
   # para ejecutar sólo una vez particion.entrenamiento y demás funciones.
-  
-  
-  # Método mRMR (mínima redundancia, máxima relevancia)
-  mrmrRanking <- reactive({
-    aux <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
-                                  mode = "mrmr")
-    return(names(aux)[1:input$numero_genes])
-  })
-                          
-  
-  results_trn <- reactive({
-    # Reestructurar para no calcular dos veces mrmrranking!
 
-    svm_trn(particion.entrenamiento(), labels_train(), mrmrRanking(),
-           numFold = as.numeric(input$numero_folds))
-  })
+  # Server of tab: Model training ------
   
-  output$mejores_parametros <- renderTable({
-    as.data.frame(results_trn()$bestParameters)
-    }, rownames = TRUE)
+  w2 <- Waiter$new(html = tagList(spin_folding_cube(),
+                                 span(br(), br(), br(), h4("Training model..."),
+                                 style="color:white;")))  
   
-  output$resultados_entrenamiento <- renderPlot({
+  observeEvent(input$boton_model_training, {
     
-    # Quizá mejor con F1
-    dataPlot(results_trn()$accMatrix[, 1:12], colours = rainbow(as.numeric(input$numero_folds)),
-             mode = "classResults",
-             main = "mRMR - Accuracy for each fold",
-             xlab = "Genes",
-             ylab = "Accuracy")
+    w2$show()
     
-  })
+    # Si se ha seleccionado un fichero, se importa
+    load(input$archivo_rdata$datapath)
+    # Extraer labels
+    labels <- matriz[1, ] %>% as.vector
+    # Extraer matriz
+    DEGsMatrix <- matriz[2:nrow(matriz), ]
+    filas <- rownames(DEGsMatrix)
+    DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
+    rownames(DEGsMatrix) <- filas
+    # Crear DEGsMatrixML
+    DEGsMatrixML <- t(DEGsMatrix)
+    
+    # Partición 75% / 25% con balanceo de clase
+    set.seed(31415)
+    indices <- reactive(createDataPartition(labels, p = input$porcentaje_entrenamiento / 100, list = FALSE))
+    particion <- reactive(list(training = DEGsMatrixML[indices(), ], test = DEGsMatrixML[-indices(), ]))
+    
+    # Conjuntos
+    particion.entrenamiento <- reactive(particion()$training)
+    particion.test <- reactive(particion()$test)
+    
+    # Labels
+    labels_train <- reactive(labels[indices()])
+    labels_test  <- reactive(labels[-indices()])
+    w$hide()
+    
+    if(input$fs_algorithm == "mRMR"){
+      ranking <- values$ranking[1:input$numero_genes, 1]
+    }
+    
+    if(input$fs_algorithm == "RF"){
+      ranking <- values$ranking[1:input$numero_genes, 2]
+    }
+    
+    if(input$fs_algorithm == "DA"){
+      ranking <- values$ranking[1:input$numero_genes, 3]
+    }
+    
+    # Debugging
+    print("values$ranking")
+    print(values$ranking)
+    print("----")
+    print("ranking")
+    print(ranking)
+    
+  }) 
+  
+  
+  
+  output$mejores_parametros <- renderTable(iris)
+  
+  
+  
+  
+  
+  
+  
+  # Server of tab: Related diseases ------
+  output$gene_for_disease_table <- renderDataTable(
+    {dis <- as.data.frame(DEGsToDiseases(input$gene_for_disease, size = 10000))
+
+    for(i in 2:9){
+      dis[, i] <- round(as.numeric(dis[, i]), 2)
+    }
+    
+    names(dis) <- c("Disease", "Overall score", "Literature", "RNA Expr.", "Genetic", "Somatic Mut.", "Drug", "Animal", "Pathways")
+    return(dis)}
+    , options = list(pageLength = 10)
+  )
   
 }
 
