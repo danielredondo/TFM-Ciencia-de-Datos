@@ -240,7 +240,7 @@ Tras descargar los ficheros de GDC Portal y descomprimirlos con \texttt{R} (fich
 
 Se extraen los genes diferencialmente expresados (DEG, por sus siglas en inglés: \textit{Differentially Expressed Genes}) utilizando un p-valor de p = 0,001 y controlando por el efecto batch usando el método SVA (\textit{Surrogate Variable Analysis}) \cite{Leek2012}. El efecto batch es un sesgo que se puede producir al procesar las muestras biológicas por tandas, y puede ocurrir por varias razones como las condiciones del laboratorio, diferencias entre personal, o incluso la hora del día a la que se procesan las muestras \cite{Goh2017, Leek2010}. Para la extracción de DEG se fija además un LFC (\textit{log fold change}) de 1, que se puede entender como que un gen sólo se considera un DEG si una de las dos expresiones de genes (ya sea de tumores o tejidos sanos) es al menos el doble que la otra. Finalmente, los resultados se extraen a una matriz de DEGs.\\
 
-\textcolor{red}{DUDA: ¿La extracción de genes relevantes (DEG) no debería hacerse sólo con datos de entrenamiento? He visto en la literatura que también se hace como en este trabajo (extracción de DEGs antes de partición train-test) \url{https://www.nature.com/articles/s41598-020-60595-1} pero no entiendo bien el por qué. ¿Cómo se puede justificar?}\\
+Aunque esta técnica es habitual \cite{Lee2020}, se podría mejorar haciendo la extracción de DEGS mediante validación cruzada para diferentes conjuntos, seleccionando como DEGS aquellos que han sido identificados como tal en todos los folds.
 
 \subsubsection{Partición entrenamiento-test}
 
