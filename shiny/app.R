@@ -1,6 +1,8 @@
 # Mejoras:
 # Añadir tumores y sanos en la parte derecha del gráfico de Sankey
 
+# Sobre el deploy: https://community.rstudio.com/t/failing-to-deploy-shinyapp-depending-on-bioconductor-packages/6970/5
+
 library(shiny)
 library(shinydashboard)
 library(dplyr)
@@ -9,6 +11,7 @@ library(reshape2)
 library(caret)
 library(ggplot2)
 library(ggalluvial)
+library(DT)
 library(waiter)
 
 source("www/dataPlot.R")
@@ -173,9 +176,19 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
                            icon = icon("play", lib = "font-awesome"),
                            width = "50%"),
               
-              plotOutput("resultados_entrenamiento")
+              br(),
               
-              # Falta añadir el F1-score y decir cuál es el mejor método
+              conditionalPanel(condition = "input.cl_algorithm == 'SVM'",
+                               br(),
+                               textOutput("optimal_svm"),
+                               br()),
+              conditionalPanel(condition = "input.cl_algorithm == 'kNN'",
+                               br(),
+                               textOutput("optimal_knn"),
+                               br()),
+                               
+              dataTableOutput("results_cv")
+              
       ),
 
       
@@ -467,12 +480,60 @@ server <- function(input, output){
     print("ranking")
     print(ranking)
     
+    if(input$cl_algorithm == "SVM"){
+      w3 <- Waiter$new(html = tagList(spin_folding_cube(),
+                                      span(br(), br(), br(), h4("Training SVM algorithm..."),
+                                           style="color:white;")))  
+      w3$show()
+      results_cv <- svm_trn(particion.entrenamiento(), labels_train(), ranking,
+                                     numFold = as.numeric(input$number_folds))
+      w3$hide()
+    }
+    
+    if(input$cl_algorithm == "RF"){
+      w3 <- Waiter$new(html = tagList(spin_folding_cube(),
+                                      span(br(), br(), br(), h4("Training RF algorithm..."),
+                                      style="color:white;")))  
+      w3$show()
+      results_cv <- rf_trn(particion.entrenamiento(), labels_train(), ranking,
+                                numFold = as.numeric(input$number_folds))
+      w3$hide()
+    }
+    
+    if(input$cl_algorithm == "kNN"){
+      w3 <- Waiter$new(html = tagList(spin_folding_cube(),
+                                      span(br(), br(), br(), h4("Training kNN algorithm..."),
+                                           style="color:white;")))  
+      w3$show()
+      results_cv <- knn_trn(particion.entrenamiento(), labels_train(), ranking,
+                                numFold = as.numeric(input$number_folds))
+      w3$hide()
+    }
+    
+    output$optimal_svm <- renderText(paste0("\nOptimal coefficients: cost = ", results_cv$bestParameters[1], "; gamma = ", results_cv$bestParameters[2]))
+    
+    output$optimal_knn <- renderText(paste0("\nOptimal number of neighbours = ", results_cv$bestK))
+    
+    output$results_cv <- renderDataTable({
+      df <- data.frame(`Number of genes` = 1:length(ranking),
+               Accuracy = round(100 * results_cv$accuracyInfo$meanAccuracy, 2),
+               `F1-Score` = round(100 * results_cv$F1Info$meanF1, 2), 
+               Sensitivity = round(100 * results_cv$sensitivityInfo$meanSensitivity, 2),
+               Specificity = round(100 * results_cv$specificityInfo$meanSpecificity, 2),
+               check.names = F)
+      dat <- datatable(df, rownames = F) %>% formatStyle(names(df)[2:5],
+                               background = styleColorBar(range(df[, 2:5]) - c(1, 0), "forestgreen"),
+                               backgroundSize = "98% 88%",
+                               backgroundRepeat = "no-repeat",
+                               backgroundPosition = "center")
+      return(dat)}
+      , options = list(pageLength = 10))
+    
   }) 
   
+
   
-  
-  output$mejores_parametros <- renderTable(iris)
-  
+
   
   
   
@@ -484,7 +545,7 @@ server <- function(input, output){
     {dis <- as.data.frame(DEGsToDiseases(input$gene_for_disease, size = 10000))
 
     for(i in 2:9){
-      dis[, i] <- round(as.numeric(dis[, i]), 2)
+      dis[, i] <- sprintf(round(as.numeric(dis[, i]), 2), fmt = '%#.2f')
     }
     
     names(dis) <- c("Disease", "Overall score", "Literature", "RNA Expr.", "Genetic", "Somatic Mut.", "Drug", "Animal", "Pathways")
