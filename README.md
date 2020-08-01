@@ -14,7 +14,7 @@ Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ing
 
 - `analisis_higado`: Código, resultados y figuras del análisis realizado para cáncer de hígado.
 
-- `documento`: Documento principal del TFM escrito en *LaTeX*.
+- `documento`: Documento principal del TFM escrito en *LaTeX*. La versión actual del documento en PDF está [aquí](https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/documento/documento_principal.pdf).
 
 - `epidemiologia`: Datos sobre la epidemiología del cáncer.
 

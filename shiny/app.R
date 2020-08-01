@@ -45,7 +45,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
       menuItem("Data loading", tabName = "datos", icon = icon("database")),
       menuItem("Genes selection", tabName = "genes", icon = icon("dna")),
       menuItem("Model training", tabName = "entrenamiento", icon = icon("play")),
-      menuItem("Model validation", tabName = "validacion", icon = icon("check-circle")),
+      menuItem("Model validation", tabName = "validation", icon = icon("check-circle")),
       menuItem("Related diseases", tabName = "enfermedades", icon = icon("disease")),
       menuItem("Authors", tabName = "autores", icon = icon("id-card")),
       menuItem("Code", tabName = "codigo", icon = icon("code"))
@@ -123,7 +123,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
       # Tab 3
       tabItem(tabName = "genes",
               h1("Genes selection"),
-              sliderInput(inputId = "numero_genes", label = "Select the number of genes to use", value = 20, min = 1, max = 51, step = 1),
+              sliderInput(inputId = "numero_genes", label = "Select the number of genes to use", value = 50, min = 1, max = 50, step = 1),
               
               textInput(inputId = "disease_da", label = "Disease for DA algorithm", value = "liver cancer", width = "50%"),
               
@@ -177,6 +177,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
                            width = "50%"),
               
               br(),
+              br(),
               
               conditionalPanel(condition = "input.cl_algorithm == 'SVM'",
                                br(),
@@ -191,6 +192,41 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               
       ),
 
+      # Tab 5
+      tabItem(tabName = "validation",
+              h1("Model validation"),
+              
+              # Elegir MRMR/RF/DA, se muestra MRMR por ahora
+              selectInput("fs_algorithm_validation",
+                          label = "Feature selection algorithm:",
+                          choices = c("mRMR", "RF", "DA"),
+                          selected = "mRMR",
+                          width = "50%"),
+              
+              # Método de clasificación
+              selectInput("cl_algorithm_validation",
+                          label = "Classification algorithm (for SVM and kNN it must be trained first to obtain optimal parameters):",
+                          choices = c("SVM", "RF", "kNN"),
+                          selected = "SVM",
+                          width = "50%"),
+              
+              # Número de genes
+              sliderInput(inputId = "numero_genes_validation", label = "Select the number of genes to use (must be equal or less than the number of genes selected at 'Genes selection'):",
+                          value = 10, min = 1, max = 50, step = 1),
+
+              # Botón validación
+              actionButton(inputId = "boton_model_validation",
+                           label = "Validate model in test",
+                           icon = icon("play", lib = "font-awesome"),
+                           width = "50%"),
+              
+              br(),
+              br(),
+              
+              plotOutput("results_validation",
+                         width = "50%")
+              
+      ),
       
       # Tab 6
       tabItem(tabName = "enfermedades",
@@ -226,7 +262,7 @@ options(shiny.maxRequestSize = 15*1024^2)
 
 server <- function(input, output){
 
-  values <- reactiveValues(ranking = NULL)
+  values <- reactiveValues(ranking = NULL, optimalSVM_train = NULL, optimalkNN_train = NULL)
   
   # Server of tab: Data loading ------
   
@@ -486,7 +522,8 @@ server <- function(input, output){
                                            style="color:white;")))  
       w3$show()
       results_cv <- svm_trn(particion.entrenamiento(), labels_train(), ranking,
-                                     numFold = as.numeric(input$number_folds))
+                            numFold = as.numeric(input$number_folds))
+      values$optimalSVM_train <- results_cv$bestParameters
       w3$hide()
     }
     
@@ -507,12 +544,14 @@ server <- function(input, output){
       w3$show()
       results_cv <- knn_trn(particion.entrenamiento(), labels_train(), ranking,
                                 numFold = as.numeric(input$number_folds))
+      values$optimalkNN_train <- results_cv$bestK
+      
       w3$hide()
     }
     
-    output$optimal_svm <- renderText(paste0("\nOptimal coefficients: cost = ", results_cv$bestParameters[1], "; gamma = ", results_cv$bestParameters[2]))
+    output$optimal_svm <- renderText(paste0("\nOptimal coefficients for ", input$numero_genes, " genes : cost = ", results_cv$bestParameters[1], "; gamma = ", results_cv$bestParameters[2]))
     
-    output$optimal_knn <- renderText(paste0("\nOptimal number of neighbours = ", results_cv$bestK))
+    output$optimal_knn <- renderText(paste0("\nOptimal number of neighbours for ", input$numero_genes, " genes = ", results_cv$bestK))
     
     output$results_cv <- renderDataTable({
       df <- data.frame(`Number of genes` = 1:length(ranking),
@@ -521,16 +560,114 @@ server <- function(input, output){
                Sensitivity = round(100 * results_cv$sensitivityInfo$meanSensitivity, 2),
                Specificity = round(100 * results_cv$specificityInfo$meanSpecificity, 2),
                check.names = F)
-      dat <- datatable(df, rownames = F) %>% formatStyle(names(df)[2:5],
+      dat <- datatable(df, rownames = F, options = list(pageLength = 10)) %>% formatStyle(names(df)[2:5],
                                background = styleColorBar(range(df[, 2:5]) - c(1, 0), "forestgreen"),
                                backgroundSize = "98% 88%",
                                backgroundRepeat = "no-repeat",
                                backgroundPosition = "center")
       return(dat)}
-      , options = list(pageLength = 10))
+    )
     
   }) 
   
+  
+  # Server of tab: Model validation  ------
+  
+  w2 <- Waiter$new(html = tagList(spin_folding_cube(),
+                                  span(br(), br(), br(), h4("Validating model..."),
+                                  style="color:white;")))  
+  
+  observeEvent(input$boton_model_validation, {
+    
+    w2$show()
+    
+    # Si se ha seleccionado un fichero, se importa
+    load(input$archivo_rdata$datapath)
+    # Extraer labels
+    labels <- matriz[1, ] %>% as.vector
+    # Extraer matriz
+    DEGsMatrix <- matriz[2:nrow(matriz), ]
+    filas <- rownames(DEGsMatrix)
+    DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
+    rownames(DEGsMatrix) <- filas
+    # Crear DEGsMatrixML
+    DEGsMatrixML <- t(DEGsMatrix)
+    
+    # Partición 75% / 25% con balanceo de clase
+    set.seed(31415)
+    indices <- reactive(createDataPartition(labels, p = input$porcentaje_entrenamiento / 100, list = FALSE))
+    particion <- reactive(list(training = DEGsMatrixML[indices(), ], test = DEGsMatrixML[-indices(), ]))
+    
+    # Conjuntos
+    particion.entrenamiento <- reactive(particion()$training)
+    particion.test <- reactive(particion()$test)
+    
+    # Labels
+    labels_train <- reactive(labels[indices()])
+    labels_test  <- reactive(labels[-indices()])
+    w$hide()
+    
+    if(input$fs_algorithm_validation == "mRMR"){
+      ranking <- values$ranking[1:input$numero_genes, 1]
+    }
+    
+    if(input$fs_algorithm_validation == "RF"){
+      ranking <- values$ranking[1:input$numero_genes, 2]
+    }
+    
+    if(input$fs_algorithm_validation == "DA"){
+      ranking <- values$ranking[1:input$numero_genes, 3]
+    }
+    
+    # Debug
+    print(paste0("ranking = ", ranking))
+    print(paste0("longitud ranking = ", length(ranking)))
+    
+    if(input$cl_algorithm_validation == "SVM"){
+      w3 <- Waiter$new(html = tagList(spin_folding_cube(),
+                                      span(br(), br(), br(), h4("Validating SVM algorithm..."),
+                                           style="color:white;")))  
+      w3$show()
+      results_validation <- svm_test(train = particion.entrenamiento(), labels_train(),
+                             test = particion.test(), labels_test(),
+                             ranking,
+                             bestParameters = values$optimalSVM_train)
+      w3$hide()
+    }
+    
+    if(input$cl_algorithm_validation == "RF"){
+      w3 <- Waiter$new(html = tagList(spin_folding_cube(),
+                                      span(br(), br(), br(), h4("Validating RF algorithm..."),
+                                           style="color:white;")))  
+      w3$show()
+      results_validation <- rf_test(train = particion.entrenamiento(), labels_train(),
+                            test = particion.test(), labels_test(),
+                            ranking)
+      w3$hide()
+    }
+    
+    if(input$cl_algorithm_validation == "kNN"){
+      w3 <- Waiter$new(html = tagList(spin_folding_cube(),
+                                      span(br(), br(), br(), h4("Validating kNN algorithm..."),
+                                           style="color:white;")))  
+      w3$show()
+      results_validation <- knn_test(train = particion.entrenamiento(), labels_train(),
+                             test = particion.test(), labels_test(),
+                             ranking, bestK = values$optimalkNN_train)
+      w3$hide()
+    }
+    
+    
+    # output$optimal_svm <- renderText(paste0("\nOptimal coefficients for ", input$numero_genes, " genes : cost = ", results_cv$bestParameters[1], "; gamma = ", results_cv$bestParameters[2]))
+    
+    # output$optimal_knn <- renderText(paste0("\nOptimal number of neighbours for ", input$numero_genes, " genes = ", results_cv$bestK))
+    
+    output$results_validation <- renderPlot({
+      tabla <- results_validation$cfMats[[input$numero_genes_validation]]$table
+      plotConfMatrix(tabla)
+    })
+    
+  }) 
 
   
 
@@ -545,12 +682,12 @@ server <- function(input, output){
     {dis <- as.data.frame(DEGsToDiseases(input$gene_for_disease, size = 10000))
 
     for(i in 2:9){
-      dis[, i] <- sprintf(round(as.numeric(dis[, i]), 2), fmt = '%#.2f')
+      dis[, i] <- round(as.numeric(dis[, i]), 2)
     }
     
     names(dis) <- c("Disease", "Overall score", "Literature", "RNA Expr.", "Genetic", "Somatic Mut.", "Drug", "Animal", "Pathways")
     return(dis)}
-    , options = list(pageLength = 10)
+    , filter = "top", options = list(pageLength = 10)
   )
   
 }
