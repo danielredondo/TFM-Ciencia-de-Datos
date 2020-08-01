@@ -213,12 +213,13 @@ Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) 
 
 \begin{itemize}
 	\item Corregir un fallo que hacía que el método de selección de características RF no funcionase correctamente ante problemas de clasificación multiclase.
-	\item Mantener los parámetros óptimos de SVM (coste y gamma) y kNN ($k$) encontrados tras optimización de los parámetros (\textit{tuning}) en conjunto de entrenamiento para aplicarlos directamente en el modelo para el conjunto de test.
+	\item Mantener los parámetros óptimos de SVM (coste y gamma) y kNN ($k$) encontrados tras optimización de los parámetros en conjunto de entrenamiento para aplicarlos directamente en el modelo para el conjunto de test.
 	\item Pequeñas modificaciones en la documentación de funciones.
 \end{itemize}
 
 \textit{\{\texttt{KnowSeq}\}} está además disponible en Docker con el comando \textit{\texttt{Docker run -it casedugr/knowseq}} y en \textit{Bioconductor}, la plataforma de código abierto en \texttt{R} más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
 
+\newpage
 \begin{center}
 \textbf{Figura 6}. Logo de \textit{\{\texttt{KnowSeq}\}}.
 \end{center}
@@ -252,9 +253,9 @@ Se utiliza el conjunto de entrenamiento para seleccionar los diez genes más rel
 
 \subsection{Validación cruzada en entrenamiento}
 
-Se realiza validación cruzada 5-fold para tres algoritmos de clasificación: SVM, RF y kNN. Los parámetros de los clasificadores se optimizan (\textit{tuning}) usando los 10 genes más relevantes de cada método de selección de características (mRMR, RF y DA). Para SVM con kernel radial se realiza optimización de los dos parámetros utilizando una rejilla con los valores especificados en la Tabla 13.\\
+Se realiza validación cruzada 5-fold para tres algoritmos de clasificación: SVM, RF y kNN. Los parámetros de los clasificadores se optimizan usando los 10 genes más relevantes de cada método de selección de características (mRMR, RF y DA). Para SVM con kernel radial se realiza optimización de los dos parámetros utilizando una rejilla con los valores especificados en la Tabla 13.\\
 
-\textbf{Tabla 13}. Valores de los parámetros que se utilizan para el tuning en rejilla de los parámetros óptimos del algoritmo SVM.
+\textbf{Tabla 13}. Valores de los parámetros que se utilizan para la búsqueda en rejilla de los parámetros óptimos del algoritmo SVM.
 
 \begin{table}[H]
 	\centering
@@ -313,7 +314,7 @@ De los 24.645 genes presentes en los datos se extraen 2.274 genes que presentan 
 	\textbf{Figura 7}. Diagrama de Sankey mostrando la partición entrenamiento-test realizada según tipo de muestra para el análisis de hígado biclase.
 \end{center}
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/07_higado_biclase_sankey.png}
+	\includegraphics[width=.75\textwidth]{figuras/07_higado_biclase_sankey.png}
 \end{center}
 
 A continuación se muestran los diez genes más relevantes encontrados por cada método de selección de características:\\
@@ -342,7 +343,7 @@ Se observa que tres genes han sido valorados como relevantes para los algoritmos
 
 \subsection{Validación cruzada en entrenamiento - SVM}
 
-En la Tabla 17 se muestran los parámetros óptimos de SVM obtenidos tras el tuning.\\
+En la Tabla 17 se muestran los parámetros óptimos de SVM obtenidos tras la búsqueda en rejilla.\\
 
 \textbf{Tabla 17}. Parámetros óptimos de SVM encontrados para los 10 genes más relevantes de cada método de selección de características.
 
@@ -493,7 +494,7 @@ En la Tabla 19 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 
 Los valores de F1-score y precisión son muy altos en la validación cruzada en entrenamiento, superando el 90\% en el mejor modelo de cada algoritmo. Es relevante destacar la alta eficiencia del modelo de kNN, que consigue grandes resultados usando únicamente 2 genes: ANGPTL6 y PTH1R.\\
 
-En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre el gen ANGPTL6 y el cáncer de hígado, aunque está asociado a la cirrosis biliar primaria \cite{Liu2012}, una enfermedad del hígado. Para el gen PTH1R, se encuentran asociaciones con otros tipos de cáncer \cite{Michailidou2017, Michailidou2015} y con algunos factores de riesgo del cáncer de hígado como el consumo de alcohol \cite{biobank} o padecer diabetes tipo II \cite{Xue2018}. Tampoco existe relación directa existente entre el resto de genes seleccionados por los mejores modelos y el cáncer de hígado.\\
+En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre el gen ANGPTL6 y el cáncer de hígado, aunque está asociado a la cirrosis biliar primaria \cite{Liu2012}, una enfermedad del hígado. Para el gen PTH1R, se encuentran asociaciones con otros tipos de cáncer \cite{Michailidou2017, Michailidou2015} y con algunos factores de riesgo del cáncer de hígado como el consumo de alcohol \cite{biobank} o padecer diabetes tipo II \cite{Xue2018}. Tampoco existe relación directa existente entre el resto de genes seleccionados por los mejores modelos y el cáncer de hígado.
 
 \section{Resultados de clasificación multiclase para cáncer de hígado}
 
@@ -501,7 +502,7 @@ El código completo del análisis se muestra en el fichero \textit{\texttt{anali
 
 \subsection{Detección de biomarcadores}
 
-Para la clasificación multiclase en cáncer de hígado se van a considerar los dos principales tipos de diagnósticos primarios presentes en los datos clínicos de cáncer de hígado: carcinoma hepatocelular y colangiocarcinoma. Se excluyen los tumores con otros diagnósticos primarios (8 casos). En la Tabla 20 se muestra la distribución de muestras.
+Para la clasificación multiclase en cáncer de hígado se van a considerar los dos principales tipos de diagnósticos primarios presentes en los datos clínicos de cáncer de hígado: carcinoma hepatocelular y colangiocarcinoma. Se excluyen los tumores con otros diagnósticos primarios (8 casos). En la Tabla 20 se muestra la distribución de muestras.\\
 
 \textbf{Tabla 20}. Distribución de tipos de muestra para el análisis de cáncer de hígado multiclase.
 
@@ -538,7 +539,7 @@ Se extraen 8.533 genes que presentan en su expresión diferencias significativas
 \textbf{Figura 18}. Diagrama de Sankey mostrando la partición entrenamiento-test realizada según tipo de muestra para el análisis de hígado multiclase.
 \end{center}
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/18_higado_multiclase_05_sankey.png}
+	\includegraphics[width=.75\textwidth]{figuras/18_higado_multiclase_05_sankey.png}
 \end{center}
 
 A continuación se muestran los diez genes más relevantes encontrados por cada método de selección de características:\\
@@ -567,7 +568,7 @@ Se observa que tres genes han sido valorados como relevantes para los algoritmos
 
 \subsection{Validación cruzada en entrenamiento - SVM}
 
-En la Tabla 23 se muestran los parámetros óptimos de SVM obtenidos tras el tuning.\\
+En la Tabla 23 se muestran los parámetros óptimos de SVM obtenidos tras la búsqueda en rejilla.\\
 
 \textbf{Tabla 23}. Parámetros óptimos de SVM encontrados para los 10 genes más relevantes de cada método de selección de características.
 
@@ -770,7 +771,7 @@ Se extraen 6.836 genes que presentan en su expresión diferencias significativas
 \textbf{Figura 30}. Diagrama de Sankey mostrando la partición entrenamiento-test realizada según tipo de muestra para el análisis de colon-recto biclase.
 \end{center}
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/30_cr_biclase_05_sankey.png}
+	\includegraphics[width=.75\textwidth]{figuras/30_cr_biclase_05_sankey.png}
 \end{center}
 
 \newpage
@@ -800,7 +801,7 @@ Se observa que el gen ESM1 es el único gen común a dos algoritmos de selecció
 
 \subsection{Validación cruzada en entrenamiento}
 
-En las Tablas 29 y 30 se muestran los parámetros óptimos de SVM y kNN obtenidos tras el tuning.\\
+En las Tablas 29 y 30 se muestran los parámetros óptimos de SVM y kNN obtenidos.\\
 
 \textbf{Tabla 29}. Parámetros óptimos de SVM encontrados para los 10 genes más relevantes de cada método de selección de características.
 
@@ -843,7 +844,6 @@ Se alcanzan F1-Score de 100\% en muchos casos. En caso de igualdad de F1-Score, 
 
 Se analiza la expresión de 3 genes más relevantes de RF y los 4 más relevantes de mRMR con diagramas de caja (Figuras 32 y 33).
 
-\newpage
 \begin{center}
 \textbf{Figura 32}. Diagrama de caja de expresión de genes por tipo de muestra en los 3 genes más relevantes con RF como método de selección de características.
 \end{center}
@@ -851,6 +851,7 @@ Se analiza la expresión de 3 genes más relevantes de RF y los 4 más relevante
 	\includegraphics[width=1\textwidth]{figuras/32_cr_biclase_43_knn_boxplots_mejor_metodo.png} 
 \end{center}
 
+\newpage
 \begin{center}
 \textbf{Figura 33}. Diagrama de caja de expresión de genes por tipo de muestra en los 4 genes más relevantes con mRMR como método de selección de características.
 \end{center}
@@ -860,8 +861,9 @@ Se analiza la expresión de 3 genes más relevantes de RF y los 4 más relevante
 
 \subsection{Validación en test}
 
-Al validar en el conjunto de test los mejor modelo encontrado para SVM (dos modelos: 3 genes con mRMR y 3 genes con RF), RF (4 genes con mRMR) y kNN (3 genes con RF) se obtiene la misma clasificación: una predicción perfecta en test (F1-Score 100\%, precisión 100\%) como se muestra en la Figura 34.\\
+Al validar en el conjunto de test los mejores modelos encontrados para SVM (dos modelos: 3 genes con mRMR y 3 genes con RF), RF (4 genes con mRMR) y kNN (3 genes con RF) se obtiene la misma clasificación: una predicción perfecta en test (F1-Score 100\%, precisión 100\%) como se muestra en la Figura 34.\\
 
+\newpage
 \begin{center}
 \textbf{Figura 34}. Matriz de confusión de los mejores modelos encontrados de SVM, RF y kNN en el conjunto de test.
 \end{center}
@@ -936,7 +938,7 @@ Se extraen 6.848 genes que presentan en su expresión diferencias significativas
 \end{center}
 
 \begin{center}
-	\includegraphics[width=1\textwidth]{figuras/35_cr_multiclase_05_sankey.png}
+	\includegraphics[width=.75\textwidth]{figuras/35_cr_multiclase_05_sankey.png}
 \end{center}
 
 \newpage
@@ -966,7 +968,7 @@ Los genes GTF2IRD1, ESM1 y MUC2 son comunes a dos algoritmos de selección de ca
 
 \subsection{Validación cruzada en entrenamiento}
 
-En las Tablas 35 y 36 se muestran los parámetros óptimos de SVM y kNN obtenidos tras el tuning.\\
+En las Tablas 35 y 36 se muestran los parámetros óptimos de SVM y kNN obtenidos.\\
 
 \textbf{Tabla 35}. Parámetros óptimos de SVM encontrados para los 10 genes más relevantes de cada método de selección de características.
 
@@ -1008,7 +1010,6 @@ El F1-Score es bastante inferior al obtenido en el resto de análisis. Los mejor
 
 Se analiza la expresión de 3 genes más relevantes de RF y los 9 más relevantes de mRMR con diagramas de caja (Figuras 37 y 38).
 
-\newpage
 \begin{center}
 	\textbf{Figura 37}. Diagrama de caja de expresión de genes por tipo de muestra en los 3 genes más relevantes con RF como método de selección de características.
 \end{center}
@@ -1016,6 +1017,7 @@ Se analiza la expresión de 3 genes más relevantes de RF y los 9 más relevante
 	\includegraphics[width=1\textwidth]{figuras/37_cr_multiclase_34_knn_boxplots_mejor_metodo.png} 
 \end{center}
 
+\newpage
 \begin{center}
 	\textbf{Figura 38}. Diagrama de caja de expresión de genes por tipo de muestra en los 9 genes más relevantes con mRMR como método de selección de características.
 \end{center}
@@ -1025,8 +1027,9 @@ Se analiza la expresión de 3 genes más relevantes de RF y los 9 más relevante
 
 \subsection{Validación en test}
 
-Al validar en el conjunto de test los mejor modelo encontrado para SVM (3 genes con RF), RF (9 genes con mRMR) y kNN (3 genes con RF) se obtienen las matrices de confusión mostradas en las Figuras 39, 40 y 41.
+Al validar en el conjunto de test los mejores modelos encontrados para SVM (3 genes con RF), RF (9 genes con mRMR) y kNN (3 genes con RF) se obtienen las matrices de confusión mostradas en las Figuras 39, 40 y 41, respectivamente.
 
+\newpage
 \begin{center}
 	\textbf{Figura 39}. Matriz de confusión del mejor modelo encontrado de SVM en el conjunto de test.
 \end{center}
@@ -1034,7 +1037,6 @@ Al validar en el conjunto de test los mejor modelo encontrado para SVM (3 genes 
 	\includegraphics[width=1\textwidth]{figuras/39_cr_multiclase_15_svm_matriz_confusion_mejor_metodo.png} 
 \end{center}
 
-\newpage
 \begin{center}
 	\textbf{Figura 40}. Matriz de confusión del mejor modelo encontrado de RF en el conjunto de test.
 \end{center}
@@ -1042,6 +1044,7 @@ Al validar en el conjunto de test los mejor modelo encontrado para SVM (3 genes 
 	\includegraphics[width=1\textwidth]{figuras/40_cr_multiclase_25_rf_matriz_confusion_mejor_metodo.png} 
 \end{center}
 
+\newpage
 \begin{center}
 	\textbf{Figura 41}. Matriz de confusión del mejor modelo encontrado de kNN en el conjunto de test.
 \end{center}
@@ -1067,7 +1070,7 @@ En la Tabla 37 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 
 \subsection{Conclusiones}
 
-En el caso de la clasificación multiclase para cáncer de colon-recto, los resultados son los peores de los obtenidos en este trabajo. Se consigue una buena distinción entre tumores y sanos pero no entre los diferentes tipos de tumores, algo que puede deberse a las pocas diferencias biológicas existentes entre adenocarcinomas y adenocarcinomas mucinosos. Los adenocarcinomas mucinosos son aquellos adenocarcinomas en los que se producen grandes cantidades de mucina (proteínas que produce el colon para ayudar a lubricación), y si este proceso de producción de mucina no se traduce en grandes diferencias en la expresión de los genes, es complicado distinguir los dos tipos de cáncer. \\
+En el caso de la clasificación multiclase para cáncer de colon-recto, los resultados son notablemente inferiores a los obtenidos en los otros problemas abordados en este trabajo. Se consigue una buena distinción entre tumores y sanos pero no así entre los diferentes tipos de tumores, algo que puede deberse a las pocas diferencias biológicas existentes entre adenocarcinomas y adenocarcinomas mucinosos. Los adenocarcinomas mucinosos son aquellos adenocarcinomas en los que se producen grandes cantidades de mucina (proteínas que produce el colon para ayudar a lubricación), y si este proceso de producción de mucina no se traduce en grandes diferencias en la expresión de los genes, es complicado distinguir los dos tipos de cáncer. \\
 
 Se han analizado las enfermedades relacionadas con los mejores genes encontrados (3 genes con RF, 9 genes con mRMR) en la plataforma de Open Targets \cite{OpenTargets2020}. Se encuentra asociación del gen SLC11A1 con cáncer de colon-recto \cite{Law2019, Tanskanen2018, Huyghe2019}, así como con enfermedades intestinales inflamatorias \cite{Jostins2012, DeLange2017}. Dos de los genes están relacionados con otros tipos de cáncer: KRT80 con cáncer de pulmón \cite{Wang2016}  y piel \cite{biobank} y MUC2 con cáncer de mama \cite{Michailidou2017a} y próstata \cite{Schumacher2018}. Genes relacionados con factores de riesgo de cáncer de colon-recto son OSBPL3 con consumo de tabaco \cite{Liu2019} y GTF2IRD1 con consumo de alcohol \cite{biobank}.
 

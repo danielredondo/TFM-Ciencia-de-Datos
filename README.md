@@ -6,7 +6,7 @@ Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ing
 
 **Daniel Redondo Sánchez**
 
-**Tutores: Daniel Castillo, Luis Javier Herrera.**
+**Tutores: Daniel Castillo Secilla, Luis Javier Herrera Maldonado.**
 
 ## Descripción del contenido
 

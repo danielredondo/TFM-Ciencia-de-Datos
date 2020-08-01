@@ -70,10 +70,10 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               random forest and kNN with 5-fold cross-validation.",
               h3(tags$b("Results")),
               "The best binary classifiers are validated with excellent results for liver cancer (F1-Score in test: 99.5%) and colon-rectum cancer
-              (F1-Score: 100%). Lower evaluation measures are obtained in the best models for multiclass classification, both in liver (F1-Score:
-              91.8%) and in colon-rectum (F1-Score: 79.3%). ",
+              (F1-Score: 100%). Lower evaluation measures are obtained in the best models for multiclass classification, in both liver (F1-Score:
+              91.8%) and colon-rectum (F1-Score: 79.3%). ",
               br(), br(),
-              "A web application has been developed, BiomarkeRs, that implements transcriptomic analysis and can be useful for people
+              "A web application has been developed, BiomarkeRs, that implements transcriptomic analysis and can be useful for users
               without previous knowledge of programming.",
               h3(tags$b("Conclusions")),
               "SVM, random forest and kNN obtained very similar results, and managed to correctly distinguish between tumoral and normal tissues
@@ -257,8 +257,8 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
   ) # Final dashboard body
 ) # Final dashboard page
 
-# Ampliar tamaño de .RData a 15MB en lugar de los 5MB por defecto
-options(shiny.maxRequestSize = 15*1024^2)
+# Ampliar tamaño de .RData a 40MB en lugar de los 5MB por defecto
+options(shiny.maxRequestSize = 40*1024^2)
 
 server <- function(input, output){
 

@@ -1,16 +1,29 @@
 \chapter{Introducción}
 
-\section{Objetivos del trabajo}
+\section{Objetivos y estructura del trabajo}
 
-En el presente Trabajo Fin de Máster se analiza la epidemiología de los cánceres de hígado y colon-recto y se detectan genes que permiten identificar tumores.
+\subsection{Objetivos}
 
+Los principales objetivos del trabajo son los siguientes:
+
+\begin{enumerate}
+	\item Descripción de los principales indicadores epidemiológicos del cáncer.
+	\item Identificación de biomarcadores para la detección de tejidos tumorales.
+	\item Construcción y validación de modelos de clasificación biclase y multiclase.
+	\item Desarrollo de una aplicación web que permita a usuarios sin conocimientos previos de programación realizar los objetivos 2 y 3.
+\end{enumerate}
+	
+\subsection{Estructura del trabajo}
+
+El presente Trabajo Fin de Máster tiene la siguiente estructura:
+ 
 \begin{itemize}
 	\item En el capítulo 1 se presenta la introducción al cáncer y a las ciencias ómicas.
-	\item En el capítulo 2 se describe la epidemiología del cáncer de hígado y colon-recto para comprender el impacto de estos tumores.
-	\item En el capítulo 3 se analizan técnicas de \textit{machine learning} con aplicación en transcriptómica.
-	\item En el capítulo 4 se detectan genes que permiten diferenciar entre personas sanas y personas con cáncer.
-	\item En el capítulo 5 se presenta una aplicación web que permite realizar la detección de biomarcadores y crear modelos de clasificación.
-	\item En el capítulo 6 se muestran las principales conclusiones del trabajo y se muestran líneas abiertas de trabajo.
+	\item En el capítulo 2 se expone la epidemiología del cáncer, con especial énfasis en los tumores de hígado y colon-recto.
+	\item En el capítulo 3 se describen algunas técnicas de \textit{machine learning} con aplicación en transcriptómica.
+	\item En el capítulo 4 se detectan huellas génicas que permiten diferenciar entre tejidos tumorales y sanos, para posteriormente construir y validar modelos de clasificación.
+	\item En el capítulo 5 se presenta la aplicación web.
+	\item En el capítulo 6 se muestran las principales líneas abiertas de trabajo.
 \end{itemize}
 
 % ---------------------------------
@@ -21,7 +34,7 @@ El cáncer es una enfermedad en la que se produce una división incontrolada de 
 
 En general, el proceso de creación del cáncer es complejo y multifactorial: a menudo el causante no es un solo elemento, sino la combinación e interacción de distintos factores ambientales y genéticos \cite{Migliore2012}. En la mayoría de los casos el cáncer no se hereda \cite{Pierce2010}. \\
 
-Los factores causantes del cáncer se pueden clasificar principalmente en tres categorías:
+Los factores de riesgo del cáncer se pueden clasificar principalmente en tres categorías:
 \begin{enumerate}
 	\item Factores no modificables. Son elementos que no se pueden cambiar, como la edad o la herencia genética \cite{WorldHealthOrganization2014, WorldHealthOrganization2020}.
 	\item Factores modificables o prevenibles. Algunos ejemplos son el tabaco, el alcohol, la dieta o la exposición a distintos carcinógenos \cite{Cogliano2011}.
@@ -38,9 +51,8 @@ El cáncer de hígado se corresponde con el código C22 de la Clasificación Int
 
 \subsubsection{Anatomía y funciones del hígado}
 
-El hígado es el órgano interno más grande y pesado del cuerpo humano, está situado en el cuadrante superior derecho del abdomen, debajo de las costillas, y está compuesto principalmente por dos lóbulos \cite{Abdel-Misih2010}.\\
+El hígado es el órgano interno más grande y pesado del cuerpo humano, está situado en el cuadrante superior derecho del abdomen, debajo de las costillas, y está compuesto principalmente por dos lóbulos \cite{Abdel-Misih2010}.
 
-\newpage
 \begin{center}
 \textbf{Figura 1}. Anatomía del abdomen humano. Ilustración de Ties van Brussel.
 \end{center}
@@ -65,7 +77,7 @@ Las neoplasias malignas de colon, recto, unión rectosigmoidea, ano y canal anal
 
 \subsubsection{Anatomía y funciones del colon-recto}
 
-El colon tiene 3 funciones principales: absorción de agua y electrolitos, producción y absorción de vitaminas y movimiento de heces hacia el recto para su eliminación por el ano \cite{Azzouz2020}.\\
+El colon tiene 3 funciones principales: absorción de agua y electrolitos, producción y absorción de vitaminas y movimiento de heces hacia el recto para su eliminación por el ano \cite{Azzouz2020}.
 
 \begin{center}
 	\textbf{Figura 2}. Anatomía del intestino humano. Ilustración de Ties van Brussel.
@@ -86,17 +98,17 @@ Para intentar prevenir el cáncer de colon-recto se deben cambiar aquellos facto
 
 % ---------------------------------
 
-\section{Ómicas}
+\section{Ciencias ómicas}
 
 Se presenta a continuación una corta introducción a las ómicas con el objetivo de comprender los conceptos que se utilizarán más adelante.
 
-\subsection{Introducción a las ómicas}
+\subsection{Introducción a las Ciencias ómicas}
 
 Los seres vivos están hechos de células. En el núcleo de cada célula se encuentran los cromosomas, estructuras que almacenan los genes del individuo. Las células humanas tienen 46 cromosomas: 23 heredados de la madre y 23 heredados del padre.\\
 
 La información genética se transporta mediante los ácidos nucleicos: ácido desoxirribonucleico (DNA, por sus siglas en inglés) y ácido ribonucleico (RNA, por sus siglas en inglés). Los ácidos nucleicos son polímeros formados por nucleótidos, que están formados a su vez por un azúcar, un fosfato y una base nitrogenada. En los ácidos nucleicos hay 4 bases nitrogenadas: A, C, G y T para DNA y A, C, G y U para RNA. La información genética se transmite del DNA al RNA, donde se traduce en la secuencia de aminoácidos de una proteína \cite{Pierce2010}.\\
 
-Existen muchas ómicas pero las más relevantes para este trabajo son la genómica y la transcriptómica.
+Existen muchas ciencias ómicas pero las más relevantes para este trabajo son la genómica y la transcriptómica.
 
 \subsection{Genómica}
 
