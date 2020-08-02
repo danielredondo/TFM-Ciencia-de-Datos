@@ -1264,7 +1264,6 @@ matriz <- rbind(labels, DEGsMatrix)
 write.csv2(labels, file = "../saved_files/labels.csv", row.names = F)
 write.csv2(DEGsMatrix, file = "../saved_files/DEGsMatrix.csv")
 save(matriz, file =  "../saved_files/matriz_biclase.RData")
-toc()
 
 # session_info para reproducibilidad
 devtools::session_info()  
