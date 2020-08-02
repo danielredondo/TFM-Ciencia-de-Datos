@@ -1261,6 +1261,8 @@ unique(c(enfermedades[grep(pattern = "cancer", ignore.case = T, x = enfermedades
 
 # ----- Guardar imagen para Shiny -----
 matriz <- rbind(labels, DEGsMatrix)
+write.csv2(labels, file = "../saved_files/labels.csv", row.names = F)
+write.csv2(DEGsMatrix, file = "../saved_files/DEGsMatrix.csv")
 save(matriz, file =  "../saved_files/matriz_biclase.RData")
 toc()
 

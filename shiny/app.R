@@ -1,7 +1,7 @@
-# Mejoras:
-# Añadir tumores y sanos en la parte derecha del gráfico de Sankey
-
-# Sobre el deploy: https://community.rstudio.com/t/failing-to-deploy-shinyapp-depending-on-bioconductor-packages/6970/5
+# Antes del deploy a shinyapps.io, ejecutar:
+# library(BiocManager)
+# options(repos = BiocManager::repositories())
+# https://community.rstudio.com/t/failing-to-deploy-shinyapp-depending-on-bioconductor-packages/6970/5
 
 library(shiny)
 library(shinydashboard)
@@ -92,38 +92,53 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
       # Tab 2
       tabItem(tabName = "datos",
 
-              h1("Data loading"),
-              fileInput(inputId = "archivo_rdata",
-                        label = "Select .RData file. (see Example File)",
-                        accept = ".RData",
-                        width = "50%"
-              ),
-              
-              actionButton(inputId = "boton_importar",
-                           label = "Import file",
-                           icon = icon("fas fa-file-import", lib = "font-awesome"),
-                           width = "50%"),
-              br(),
-              
-              conditionalPanel(condition = "input.boton_importar!=0",
-                tableOutput("tabla1"),
+              # Columna izquierda
+              fluidRow(column(6, 
+                h1("Data loading"),
+                fileInput(inputId = "file_labels",
+                          label = "Select file of labels",
+                          accept = ".csv",
+                          width = "100%"
+                ),
+                fileInput(inputId = "file_DEGsMatrix",
+                          label = "Select file of DEGsMatrix",
+                          accept = ".csv",
+                          width = "100%"
+                ),
                 
-                h2("Train-test partition"),
+                actionButton(inputId = "boton_importar",
+                             label = "Import file",
+                             icon = icon("fas fa-file-import", lib = "font-awesome"),
+                             width = "100%"),
+                br(),
                 
-                sliderInput("porcentaje_entrenamiento",
-                            label = "Train percentage (%)",
-                            value = 75, min = 5, max = 95, step = 5,
-                            width = "50%"
-                            ),
-                
-                plotOutput("sankey", width = "50%")
+                conditionalPanel(condition = "input.boton_importar!=0",
+                                 
+                                 h2("Distribution of classes"),
+                                 
+                                 tableOutput("tabla1")
+                                 
+                                 )),
+                 # Columna derecha
+                 column(6, br(), br(), br(),
+                          conditionalPanel(condition = "input.boton_importar!=0",
+                             h2("Train-test partition"),
+                             
+                             sliderInput("porcentaje_entrenamiento",
+                                         label = "Train percentage (%)",
+                                         value = 75, min = 5, max = 95, step = 5,
+                                         width = "100%"
+                             ),
+                            h2("Sankey plot"),
+                            plotOutput("sankey", width = "100%")))
               )
+
       ),
       
       # Tab 3
       tabItem(tabName = "genes",
               h1("Genes selection"),
-              sliderInput(inputId = "numero_genes", label = "Select the number of genes to use", value = 50, min = 1, max = 50, step = 1),
+              sliderInput(inputId = "numero_genes", label = "Select the number of genes to use", value = 50, min = 1, max = 50, step = 1, width = "50%"),
               
               textInput(inputId = "disease_da", label = "Disease for DA algorithm", value = "liver cancer", width = "50%"),
               
@@ -212,7 +227,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               
               # Número de genes
               sliderInput(inputId = "numero_genes_validation", label = "Select the number of genes to use (must be equal or less than the number of genes selected at 'Genes selection'):",
-                          value = 10, min = 1, max = 50, step = 1),
+                          value = 10, min = 1, max = 50, step = 1, width = "50%"),
 
               # Botón validación
               actionButton(inputId = "boton_model_validation",
@@ -257,7 +272,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
   ) # Final dashboard body
 ) # Final dashboard page
 
-# Ampliar tamaño de .RData a 40MB en lugar de los 5MB por defecto
+# Ampliar tamaño de archivos a importar a 40MB en lugar de los 5MB por defecto
 options(shiny.maxRequestSize = 40*1024^2)
 
 server <- function(input, output){
@@ -268,18 +283,17 @@ server <- function(input, output){
   
   observeEvent(input$boton_importar, {
     
-    # Si se ha seleccionado un fichero, se importa
-    load(input$archivo_rdata$datapath)
+    # Si se han seleccionado los ficheros, se importan
     # Extraer labels
-    labels <- matriz[1, ] %>% as.vector
+    labels <- as.vector(t(read.csv2(file = input$file_labels$datapath)))
     # Extraer matriz
-    DEGsMatrix <- matriz[2:nrow(matriz), ]
+    DEGsMatrix <- as.data.frame(read.csv2(file = input$file_DEGsMatrix$datapath, row.names = 1))
     filas <- rownames(DEGsMatrix)
     DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
     rownames(DEGsMatrix) <- filas
     # Crear DEGsMatrixML
     DEGsMatrixML <- t(DEGsMatrix)
-    
+  
     # Parámetros generales
     
     # Partición 75% / 25% con balanceo de clase
@@ -297,8 +311,7 @@ server <- function(input, output){
     
     # Se muestra la tabla
     output$tabla1 <- renderTable({
-        if(is.null(input$archivo_rdata))
-          return(NULL)
+        if(is.null(input$file_labels)) return(NULL)
         
       # Mensaje de OK
       showModal(modalDialog(
@@ -313,8 +326,7 @@ server <- function(input, output){
     })
   
   output$sankey <- renderPlot({
-    if(is.null(input$archivo_rdata))
-      return(NULL)
+    if(is.null(input$file_labels)) return(NULL)
     
     # Número de casos
     # Train
@@ -328,14 +340,17 @@ server <- function(input, output){
     test_san <- table(labels_test())[2]
 
     # Diagrama de Sankey
-    datos_sankey <- data.frame(tipo = c(paste0("Tumor\n", entr_tum + test_tum, " casos"), paste0("Tumor\n", entr_tum + test_tum, " casos"),
-                                        paste0("Normal tissue\n", entr_san + test_san, " casos"), paste0("Normal tissue\n", entr_san + test_san, " casos")),
-                               traintest = c("Train", "Test", "Train", "Test"),
+    datos_sankey <- data.frame(tipo = c(paste0("Tumour\n", entr_tum + test_tum, " cases"), paste0("Tumour\n", entr_tum + test_tum, " cases"),
+                                        paste0("Normal tissue\n", entr_san + test_san, " cases"), paste0("Normal tissue\n", entr_san + test_san, " cases")),
+                               traintest = c(paste0("Train\n", entr_tum, " tumour\n", entr_san, " normal tissue"),
+                                             paste0("Test\n", test_tum, " tumour\n", test_san, " normal tissue"),
+                                             paste0("Train\n", entr_tum, " tumour\n", entr_san, " normal tissue"),
+                                             paste0("Test\n", test_tum, " tumour\n", test_san, " normal tissue")),
                                value = c(entr_tum, test_tum, entr_san, test_san))
     
     # Pequeño reorden para que mejorar la presentación de los datos
     datos_sankey$tipo <- factor(datos_sankey$tipo,
-                                levels = c(paste0("Tumor\n", entr_tum + test_tum, " casos"), paste0("Normal tissue\n", entr_san + test_san, " casos")),
+                                levels = c(paste0("Tumour\n", entr_tum + test_tum, " cases"), paste0("Normal tissue\n", entr_san + test_san, " cases")),
                                 ordered = T)
     
     ggplot(data = datos_sankey,
@@ -367,11 +382,10 @@ server <- function(input, output){
     w$show()
     
     # Si se ha seleccionado un fichero, se importa
-    load(input$archivo_rdata$datapath)
     # Extraer labels
-    labels <- matriz[1, ] %>% as.vector
+    labels <- as.vector(t(read.csv2(file = input$file_labels$datapath)))
     # Extraer matriz
-    DEGsMatrix <- matriz[2:nrow(matriz), ]
+    DEGsMatrix <- as.data.frame(read.csv2(file = input$file_DEGsMatrix$datapath, row.names = 1))
     filas <- rownames(DEGsMatrix)
     DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
     rownames(DEGsMatrix) <- filas
@@ -464,7 +478,7 @@ server <- function(input, output){
   # Server of tab: Model training ------
   
   w2 <- Waiter$new(html = tagList(spin_folding_cube(),
-                                 span(br(), br(), br(), h4("Training model..."),
+                                 span(br(), br(), br(), h4(""),
                                  style="color:white;")))  
   
   observeEvent(input$boton_model_training, {
@@ -472,11 +486,10 @@ server <- function(input, output){
     w2$show()
     
     # Si se ha seleccionado un fichero, se importa
-    load(input$archivo_rdata$datapath)
     # Extraer labels
-    labels <- matriz[1, ] %>% as.vector
+    labels <- as.vector(t(read.csv2(file = input$file_labels$datapath)))
     # Extraer matriz
-    DEGsMatrix <- matriz[2:nrow(matriz), ]
+    DEGsMatrix <- as.data.frame(read.csv2(file = input$file_DEGsMatrix$datapath, row.names = 1))
     filas <- rownames(DEGsMatrix)
     DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
     rownames(DEGsMatrix) <- filas
@@ -495,7 +508,7 @@ server <- function(input, output){
     # Labels
     labels_train <- reactive(labels[indices()])
     labels_test  <- reactive(labels[-indices()])
-    w$hide()
+    w2$hide()
     
     if(input$fs_algorithm == "mRMR"){
       ranking <- values$ranking[1:input$numero_genes, 1]
@@ -573,20 +586,19 @@ server <- function(input, output){
   
   # Server of tab: Model validation  ------
   
-  w2 <- Waiter$new(html = tagList(spin_folding_cube(),
+  w3 <- Waiter$new(html = tagList(spin_folding_cube(),
                                   span(br(), br(), br(), h4("Validating model..."),
                                   style="color:white;")))  
   
   observeEvent(input$boton_model_validation, {
     
-    w2$show()
+    w3$show()
     
     # Si se ha seleccionado un fichero, se importa
-    load(input$archivo_rdata$datapath)
     # Extraer labels
-    labels <- matriz[1, ] %>% as.vector
+    labels <- as.vector(t(read.csv2(file = input$file_labels$datapath)))
     # Extraer matriz
-    DEGsMatrix <- matriz[2:nrow(matriz), ]
+    DEGsMatrix <- as.data.frame(read.csv2(file = input$file_DEGsMatrix$datapath, row.names = 1))
     filas <- rownames(DEGsMatrix)
     DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
     rownames(DEGsMatrix) <- filas
@@ -605,7 +617,7 @@ server <- function(input, output){
     # Labels
     labels_train <- reactive(labels[indices()])
     labels_test  <- reactive(labels[-indices()])
-    w$hide()
+    w3$hide()
     
     if(input$fs_algorithm_validation == "mRMR"){
       ranking <- values$ranking[1:input$numero_genes, 1]
