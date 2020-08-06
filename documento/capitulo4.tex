@@ -492,9 +492,10 @@ En la Tabla 19 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 
 \subsection{Conclusiones}
 
-Los valores de F1-score y precisión son muy altos en la validación cruzada en entrenamiento, superando el 90\% en el mejor modelo de cada algoritmo. Es relevante destacar la alta eficiencia del modelo de kNN, que consigue grandes resultados usando únicamente 2 genes: ANGPTL6 y PTH1R.\\
+Como conclusiones del presente experimento, los valores de F1-score y precisión son muy altos en la validación cruzada en entrenamiento, superando el 90\% en el mejor modelo de cada algoritmo. Es relevante destacar la alta eficiencia del modelo de kNN, que consigue grandes resultados usando únicamente 2 genes: ANGPTL6 y PTH1R. Estos dos genes son posibles biomarcadores diana debido su gran poder de discernimiento entre tejido tumoral y sano.\\
 
-En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre el gen ANGPTL6 y el cáncer de hígado, aunque está asociado a la cirrosis biliar primaria \cite{Liu2012}, una enfermedad del hígado. Para el gen PTH1R, se encuentran asociaciones con otros tipos de cáncer \cite{Michailidou2017, Michailidou2015} y con algunos factores de riesgo del cáncer de hígado como el consumo de alcohol \cite{biobank} o padecer diabetes tipo II \cite{Xue2018}. Tampoco existe relación directa existente entre el resto de genes seleccionados por los mejores modelos y el cáncer de hígado.
+En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre el gen ANGPTL6 y el cáncer de hígado, aunque está asociado a la cirrosis biliar primaria \cite{Liu2012}, una enfermedad del hígado. Para el gen PTH1R, se encuentran asociaciones con otros tipos de cáncer \cite{Michailidou2017, Michailidou2015} y con algunos factores de riesgo del cáncer de hígado como el consumo de alcohol \cite{biobank} o padecer diabetes tipo II \cite{Xue2018}. Tampoco existe relación directa existente entre el resto de genes seleccionados por los mejores modelos y el cáncer de hígado, por lo que se proponen como campo de futura investigación.
+
 
 \section{Resultados de clasificación multiclase para cáncer de hígado}
 
@@ -727,7 +728,7 @@ En la Tabla 25 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 
 \subsection{Conclusiones}
 
-Los mejores modelos de SVM y kNN distinguen bien entre tejido tumoral y tejido sano, pero cometen 4 errores distinguiendo carcinomas hepatocelulares de colangiocarcinomas. Estos errores cometidos en la clasificación pueden ser debidos a similitudes biológicas entre ambos tipos de cáncer. El mejor modelo de RF distingue ligeramente mejor entre los dos tipos de cáncer, aunque predice como tejido normal dos casos de carcinoma hepatocelular.\\
+Como conclusión, los mejores modelos de SVM y kNN distinguen bien entre tejido tumoral y tejido sano, pero cometen 4 errores distinguiendo carcinomas hepatocelulares de colangiocarcinomas. Estos errores cometidos en la clasificación pueden ser debidos a similitudes biológicas entre ambos tipos de cáncer. El mejor modelo de RF distingue ligeramente mejor entre los dos tipos de cáncer, aunque predice como tejido normal dos casos de carcinoma hepatocelular.\\
 
 En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre los genes de los mejores modelos (7 mejores genes de mRMR) y el cáncer de hígado. Sin embargo, algunos genes están relacionados con sus factores de riesgo: PLXDC1 y AP2B1 con hábito tabáquico \cite{Liu2019} y CDH13 con consumo de alcohol \cite{Schumann2016}.
 
@@ -890,9 +891,9 @@ En la Tabla 31 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 
 \subsection{Conclusiones}
 
-Los mejores modelos de SVM, RF y kNN distinguen perfectamente entre tejido tumoral y tejido sano, sin ningún error, y utilizando menos de 5 genes en todos los casos.\\
+Como principal conclusión, los mejores modelos de SVM, RF y kNN distinguen perfectamente entre tejido tumoral y tejido sano, sin ningún error, y utilizando menos de 5 genes en todos los casos.\\
 
-En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre los genes de los mejores modelos (4 mejores genes de mRMR y 3 mejores genes de RF) y el cáncer de colon-recto salvo para el gen MET \cite{Jiang1993}. Sin embargo, VSTM2A está relacionado con el cáncer de cérvix \cite{Takeuchi2019} y EPOP con el consumo de alcohol \cite{Liu2019, Brazel2019}. 
+En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre los genes de los mejores modelos (4 mejores genes de mRMR y 3 mejores genes de RF) y el cáncer de colon-recto salvo para el gen MET \cite{Jiang1993}. Sin embargo, VSTM2A está relacionado con el cáncer de cérvix \cite{Takeuchi2019} y EPOP con el cáncer y el consumo de alcohol \cite{Liu2019, Brazel2019}. 
 
 \section{Resultados de clasificación multiclase para cáncer de colon-recto}
 
@@ -1076,8 +1077,19 @@ Se han analizado las enfermedades relacionadas con los mejores genes encontrados
 
 \section{Conclusiones finales}
 
-mRMR y RF han demostrado ser buenos métodos de selección de características, siempre mejores que DA, aunque carecen del enfoque médico en el que se basa este último método. Con menos de 10 genes se ha conseguido en general una buena clasificación, a menudo llegando a usar 2 ó 3 genes.\\
+Se presentan a continuación las conclusiones finales obtenidas tras analizar los distintos problemas de clasificación durante el presente Trabajo Fin de Máster.\\
 
-Los 3 algoritmos de clasificación propuestos (SVM, RF y kNN) han obtenido resultados muy similares, tanto para problemas biclase como multiclase. Una de las ventajas de trabajar con varios algoritmos de clasificación es que se puede escoger aquel que utiliza el menor número de genes, por las ventajas que ello conlleva (menor coste computacional, mayor interpretabilidad).\\
+Sobre los algoritmos de selección de características, mRMR y RF han demostrado ser buenos métodos, siempre mejores que DA, aunque carecen del enfoque médico en el que se basa este último método. Con menos de 10 genes se ha conseguido en general una buena clasificación, a menudo llegando a usar 2 ó 3 genes. Encontrar una técnica de clasificación adecuada con un número tan pequeño de genes puede suponer una mejora significativa en el pronóstico de pacientes con cáncer, ya que mediante técnicas simples de diagnóstico se pueden detectar tumores en estadios iniciales, lo que supone múltiples ventajas \cite{Whitaker2020}:
 
-Pese a haber encontrado genes que separan correctamente las distintas clases, para considerar que existen evidencias claras gen-enfermedad es necesario contar con una interpretación clínica \cite{Drier2011}. Este razonamiento está en concordancia con el debate existente sobre el uso de p-valores en la ciencia \cite{Evans1988, Goodman1999, Matthews2000}. De igual forma, pese a los excelentes resultados de los modelos encontrados en el conjunto de test, la validez externa de los métodos está por probar \cite{Steckler2008} y sería recomendable comprobar su efectividad en distintos conjuntos de datos.
+\begin{itemize}
+	\item Mayor efectividad del tratamiento contra la enfermedad, y disminución de sus complicaciones y secuelas.
+	\item Mejora de la calidad de vida del paciente.
+	\item Aumento de la supervivencia.
+\end{itemize}
+
+Para considerar que existen una relación evidente gen-enfermedad es necesario contar con una interpretación clínica \cite{Drier2011}, un razonamiento en concordancia con el debate científico sobre el uso de p-valores en las últimas décadas \cite{Evans1988, Goodman1999, Matthews2000} y en la actualidad \cite{McShane2019, Wasserstein2019}. Por este motivo, sería interesante que expertos en el campo de investigación puedan analizar las huellas genéticas encontradas en el presente trabajo para poder establecer con claridad la relación gen-enfermedad.\\
+
+En general, los algoritmos de clasificación propuestos (SVM, RF y kNN) han obtenido resultados correctos y muy similares entre sí tanto para problemas biclase como multiclase. Una de las ventajas de trabajar con varios algoritmos de clasificación es que se puede escoger aquel que utiliza el menor número de genes, con las ventajas que ello conlleva (menor coste computacional y mayor interpretabilidad). Otra opción posible es escoger aquel algoritmo que aporte más interpretabilidad al problema (kNN en este caso). \\
+
+Por último, sería interesante validar los excelentes resultados de los modelos encontrados en otros conjuntos de datos para probar la validez externa de los modelos \cite{Steckler2008}.\\
+
