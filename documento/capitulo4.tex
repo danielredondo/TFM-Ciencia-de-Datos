@@ -494,8 +494,9 @@ En la Tabla 19 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 
 Como conclusiones del presente experimento, los valores de F1-score y precisión son muy altos en la validación cruzada en entrenamiento, superando el 90\% en el mejor modelo de cada algoritmo. Es relevante destacar la alta eficiencia del modelo de kNN, que consigue grandes resultados usando únicamente 2 genes: ANGPTL6 y PTH1R. Estos dos genes son posibles biomarcadores diana debido su gran poder de discernimiento entre tejido tumoral y sano.\\
 
-En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre el gen ANGPTL6 y el cáncer de hígado, aunque está asociado a la cirrosis biliar primaria \cite{Liu2012}, una enfermedad del hígado. Para el gen PTH1R, se encuentran asociaciones con otros tipos de cáncer \cite{Michailidou2017, Michailidou2015} y con algunos factores de riesgo del cáncer de hígado como el consumo de alcohol \cite{biobank} o padecer diabetes tipo II \cite{Xue2018}. Tampoco existe relación directa existente entre el resto de genes seleccionados por los mejores modelos y el cáncer de hígado, por lo que se proponen como campo de futura investigación.
+En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre el gen ANGPTL6 y el cáncer de hígado, aunque está asociado con el cáncer \cite{Carbone2018} y la cirrosis biliar primaria \cite{Liu2012}. Para el gen PTH1R, se encuentran asociaciones con varios tipos de cáncer \cite{Michailidou2017, Michailidou2015} y algunos factores de riesgo del cáncer de hígado como el consumo de alcohol \cite{biobank} o padecer diabetes tipo II \cite{Xue2018}.\\
 
+Todos los genes seleccionados por los mejores modelos tienen relación con el cáncer. Los genes CCNE1y CDH13 están directamente relacionados con el cáncer de hígado, y los genes ANGPTL6, ADAMTS13, BMPER, CCNE1y CDH13 están relacionados con distintas enfermedades hepáticas.
 
 \section{Resultados de clasificación multiclase para cáncer de hígado}
 
@@ -730,7 +731,7 @@ En la Tabla 25 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 
 Como conclusión, los mejores modelos de SVM y kNN distinguen bien entre tejido tumoral y tejido sano, pero cometen 4 errores distinguiendo carcinomas hepatocelulares de colangiocarcinomas. Estos errores cometidos en la clasificación pueden ser debidos a similitudes biológicas entre ambos tipos de cáncer. El mejor modelo de RF distingue ligeramente mejor entre los dos tipos de cáncer, aunque predice como tejido normal dos casos de carcinoma hepatocelular.\\
 
-En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre los genes de los mejores modelos (7 mejores genes de mRMR) y el cáncer de hígado. Sin embargo, algunos genes están relacionados con sus factores de riesgo: PLXDC1 y AP2B1 con hábito tabáquico \cite{Liu2019} y CDH13 con consumo de alcohol \cite{Schumann2016}.
+En la plataforma de Open Targets \cite{OpenTargets2020} se encuentra asociación entre todos los genes de los mejores modelos (7 mejores genes de mRMR) y el cáncer excepto para FTLP3, que es un pseudogen (gen que ha perdido su funcionalidad) \cite{Guo2014}. El gen CDH13 tiene además relación directa con el cáncer de hígado. Por otra parte, algunos genes están relacionados con factores de riesgo del cáncer de hígado: PLXDC1 y AP2B1 con hábito tabáquico \cite{Liu2019} y CDH13 con consumo de alcohol \cite{Schumann2016}.
 
 \section{Resultados de clasificación biclase para cáncer de colon-recto}
 
@@ -891,9 +892,9 @@ En la Tabla 31 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 
 \subsection{Conclusiones}
 
-Como principal conclusión, los mejores modelos de SVM, RF y kNN distinguen perfectamente entre tejido tumoral y tejido sano, sin ningún error, y utilizando menos de 5 genes en todos los casos.\\
+Como principal conclusión, los mejores modelos de SVM, RF y kNN distinguen perfectamente entre tejido tumoral y tejido sano utilizando menos de 5 genes en todos los casos.\\
 
-En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre los genes de los mejores modelos (4 mejores genes de mRMR y 3 mejores genes de RF) y el cáncer de colon-recto salvo para el gen MET \cite{Jiang1993}. Sin embargo, VSTM2A está relacionado con el cáncer de cérvix \cite{Takeuchi2019} y EPOP con el cáncer y el consumo de alcohol \cite{Liu2019, Brazel2019}. 
+En la plataforma de Open Targets \cite{OpenTargets2020} se encuentra asociación entre todos los genes de los mejores modelos (4 mejores genes de mRMR y 3 mejores genes de RF) y el cáncer de colon-recto.
 
 \section{Resultados de clasificación multiclase para cáncer de colon-recto}
 
@@ -1073,7 +1074,7 @@ En la Tabla 37 se muestra un resumen de los mejores modelos obtenidos y su F1-Sc
 
 En el caso de la clasificación multiclase para cáncer de colon-recto, los resultados son notablemente inferiores a los obtenidos en los otros problemas abordados en este trabajo. Se consigue una buena distinción entre tumores y sanos pero no así entre los diferentes tipos de tumores, algo que puede deberse a las pocas diferencias biológicas existentes entre adenocarcinomas y adenocarcinomas mucinosos. Los adenocarcinomas mucinosos son aquellos adenocarcinomas en los que se producen grandes cantidades de mucina (proteínas que produce el colon para ayudar a lubricación), y si este proceso de producción de mucina no se traduce en grandes diferencias en la expresión de los genes, es complicado distinguir los dos tipos de cáncer. \\
 
-Se han analizado las enfermedades relacionadas con los mejores genes encontrados (3 genes con RF, 9 genes con mRMR) en la plataforma de Open Targets \cite{OpenTargets2020}. Se encuentra asociación del gen SLC11A1 con cáncer de colon-recto \cite{Law2019, Tanskanen2018, Huyghe2019}, así como con enfermedades intestinales inflamatorias \cite{Jostins2012, DeLange2017}. Dos de los genes están relacionados con otros tipos de cáncer: KRT80 con cáncer de pulmón \cite{Wang2016}  y piel \cite{biobank} y MUC2 con cáncer de mama \cite{Michailidou2017a} y próstata \cite{Schumacher2018}. Genes relacionados con factores de riesgo de cáncer de colon-recto son OSBPL3 con consumo de tabaco \cite{Liu2019} y GTF2IRD1 con consumo de alcohol \cite{biobank}.
+Se han analizado las enfermedades relacionadas con los mejores genes encontrados (3 genes con RF, 9 genes con mRMR) en la plataforma de Open Targets \cite{OpenTargets2020}. Se encuentra asociación entre todos los genes y el cáncer de colon-recto. Por ejemplo, el gen SLC11A1 está asociado con cáncer de colon-recto en múltiples referencias bibliográficas \cite{Law2019, Tanskanen2018, Huyghe2019}, así como con enfermedades intestinales inflamatorias \cite{Jostins2012, DeLange2017}. Genes relacionados con factores de riesgo de cáncer de colon-recto son OSBPL3 con consumo de tabaco \cite{Liu2019} y GTF2IRD1 con consumo de alcohol \cite{biobank}.
 
 \section{Conclusiones finales}
 
@@ -1087,9 +1088,8 @@ Sobre los algoritmos de selección de características, mRMR y RF han demostrado
 	\item Aumento de la supervivencia.
 \end{itemize}
 
-Para considerar que existen una relación evidente gen-enfermedad es necesario contar con una interpretación clínica \cite{Drier2011}, un razonamiento en concordancia con el debate científico sobre el uso de p-valores en las últimas décadas \cite{Evans1988, Goodman1999, Matthews2000} y en la actualidad \cite{McShane2019, Wasserstein2019}. Por este motivo, sería interesante que expertos en el campo de investigación puedan analizar las huellas genéticas encontradas en el presente trabajo para poder establecer con claridad la relación gen-enfermedad.\\
+Para considerar que existen una relación evidente gen-enfermedad es necesario contar con una interpretación clínica \cite{Drier2011}, no siendo suficiente una evidencia estadística. Este razonamiento  está en concordancia con el debate científico sobre el uso de p-valores en las últimas décadas \cite{Evans1988, Goodman1999, Matthews2000} y en la actualidad \cite{McShane2019, Wasserstein2019}. Por este motivo, sería interesante que expertos en el campo de investigación médica puedan analizar las huellas genéticas encontradas en el presente trabajo para poder establecer con claridad la relación gen-enfermedad cuando esta relación no está clara.\\
 
 En general, los algoritmos de clasificación propuestos (SVM, RF y kNN) han obtenido resultados correctos y muy similares entre sí tanto para problemas biclase como multiclase. Una de las ventajas de trabajar con varios algoritmos de clasificación es que se puede escoger aquel que utiliza el menor número de genes, con las ventajas que ello conlleva (menor coste computacional y mayor interpretabilidad). Otra opción posible es escoger aquel algoritmo que aporte más interpretabilidad al problema (kNN en este caso). \\
 
 Por último, sería interesante validar los excelentes resultados de los modelos encontrados en otros conjuntos de datos para probar la validez externa de los modelos \cite{Steckler2008}.\\
-
