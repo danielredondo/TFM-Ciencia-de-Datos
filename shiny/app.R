@@ -1,8 +1,10 @@
-# Antes del deploy a shinyapps.io, ejecutar:
+# Before the deploy to shinyapps.io, run:
 # library(BiocManager)
 # options(repos = BiocManager::repositories())
+# See here:
 # https://community.rstudio.com/t/failing-to-deploy-shinyapp-depending-on-bioconductor-packages/6970/5
 
+# Packages
 library(shiny)
 library(shinydashboard)
 library(dplyr)
@@ -14,8 +16,10 @@ library(ggalluvial)
 library(DT)
 library(waiter)
 
+# File to slightly modify dataPlot function
 source("www/dataPlot.R")
 
+# Define some spinners
 spinner_abrir <- tagList(
   spin_folding_cube(),
   span(br(), h4("Loading application..."), style="color:white;")
@@ -27,14 +31,14 @@ spinner <- tagList(
 )
 
 ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
-  ## Tema
+  ## Theme
   skin = "black",
-  ## Cabecera
+  ## Header
   dashboardHeader(title = span(
     "biomarkeRs",
     style = "font-family: Lucida Console; font-weight: bold"
   )),
-  ## Barra lateral
+  ## Sidebar
   dashboardSidebar(
     tags$head(
       tags$link(rel = "stylesheet", type = "text/css", href = "style.css")
@@ -51,9 +55,10 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
       menuItem("Code", tabName = "codigo", icon = icon("code"))
     )
   ),
-  ## Cuerpo
+  ## Body
   dashboardBody(
     use_waiter(),
+    # Spinners to show on load, or when the application is busy
     #waiter_show_on_load(spinner_abrir, color = "#027368"),
     #waiter_on_busy(spinner, color = "#027368"),
     tabItems(
@@ -73,7 +78,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               (F1-Score: 100%). Lower evaluation measures are obtained in the best models for multiclass classification, in both liver (F1-Score:
               91.8%) and colon-rectum (F1-Score: 79.3%). ",
               br(), br(),
-              "A web application has been developed, BiomarkeRs, that implements transcriptomic analysis and can be useful for users
+              "A web application has been developed, biomarkeRs, that implements transcriptomic analysis and can be useful for users
               without previous knowledge of programming.",
               h3(tags$b("Conclusions")),
               "SVM, random forest and kNN obtained very similar results, and managed to correctly distinguish between tumoral and normal tissues
@@ -82,7 +87,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               
               h2("About this web application"),
               "[Text]",
-              # Parte final
+              # Images
               br(), br(), br(),
               fluidRow(column(6, tags$img(src = "ugr.png", height = "100px")),
                        column(6, tags$img(src = "knowseq.png", height = "120px")))
@@ -92,16 +97,28 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
       # Tab 2
       tabItem(tabName = "datos",
 
-              # Columna izquierda
+              # Left column
               fluidRow(column(6, 
                 h1("Data loading"),
                 fileInput(inputId = "file_labels",
-                          label = "Select file of labels",
+                          label = span("Select CSV file with labels (see ",
+                                       tags$a(
+                                         "here",
+                                         href = "https://raw.githubusercontent.com/danielredondo/TFM_ciencia_de_datos/master/shiny/datos/higado_200genes_labels.csv",
+                                         target="_blank"
+                                         ),
+                                       "an example)"),
                           accept = ".csv",
                           width = "100%"
                 ),
                 fileInput(inputId = "file_DEGsMatrix",
-                          label = "Select file of DEGsMatrix",
+                          label = span("Select CSV file with DEGsMatrix (see ",
+                                       tags$a(
+                                         "here",
+                                         href = "https://github.com/danielredondo/TFM_ciencia_de_datos/raw/master/shiny/datos/higado_200genes_DEGsMatrix.csv",
+                                         target="_blank"
+                                       ),
+                                       "an example)"),
                           accept = ".csv",
                           width = "100%"
                 ),
@@ -119,7 +136,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
                                  tableOutput("tabla1")
                                  
                                  )),
-                 # Columna derecha
+                 # Right column
                  column(6, br(), br(), br(),
                           conditionalPanel(condition = "input.boton_importar!=0",
                              h2("Train-test partition"),
@@ -164,27 +181,28 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
       tabItem(tabName = "entrenamiento",
               h1("Model training"),
               
-              # Elegir MRMR/RF/DA, se muestra MRMR por ahora
+              # Choose feature selection algorithm
               selectInput("fs_algorithm",
                           label = "Feature selection algorithm",
                           choices = c("mRMR", "RF", "DA"),
                           selected = "mRMR",
                           width = "50%"),
               
-              # Método de clasificación
+              # Choose classification algorithm
               selectInput("cl_algorithm",
                           label = "Classification algorithm",
                           choices = c("SVM", "RF", "kNN"),
                           selected = "SVM",
                           width = "50%"),
               
-              # Se puede añadir número de CV que se hacen
+              # Choose number of folds
               selectInput("number_folds",
                           label = "Number of folds",
                           choices = c(3, 5, 10),
                           selected = 5,
                           width = "50%"),
               
+              # Train model button
               actionButton(inputId = "boton_model_training",
                            label 
                            = "Train model",
@@ -194,6 +212,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               br(),
               br(),
               
+              # Show optimal parameters (if the classification method is SVM or kNN)
               conditionalPanel(condition = "input.cl_algorithm == 'SVM'",
                                br(),
                                textOutput("optimal_svm"),
@@ -211,25 +230,21 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
       tabItem(tabName = "validation",
               h1("Model validation"),
               
-              # Elegir MRMR/RF/DA, se muestra MRMR por ahora
               selectInput("fs_algorithm_validation",
                           label = "Feature selection algorithm:",
                           choices = c("mRMR", "RF", "DA"),
                           selected = "mRMR",
                           width = "50%"),
               
-              # Método de clasificación
               selectInput("cl_algorithm_validation",
                           label = "Classification algorithm (for SVM and kNN it must be trained first to obtain optimal parameters):",
                           choices = c("SVM", "RF", "kNN"),
                           selected = "SVM",
                           width = "50%"),
               
-              # Número de genes
               sliderInput(inputId = "numero_genes_validation", label = "Select the number of genes to use (must be equal or less than the number of genes selected at 'Genes selection'):",
                           value = 10, min = 1, max = 50, step = 1, width = "50%"),
 
-              # Botón validación
               actionButton(inputId = "boton_model_validation",
                            label = "Validate model in test",
                            icon = icon("play", lib = "font-awesome"),
@@ -255,24 +270,27 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
       tabItem(tabName = "autores",
               h1("Authors"),
               tags$h4(
-                tags$li(tags$b("Daniel Redondo Sánchez")), br(),
-                tags$li(tags$b("Ignacio Rojas")), br(),
-                tags$li(tags$b("Luis Javier Herrera")), br(),
-                tags$li(tags$b("Daniel Castillo"))
-                )
+                tags$li("Daniel Redondo Sánchez. Granada Cancer Registry, ibs.GRANADA."), br(),
+                tags$li("Daniel Castillo. University of Granada."), br(),
+                tags$li("Luis Javier Herrera. University of Granada.")),
+                
+                h2("Contact"),
+                "Daniel Redondo Sánchez (daniel.redondo.easp at juntadeandalucia.es) is the main developer of this Shiny App.", br(),
+                "Daniel Castillo (cased at ugr.es) is the main developer of the R package KnowSeq."
+              
               ),
       # Tab 8
       tabItem(tabName = "codigo",
               h1("Code"),
               tags$h4(
-                "In ", tags$a(href = "https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/shiny/app.R", "this GitHub repository"),
+                "In ", tags$a(href = "https://github.com/danielredondo/TFM_ciencia_de_datos/tree/master/shiny", "this GitHub repository"),
                 "you can find the code of the web application.")
               )
-      ) # Final tabs
-  ) # Final dashboard body
-) # Final dashboard page
+      ) # Close tabs
+  ) # Close dashboard body
+) # Close dashboard page
 
-# Ampliar tamaño de archivos a importar a 40MB en lugar de los 5MB por defecto
+# Extend size of accepted files (40MB instead of the 5MB - default)
 options(shiny.maxRequestSize = 40*1024^2)
 
 server <- function(input, output){
@@ -283,25 +301,22 @@ server <- function(input, output){
   
   observeEvent(input$boton_importar, {
     
-    # Si se han seleccionado los ficheros, se importan
-    # Extraer labels
+    # If files are selected, they are imported
+    # Read labels
     labels <- as.vector(t(read.csv2(file = input$file_labels$datapath)))
-    # Extraer matriz
+    # Read DEGsMatrix
     DEGsMatrix <- as.data.frame(read.csv2(file = input$file_DEGsMatrix$datapath, row.names = 1))
     filas <- rownames(DEGsMatrix)
     DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
     rownames(DEGsMatrix) <- filas
-    # Crear DEGsMatrixML
+    # Create DEGsMatrixML (for machine learning purposes)
     DEGsMatrixML <- t(DEGsMatrix)
-  
-    # Parámetros generales
     
-    # Partición 75% / 25% con balanceo de clase
+    # Train-test partition
     set.seed(31415)
     indices <- reactive(createDataPartition(labels, p = input$porcentaje_entrenamiento / 100, list = FALSE))
     particion <- reactive(list(training = DEGsMatrixML[indices(), ], test = DEGsMatrixML[-indices(), ]))
     
-    # Conjuntos
     particion.entrenamiento <- reactive(particion()$training)
     particion.test <- reactive(particion()$test)
     
@@ -309,11 +324,11 @@ server <- function(input, output){
     labels_train <- reactive(labels[indices()])
     labels_test  <- reactive(labels[-indices()])
     
-    # Se muestra la tabla
+    # Table
     output$tabla1 <- renderTable({
         if(is.null(input$file_labels)) return(NULL)
         
-      # Mensaje de OK
+      # Message if file is correctly imported
       showModal(modalDialog(
         h3(icon("check-circle", lib = "font-awesome", class = "fa-1x"),
            " File imported"),
@@ -328,7 +343,6 @@ server <- function(input, output){
   output$sankey <- renderPlot({
     if(is.null(input$file_labels)) return(NULL)
     
-    # Número de casos
     # Train
     #table(labels_train)
     entr_tum <- table(labels_train())[1]
@@ -339,7 +353,7 @@ server <- function(input, output){
     test_tum <- table(labels_test())[1]
     test_san <- table(labels_test())[2]
 
-    # Diagrama de Sankey
+    # Sankey diagram
     datos_sankey <- data.frame(tipo = c(paste0("Tumour\n", entr_tum + test_tum, " cases"), paste0("Tumour\n", entr_tum + test_tum, " cases"),
                                         paste0("Normal tissue\n", entr_san + test_san, " cases"), paste0("Normal tissue\n", entr_san + test_san, " cases")),
                                traintest = c(paste0("Train\n", entr_tum, " tumour\n", entr_san, " normal tissue"),
@@ -348,7 +362,7 @@ server <- function(input, output){
                                              paste0("Test\n", test_tum, " tumour\n", test_san, " normal tissue")),
                                value = c(entr_tum, test_tum, entr_san, test_san))
     
-    # Pequeño reorden para que mejorar la presentación de los datos
+    # Reordering types
     datos_sankey$tipo <- factor(datos_sankey$tipo,
                                 levels = c(paste0("Tumour\n", entr_tum + test_tum, " cases"), paste0("Normal tissue\n", entr_san + test_san, " cases")),
                                 ordered = T)
@@ -370,7 +384,7 @@ server <- function(input, output){
             axis.ticks = element_blank(),
             panel.grid = element_blank()) 
     })
-  }) # Cierre botón import
+  }) # Close import button
   
   
   # Server of tab: Genes selection ------
@@ -381,32 +395,25 @@ server <- function(input, output){
     
     w$show()
     
-    # Si se ha seleccionado un fichero, se importa
-    # Extraer labels
     labels <- as.vector(t(read.csv2(file = input$file_labels$datapath)))
-    # Extraer matriz
     DEGsMatrix <- as.data.frame(read.csv2(file = input$file_DEGsMatrix$datapath, row.names = 1))
     filas <- rownames(DEGsMatrix)
     DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
     rownames(DEGsMatrix) <- filas
-    # Crear DEGsMatrixML
     DEGsMatrixML <- t(DEGsMatrix)
     
-    # Partición 75% / 25% con balanceo de clase
     set.seed(31415)
     indices <- reactive(createDataPartition(labels, p = input$porcentaje_entrenamiento / 100, list = FALSE))
     particion <- reactive(list(training = DEGsMatrixML[indices(), ], test = DEGsMatrixML[-indices(), ]))
     
-    # Conjuntos
     particion.entrenamiento <- reactive(particion()$training)
     particion.test <- reactive(particion()$test)
     
-    # Labels
     labels_train <- reactive(labels[indices()])
     labels_test  <- reactive(labels[-indices()])
     w$hide()
 
-    # Método mRMR (mínima redundancia, máxima relevancia)
+    # mRMR method
     w <- Waiter$new(html = tagList(spin_folding_cube(),
                                    span(br(), br(), br(), h4("Running mRMR algorithm..."),
                                         style="color:white;")))
@@ -416,7 +423,7 @@ server <- function(input, output){
     mrmrRanking <- names(mrmrRanking)
     w$hide()
     
-    # Método random forest
+    # RF method
     w <- Waiter$new(html = tagList(spin_folding_cube(),
                                    span(br(), br(), br(), h4("Running RF algorithm..."),
                                         style="color:white;")))
@@ -425,7 +432,7 @@ server <- function(input, output){
                                   mode = "rf")
     w$hide()
     
-    # Método DA
+    # DA method
     w <- Waiter$new(html = tagList(spin_folding_cube(),
                                    span(br(), br(), br(), h4("Running DA algorithm..."),
                                         style="color:white;")))
@@ -436,7 +443,7 @@ server <- function(input, output){
                                   mode = "da", disease = input$disease_da)
     daRanking <- names(daRanking)
     
-    # Si ha habido algún problema en la llamada a la API, se repite tras un descanso de 3 segundos
+    # If there has been any problem in the API call, it's repeated after a 3 second break
     while(is.null(daRanking)){
       Sys.sleep(3)
       daRanking <- featureSelection(particion.entrenamiento(), labels_train(), colnames(particion.entrenamiento()),
@@ -449,7 +456,7 @@ server <- function(input, output){
     
   values$ranking <- cbind(mrmrRanking, rfRanking, daRanking)
     
-  # Rankings: extracción del número de genes especificado por el usuario
+  # Ranking tables
     
   output$genes_mrmr <- renderTable({
     mrmrRanking <- mrmrRanking[1:input$numero_genes]
@@ -466,14 +473,7 @@ server <- function(input, output){
     return(daRanking)
   }, colnames = FALSE)
 
-  }) # Cierre botón calcular genes
-
-  # Leer
-  # https://stackoverflow.com/questions/29716868/r-shiny-how-to-get-an-reactive-data-frame-updated-each-time-pressing-an-actionb
-  # https://stackoverflow.com/questions/33671915/r-shiny-server-how-to-keep-variable-value-in-observeevent-function
-  # https://groups.google.com/g/shiny-discuss/c/UVL3uENQ88k
-  # https://shiny.rstudio.com/articles/action-buttons.html
-  # para ejecutar sólo una vez particion.entrenamiento y demás funciones.
+  }) # Close button
 
   # Server of tab: Model training ------
   
@@ -485,27 +485,21 @@ server <- function(input, output){
     
     w2$show()
     
-    # Si se ha seleccionado un fichero, se importa
-    # Extraer labels
+
     labels <- as.vector(t(read.csv2(file = input$file_labels$datapath)))
-    # Extraer matriz
     DEGsMatrix <- as.data.frame(read.csv2(file = input$file_DEGsMatrix$datapath, row.names = 1))
     filas <- rownames(DEGsMatrix)
     DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
     rownames(DEGsMatrix) <- filas
-    # Crear DEGsMatrixML
     DEGsMatrixML <- t(DEGsMatrix)
     
-    # Partición 75% / 25% con balanceo de clase
     set.seed(31415)
     indices <- reactive(createDataPartition(labels, p = input$porcentaje_entrenamiento / 100, list = FALSE))
     particion <- reactive(list(training = DEGsMatrixML[indices(), ], test = DEGsMatrixML[-indices(), ]))
     
-    # Conjuntos
     particion.entrenamiento <- reactive(particion()$training)
     particion.test <- reactive(particion()$test)
     
-    # Labels
     labels_train <- reactive(labels[indices()])
     labels_test  <- reactive(labels[-indices()])
     w2$hide()
@@ -521,13 +515,6 @@ server <- function(input, output){
     if(input$fs_algorithm == "DA"){
       ranking <- values$ranking[1:input$numero_genes, 3]
     }
-    
-    # Debugging
-    print("values$ranking")
-    print(values$ranking)
-    print("----")
-    print("ranking")
-    print(ranking)
     
     if(input$cl_algorithm == "SVM"){
       w3 <- Waiter$new(html = tagList(spin_folding_cube(),
@@ -594,27 +581,20 @@ server <- function(input, output){
     
     w3$show()
     
-    # Si se ha seleccionado un fichero, se importa
-    # Extraer labels
     labels <- as.vector(t(read.csv2(file = input$file_labels$datapath)))
-    # Extraer matriz
     DEGsMatrix <- as.data.frame(read.csv2(file = input$file_DEGsMatrix$datapath, row.names = 1))
     filas <- rownames(DEGsMatrix)
     DEGsMatrix <- apply(DEGsMatrix, 2, as.numeric)
     rownames(DEGsMatrix) <- filas
-    # Crear DEGsMatrixML
     DEGsMatrixML <- t(DEGsMatrix)
     
-    # Partición 75% / 25% con balanceo de clase
     set.seed(31415)
     indices <- reactive(createDataPartition(labels, p = input$porcentaje_entrenamiento / 100, list = FALSE))
     particion <- reactive(list(training = DEGsMatrixML[indices(), ], test = DEGsMatrixML[-indices(), ]))
     
-    # Conjuntos
     particion.entrenamiento <- reactive(particion()$training)
     particion.test <- reactive(particion()$test)
     
-    # Labels
     labels_train <- reactive(labels[indices()])
     labels_test  <- reactive(labels[-indices()])
     w3$hide()
@@ -630,10 +610,6 @@ server <- function(input, output){
     if(input$fs_algorithm_validation == "DA"){
       ranking <- values$ranking[1:input$numero_genes, 3]
     }
-    
-    # Debug
-    print(paste0("ranking = ", ranking))
-    print(paste0("longitud ranking = ", length(ranking)))
     
     if(input$cl_algorithm_validation == "SVM"){
       w3 <- Waiter$new(html = tagList(spin_folding_cube(),
@@ -664,35 +640,24 @@ server <- function(input, output){
                                            style="color:white;")))  
       w3$show()
       results_validation <- knn_test(train = particion.entrenamiento(), labels_train(),
-                             test = particion.test(), labels_test(),
-                             ranking, bestK = values$optimalkNN_train)
+                                     test = particion.test(), labels_test(),
+                                     ranking, bestK = values$optimalkNN_train)
       w3$hide()
     }
-    
-    
-    # output$optimal_svm <- renderText(paste0("\nOptimal coefficients for ", input$numero_genes, " genes : cost = ", results_cv$bestParameters[1], "; gamma = ", results_cv$bestParameters[2]))
-    
-    # output$optimal_knn <- renderText(paste0("\nOptimal number of neighbours for ", input$numero_genes, " genes = ", results_cv$bestK))
     
     output$results_validation <- renderPlot({
       tabla <- results_validation$cfMats[[input$numero_genes_validation]]$table
       plotConfMatrix(tabla)
     })
     
-  }) 
-
+  })
   
 
-  
-  
-  
-  
-  
-  
   # Server of tab: Related diseases ------
   output$gene_for_disease_table <- renderDataTable(
     {dis <- as.data.frame(DEGsToDiseases(input$gene_for_disease, size = 10000))
 
+    # Round coefficients
     for(i in 2:9){
       dis[, i] <- round(as.numeric(dis[, i]), 2)
     }
