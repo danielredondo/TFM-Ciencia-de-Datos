@@ -15,20 +15,14 @@ Para el problema de clasificación de muestras de tejidos existen varias líneas
 \{\texttt{KnowSeq}\} es un paquete de \texttt{R} en continua evolución y abierto a la colaboración mediante GitHub \cite{KnowSeq}. Algunas mejoras propuestas por el autor que se pueden implementar a corto plazo son las siguientes:
 
 \begin{itemize}
-	\item Un tuning preciso de los parámetros de los algoritmos de clasificación. Para realizar el tuning de los parámetros óptimos de SVM y kNN se han utilizado los 10 genes más relevantes. Posteriormente, se seleccionaba como mejor modelo aquel que con menor número de genes obtenía el mejor F1-Score. Quizá para este número de genes, menor de 10, existan otros parámetros que puedan optimizar los resultados del algoritmo. Tras implementar este cambio, se podrían obtener parámetros óptimos para cada método de selección de características y número de genes.
-	\item Nuevos gráficos. Dentro de la función \texttt{KnowSeq::dataPlot} se pueden implementar los mapas de calor planteados en el presente trabajo para medir F1-Score, precisión, sensibilidad y especificidad (por ejemplo, Figura 8). En el caso de estas figuras, permiten detectar fácilmente los indicadores más altos debido a los colores empleados y al resaltado en negrita del valor más alto (realizado automáticamente con el código).
+	\item Un tuning preciso de los parámetros de los algoritmos de clasificación. En este trabajo, para realizar el tuning de los parámetros óptimos de SVM y kNN se han utilizado los 10 genes más relevantes. Posteriormente, se seleccionaba como mejor modelo aquel que con menor número de genes obtenía el mejor F1-Score. Es probable que para ese número de genes, menor de 10, existan otros parámetros que puedan optimizar los resultados del algoritmo. Tras implementar este cambio, se podrían obtener parámetros óptimos para cada método de selección de características y número de genes.
+	\item Nuevos gráficos. Dentro de la función \texttt{KnowSeq::dataPlot} se pueden implementar los mapas de calor mostrados en el presente trabajo (como la Figura 8) para medir los distintos indicadores (F1-Score, precisión, sensibilidad y especificidad) obtenidos con varios métodos de selección de características. En el caso de estas figuras, permiten detectar fácilmente los indicadores más altos debido a los colores empleados y al resaltado en negrita del valor más alto (realizado automáticamente con el código).
 \end{itemize}
-
-\textcolor{red}{Conforme vaya haciendo estos cambios en KnowSeq, puedo ir pasándolos a la parte de análisis donde nombro los cambios que he realizado en el paquete.}
 
 \section{\texttt{BiomarkeRs}}
 
-Siguiendo la iniciativa de la aplicación web \texttt{BiomarkeRs} se debe continuar haciendo esfuerzos para acercar el análisis de datos transcriptómicos a personas sin conocimientos previos de programación. En este sentido, el uso de tutoriales o cursos cortos para enseñar a usar la plataforma pueden ser de utilidad. Además, la aplicación web debería aprovechar todo el potencial presente en \{\texttt{KnowSeq}\} y actualizarse con las nuevas funcionalidades que se implementen en el paquete. El hecho de que sea una aplicación de código abierto puede ayudar a esta actualización. \\
+Siguiendo la iniciativa de la aplicación web \texttt{BiomarkeRs}, se debe continuar haciendo esfuerzos para acercar el análisis de datos transcriptómicos a personas sin conocimientos previos de programación. En este sentido, el uso de tutoriales o cursos cortos para enseñar a usar la plataforma pueden ser de utilidad. Además, la aplicación web debería aprovechar todo el potencial presente en \{\texttt{KnowSeq}\} y actualizarse con las nuevas funcionalidades que se implementen en el paquete. El hecho de que sea una aplicación de código abierto puede ayudar en esta constante actualización. 
 
 \section{Artículo}
 
 Finalmente, como consecuencia de este trabajo se está desarrollando un artículo científico que será enviado a una revista del campo de la bioinformática.
-
-
-
-

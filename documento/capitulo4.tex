@@ -209,17 +209,17 @@ Para las variables con datos faltantes se ha realizado un análisis de casos com
 
 \subsection{Herramientas para el análisis}
 
-Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) \cite{R} y \textit{\{\texttt{KnowSeq}\}} (v.1.2.0) \cite{KnowSeq}, paquete de \texttt{R} que ha sido desarrollado por los tutores del presente trabajo y en el que el autor ha contribuido con algunas mejoras y actualizaciones (\url{https://github.com/CasedUgr/KnowSeq/commits?author=danielredondo}):
+Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) \cite{R} y \textit{\{\texttt{KnowSeq}\}} (v.1.2.0) \cite{KnowSeq}, paquete de \texttt{R} que ha sido desarrollado por los tutores del presente trabajo y en el que el autor figura como colaborador y ha contribuido con algunas mejoras y actualizaciones:
 
 \begin{itemize}
-	\item Corregir un fallo que hacía que el método de selección de características RF no funcionase correctamente ante problemas de clasificación multiclase.
-	\item Mantener los parámetros óptimos de SVM (coste y gamma) y kNN ($k$) encontrados tras optimización de los parámetros en conjunto de entrenamiento para aplicarlos directamente en el modelo para el conjunto de test.
-	\item Pequeñas modificaciones en la documentación de funciones.
+	\item Mantener los parámetros óptimos de SVM (coste y gamma) y kNN ($k$) encontrados tras optimización de los parámetros en conjunto de entrenamiento para aplicarlos directamente en el modelo para el conjunto de test. La pull request en GitHub asociada a este cambio se puede encontrar en el siguiente enlace: \url{https://github.com/CasedUgr/KnowSeq/pull/11}.
+	\item Corregir un fallo que hacía que el método de selección de características RF no funcionase correctamente ante problemas de clasificación multiclase. La pull request  en GitHub  asociada a este cambio se puede encontrar en el siguiente enlace: \url{https://github.com/CasedUgr/KnowSeq/pull/43}.
+	\item Mejorar la función de entrenamiento de RF para que funcionase correctamente ante problemas multiclase. La pull request  en GitHub asociada a este cambio se puede encontrar en el siguiente enlace: \url{https://github.com/CasedUgr/KnowSeq/pull/44}.
+	\item Añadir un nuevo tipo de gráfico dentro de la función \texttt{KnowSeq::dataPlot} que permite visualizar la evolución de los indicadores F1-Score, precisión, sensibilidad y especificidad según número de genes usados. La pull request  en GitHub  asociada a este cambio se puede encontrar en el siguiente enlace: \url{https://github.com/CasedUgr/KnowSeq/pull/45}.
 \end{itemize}
 
-\textit{\{\texttt{KnowSeq}\}} está además disponible en Docker con el comando \textit{\texttt{Docker run -it casedugr/knowseq}} y en \textit{Bioconductor}, la plataforma de código abierto en \texttt{R} más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.\\
+El paquete \textit{\{\texttt{KnowSeq}\}} está además disponible en Docker con el comando \textit{\texttt{Docker run -it casedugr/knowseq}} y en \textit{Bioconductor}, la plataforma de código abierto en \texttt{R} más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.
 
-\newpage
 \begin{center}
 \textbf{Figura 6}. Logo de \textit{\{\texttt{KnowSeq}\}}.
 \end{center}
@@ -255,6 +255,7 @@ Se utiliza el conjunto de entrenamiento para seleccionar los diez genes más rel
 
 Se realiza validación cruzada 5-fold para tres algoritmos de clasificación: SVM, RF y kNN. Los parámetros de los clasificadores se optimizan usando los 10 genes más relevantes de cada método de selección de características (mRMR, RF y DA). Para SVM con kernel radial se realiza optimización de los dos parámetros utilizando una rejilla con los valores especificados en la Tabla 13.\\
 
+\newpage
 \textbf{Tabla 13}. Valores de los parámetros que se utilizan para la búsqueda en rejilla de los parámetros óptimos del algoritmo SVM.
 
 \begin{table}[H]
@@ -280,8 +281,9 @@ El código completo del análisis está disponible en el fichero \textit{\texttt
 
 \subsection{Detección de biomarcadores}
 
-Para la clasificación biclase en cáncer de hígado se cuenta con 404 tumores y 58 muestras de tejido sano (Tabla 14). \\
+Para la clasificación biclase en cáncer de hígado se cuenta con 404 tumores y 58 muestras de tejido sano (Tabla 14).
 
+\newpage
 \textbf{Tabla 14}. Distribución de tipos de muestra para el análisis de cáncer de hígado biclase.
 
 \begin{table}[H]
@@ -310,6 +312,7 @@ De los 24.645 genes presentes en los datos se extraen 2.274 genes que presentan 
 	\end{tabular}
 \end{table}
 
+\newpage
 \begin{center}
 	\textbf{Figura 7}. Diagrama de Sankey mostrando la partición entrenamiento-test realizada según tipo de muestra para el análisis de hígado biclase.
 \end{center}
@@ -496,7 +499,9 @@ Como conclusiones del presente experimento, los valores de F1-score y precisión
 
 En la plataforma de Open Targets \cite{OpenTargets2020} no se encuentra ninguna asociación entre el gen ANGPTL6 y el cáncer de hígado, aunque está asociado con el cáncer \cite{Carbone2018} y la cirrosis biliar primaria \cite{Liu2012}. Para el gen PTH1R, se encuentran asociaciones con varios tipos de cáncer \cite{Michailidou2017, Michailidou2015} y algunos factores de riesgo del cáncer de hígado como el consumo de alcohol \cite{biobank} o padecer diabetes tipo II \cite{Xue2018}.\\
 
-Todos los genes seleccionados por los mejores modelos tienen relación con el cáncer. Los genes CCNE1y CDH13 están directamente relacionados con el cáncer de hígado, y los genes ANGPTL6, ADAMTS13, BMPER, CCNE1y CDH13 están relacionados con distintas enfermedades hepáticas.
+Todos los genes seleccionados por los mejores modelos tienen relación con el cáncer. Los genes CCNE1
+y CDH13 están directamente relacionados con el cáncer de hígado, y los genes ANGPTL6, ADAMTS13, BMPER, CCNE1
+y CDH13 están relacionados con distintas enfermedades hepáticas.
 
 \section{Resultados de clasificación multiclase para cáncer de hígado}
 
