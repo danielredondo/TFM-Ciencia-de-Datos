@@ -1,8 +1,6 @@
 # Epidemiología y detección de biomarcadores en cáncer
 
-*(Trabajo en desarrollo)*
-
-Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ingeniería de Computadores, Universidad de Granada
+Trabajo Fin de Máster. Máster Universitario Oficial en Ciencia de Datos e Ingeniería de Computadores, Universidad de Granada.
 
 **Daniel Redondo Sánchez**
 
@@ -18,4 +16,4 @@ Trabajo Fin de Máster - Máster Universitario Oficial en Ciencia de Datos e Ing
 
 - `epidemiologia`: Datos sobre la epidemiología del cáncer.
 
-- `shiny`: Aplicación web `biomarkeRs`.
+- `shiny`: Aplicación web `biomarkeRs`, disponible online en [https://dredondo.shinyapps.io/biomarkeRs/](https://dredondo.shinyapps.io/biomarkeRs/).
