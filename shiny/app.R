@@ -66,7 +66,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
       tabItem(tabName = "intro",
               
               h1("About this web application"),
-              "This web application allows users with no previous knowledge of programming to analyze transcriptomics data using machine learning.",
+              tags$i("biomarkeRs"), "is a web application that allows users with no previous knowledge of programming to analyze transcriptomics data using machine learning.",
               br(), br(),
               
               "The ", tags$i("biomarkeRs"), "application is part of the", 
@@ -75,7 +75,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
                 href = "https://github.com/danielredondo/TFM_ciencia_de_datos",
                 target="_blank"
               ),
-              "It´s developed in R-Shiny and the code is ",
+              "It's developed in R-Shiny and the code is ",
               tags$a(
                 "open source.",
                 href = "https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/shiny/app.R",
@@ -301,7 +301,7 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               h1("Code"),
               tags$h4(
                 "In ", tags$a(href = "https://github.com/danielredondo/TFM_ciencia_de_datos/tree/master/shiny", "this GitHub repository"),
-                "you can find the code of the web application.")
+                "you can find the code of this web application.")
               )
       ) # Close tabs
   ) # Close dashboard body
