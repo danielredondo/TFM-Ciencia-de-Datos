@@ -19,10 +19,22 @@ Para el problema de clasificación de muestras de tejidos existen varias líneas
 	\item Nuevos gráficos. Dentro de la función \texttt{KnowSeq::dataPlot} se pueden implementar los mapas de calor mostrados en el presente trabajo (como la Figura 8) para medir los distintos indicadores (F1-Score, precisión, sensibilidad y especificidad) obtenidos con varios métodos de selección de características. En el caso de estas figuras, permiten detectar fácilmente los indicadores más altos debido a los colores empleados y al resaltado en negrita del valor más alto (realizado automáticamente con el código).
 \end{itemize}
 
-\section{\texttt{BiomarkeRs}}
+\section{\texttt{biomarkeRs}}
 
-Siguiendo la iniciativa de la aplicación web \texttt{BiomarkeRs}, se debe continuar haciendo esfuerzos para acercar el análisis de datos transcriptómicos a personas sin conocimientos previos de programación. En este sentido, el uso de tutoriales o cursos cortos para enseñar a usar la plataforma pueden ser de utilidad. Además, la aplicación web debería aprovechar todo el potencial presente en \{\texttt{KnowSeq}\} y actualizarse con las nuevas funcionalidades que se implementen en el paquete. El hecho de que sea una aplicación de código abierto puede ayudar en esta constante actualización. 
+Tras la creación de la aplicación web \texttt{biomarkeRs} se deben hacer esfuerzos para acercar el análisis de datos transcriptómicos a usuarios sin conocimientos previos de programación. En este sentido, el uso de tutoriales o cursos cortos para enseñar a usar \texttt{biomarkeRs} pueden ser de utilidad. Por otra parte, la aplicación web debería aprovechar todo el potencial presente en \{\texttt{KnowSeq}\} y actualizarse con las nuevas funcionalidades que se implementen en el paquete.\\
+
+La aplicación web \texttt{biomarkeRs} está aún en una etapa inicial, y se pueden añadir muchas mejoras:
+
+\begin{itemize}
+	\item Ampliar el propósito de la aplicación para incluir también análisis de tipo multiclase. 
+	\item Redactar en inglés un manual de uso para fomentar el uso de la aplicación. Otra opción complementaria puede ser la grabación de vídeos explicando el funcionamiento de la aplicación con casos de uso.
+	\item Añadir el F1-Score obtenido en el apartado de validación del modelo. Aunque este indicador se puede calcular a partir de la matriz de confusión, esto facilitaría la experiencia de usuario.
+	\item \textcolor{red}{Añadir como cosas a mejorar de la app: que el usuario pueda elegir los IDs que se usan para train y test}
+	\item\textcolor{red}{Se podría añadir en la tabla final de resultados una tabla interactiva con los IDs, su clase original, y su clase predicha por el modelo, con otra columna con "true positive/false positive/etc"... pero habría que modificar las funciones test de KnowSeq para que devuelva un vector con las clases predichas (en la actualidad, devuelve matriz de confusión, vectores de acc, spe, sens y f1). Pero hay que cambiar todas las funciones de test para que devuelvan las etiquetas predichas}
+\end{itemize}
+
+El hecho de que sea una aplicación de código abierto abierta a colaboraciones puede ayudar a implementar estas mejoras.
 
 \section{Artículo}
 
-Finalmente, como consecuencia de este trabajo se está desarrollando un artículo científico que será enviado a una revista del campo de la bioinformática.
+Se está desarrollando un artículo científico que sintetiza los resultados obtenidos en el presente trabajo y será enviado a una revista del campo de la bioinformática.
