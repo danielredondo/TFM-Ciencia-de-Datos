@@ -64,7 +64,25 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
     tabItems(
       # Tab 1
       tabItem(tabName = "intro",
-              h1("Epidemiology and biomarkers detection in cancer"),
+              
+              h1("About this web application"),
+              "This web application allows users with no previous knowledge of programming to analyze transcriptomics data using machine learning.",
+              br(), br(),
+              
+              "The ", tags$i("biomarkeRs"), "application is part of the", 
+              tags$a(
+                "final master's project of Daniel Redondo Sánchez.",
+                href = "https://github.com/danielredondo/TFM_ciencia_de_datos",
+                target="_blank"
+              ),
+              "It´s developed in R-Shiny and the code is ",
+              tags$a(
+                "open source.",
+                href = "https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/shiny/app.R",
+                target="_blank"
+              ),
+              
+              h2("Abstract of the final master's project: Epidemiology and biomarkers detection in cancer"),
               
               h3(tags$b("Introduction")),
               "Cancer is one of the world's largest public health problems with more than 17 million new cases and 9 million deaths every year.",
@@ -79,14 +97,13 @@ ui <- dashboardPage(title = "biomarkeRs", # Title in web browser
               91.8%) and colon-rectum (F1-Score: 79.3%). ",
               br(), br(),
               "A web application has been developed, biomarkeRs, that implements transcriptomic analysis and can be useful for users
-              without previous knowledge of programming.",
+              with no previous knowledge of programming.",
               h3(tags$b("Conclusions")),
               "SVM, random forest and kNN obtained very similar results, and managed to correctly distinguish between tumoral and normal tissues
               with some troubles distinguishing between different types of cancer. External validation and clinical interpretations are necessary
               to clearly establish a gene-disease association.",
               
-              h2("About this web application"),
-              "[Text]",
+
               # Images
               br(), br(), br(),
               fluidRow(column(6, tags$img(src = "ugr.png", height = "100px")),
