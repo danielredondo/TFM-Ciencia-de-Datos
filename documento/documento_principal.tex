@@ -159,20 +159,15 @@ Luis Javier Herrera Maldonado
 	\includegraphics[height=2.5cm]{logos/ugr.png} \\ 
 }
 	
+	% Título
 	\mainmatter
 	\maketitle
 	\thispagestyle{empty}
 	
-	%% 
-	%% \null\newpage
-	%% \thispagestyle{empty}
-	%% \noindent \textbf{Agradecimientos:}\\
-	%% 
-	%% 
-	%% \null\newpage
-	%%
-	%% 
-	
+	% Agradecimientos
+	\include{agradecimientos}
+		\thispagestyle{empty}
+		
 	% Índice
 	\tableofcontents
 		
@@ -207,10 +202,4 @@ Luis Javier Herrera Maldonado
 	\addcontentsline{toc}{chapter}{Bibliografía}
 	\bibliography{bibliografia}
 	
-	% Apéndices
-	%\appendix
-	%\backmatter
-	%\chapter{Anexo I}
-	%\include{anexo}
-		
 \end{document}

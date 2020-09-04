@@ -1,13 +1,13 @@
 \chapter{Líneas abiertas de trabajo}
 
-\section{El problema de clasificación}
+\section{Mejora de clasificación}
 
-Para el problema de clasificación de muestras de tejidos existen varias líneas abiertas de trabajo:
+Para mejorar los resultados obtenidos en la clasificación de muestras de tejidos existen varias líneas abiertas de trabajo:
 
 \begin{itemize}
-	\item Otros métodos de clasificación. Además de los algoritmos de clasificación SVM, RF y kNN, se pueden emplear otros métodos. Por ejemplo, se puede clasificar usando SVM con núcleos de base no radial o crear un \textit{ensemble} de algoritmos para permitir una estructura más flexible del modelo que se adapte mejor a los datos.
-	\item Otros métodos de selección de características. Para lograr un equilibrio entre resultados numéricos y clínicos, se pueden utilizar algoritmos de selección de características que usan evidencias existentes de relaciones gen-enfermedad y añaden reducción de la redundancia. Es el caso de DARED, un algoritmo en el que están trabajando los tutores de este trabajo y que supone una mejora con respecto al método DA empleado en el capítulo 4.
-	\item En el caso de la clasificación multiclase para colon-recto, donde los resultados no eran buenos, se podría combinar el análisis de expresión de genes con análisis de microRNA o alteraciones somáticas para mejora.
+	\item Otros métodos de selección de características. Para lograr un equilibrio entre resultados numéricos y clínicos, se pueden utilizar algoritmos de selección de características que usan evidencias existentes de relaciones gen-enfermedad y añaden reducción de la redundancia. Es el caso de DARED, un algoritmo en el que están trabajando los tutores de este trabajo y que supone una mejora con respecto al método DA.
+	\item Otros métodos de clasificación. Además de los algoritmos de clasificación usados en el trabajo se pueden emplear otros métodos. Por ejemplo, se puede clasificar usando SVM con núcleos de base no radial o crear un \textit{ensemble} de algoritmos para permitir una estructura más flexible del modelo que quizá se adapte mejor a los datos.
+	\item Combinar análisis de RNA con otros tipos de análisis. En el caso de la clasificación multiclase para colon-recto, donde los resultados pueden ser mejorables, se podría combinar el análisis de expresión de genes con análisis de microRNA o alteraciones somáticas.
 \end{itemize}
 
 \section{\{\texttt{KnowSeq}\}}
@@ -21,19 +21,19 @@ Para el problema de clasificación de muestras de tejidos existen varias líneas
 
 \section{\texttt{biomarkeRs}}
 
-Tras la creación de la aplicación web \texttt{biomarkeRs} se deben hacer esfuerzos para acercar el análisis de datos transcriptómicos a usuarios sin conocimientos previos de programación. En este sentido, el uso de tutoriales o cursos cortos para enseñar a usar \texttt{biomarkeRs} pueden ser de utilidad. Por otra parte, la aplicación web debería aprovechar todo el potencial presente en \{\texttt{KnowSeq}\} y actualizarse con las nuevas funcionalidades que se implementen en el paquete.\\
+Tras la creación de la aplicación web \texttt{biomarkeRs}, se deben hacer esfuerzos continuados para acercar el análisis de datos transcriptómicos a usuarios sin conocimientos previos de programación. En este sentido, el uso de tutoriales o cursos cortos para enseñar a usar \texttt{biomarkeRs} pueden ser de utilidad. Por otra parte, la aplicación web debería aprovechar todo el potencial presente en \{\texttt{KnowSeq}\} y actualizarse con las nuevas funcionalidades que se implementen en el paquete.\\
 
-La aplicación web \texttt{biomarkeRs} está aún en una etapa inicial, y se pueden añadir muchas mejoras:
+La aplicación web \texttt{biomarkeRs} está en una etapa inicial y puede ir actualizándose con múltiples mejoras:
 
 \begin{itemize}
-	\item Ampliar el propósito de la aplicación para incluir también análisis de tipo multiclase. 
-	\item Redactar en inglés un manual de uso para fomentar el uso de la aplicación. Otra opción complementaria puede ser la grabación de vídeos explicando el funcionamiento de la aplicación con casos de uso.
-	\item Añadir el F1-Score obtenido en el apartado de validación del modelo. Aunque este indicador se puede calcular a partir de la matriz de confusión, esto facilitaría la experiencia de usuario.
-	\item \textcolor{red}{Añadir como cosas a mejorar de la app: que el usuario pueda elegir los IDs que se usan para train y test}
-	\item\textcolor{red}{Se podría añadir en la tabla final de resultados una tabla interactiva con los IDs, su clase original, y su clase predicha por el modelo, con otra columna con "true positive/false positive/etc"... pero habría que modificar las funciones test de KnowSeq para que devuelva un vector con las clases predichas (en la actualidad, devuelve matriz de confusión, vectores de acc, spe, sens y f1). Pero hay que cambiar todas las funciones de test para que devuelvan las etiquetas predichas}
+	\item Incorporación de análisis multiclase. 
+	\item Redacción en inglés de un manual de uso para fomentar el uso de la aplicación. Otra opción complementaria puede ser la grabación de vídeos explicando el funcionamiento de la aplicación con casos de uso.
+	\item Inclusión del F1-Score obtenido en el apartado de validación del modelo. Aunque este indicador se puede calcular a partir de la matriz de confusión, que esté presente de manera directa facilitaría la experiencia de usuario.
+	\item Incorporación en el apartado de validación del modelo de una tabla interactiva en la que aparezcan el código identificativo del paciente, su clase observada y la clase predicha por el modelo. Esta característica puede ser relevante para personal médico ya que aporta valor a las predicciones individuales de cada paciente. Para añadir la característica, habría que actualizar las funciones de \textit{\{\texttt{KnowSeq}\}} que evalúan modelos en el conjunto de test para que devuelvan la clase predicha para cada muestra.
+	\item Carga de datos personalizados. En el apartado de carga de datos se podría permitir al usuario que cargase conjuntos de train y test personalizados.
 \end{itemize}
 
-El hecho de que sea una aplicación de código abierto abierta a colaboraciones puede ayudar a implementar estas mejoras.
+El hecho de que sea una aplicación de código abierto puede ayudar en la implementación de estas mejoras.
 
 \section{Artículo}
 
