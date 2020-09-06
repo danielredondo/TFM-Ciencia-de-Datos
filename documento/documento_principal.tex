@@ -89,6 +89,29 @@
 
 \definecolor{darkblue}{rgb}{0.0, 0.0, 0.55}
 
+% Para declaración
+\newcommand{\signatureline}[2]{%
+	\par\noindent
+	\begin{tabular}{@{}p{5cm}@{}}
+		\rule{0pt}{3cm}
+		\\ \hline \\[-.75\normalbaselineskip]
+		#1
+	\end{tabular}\hfill
+	\begin{tabular}{@{}p{3,5cm}@{}}
+		\rule{0pt}{3cm}
+		\\ \hline \\[-.75\normalbaselineskip]
+		#2
+	\end{tabular}\par
+}
+
+\newcommand{\approval}{%
+	\par\vspace*{\fill} % Puts signature lines in the same spot of each page for easy stamping
+	\subsubsection*{Los Directores del Trabajo Fin de Máster:}
+	\signatureline{Luis Javier Herrera Maldonado}{Daniel Castillo-Secilla} % Putting \vspace after this doesn't put space between these signaturelines
+	\clearpage
+}
+
+
 
 
 \newtheorem*{defi}{\normalfont\fontfamily{phv}\fontsize{12}{17}\bfseries Definici\'on}[section]
@@ -164,9 +187,17 @@ Luis Javier Herrera Maldonado
 	\maketitle
 	\thispagestyle{empty}
 	
+	% Declaración
+	\null \newpage
+    \thispagestyle{empty}
+	\newpage
+	\include{declaracion}
+	\newpage
+	\thispagestyle{empty}
+	
 	% Agradecimientos
 	\include{agradecimientos}
-		\thispagestyle{empty}
+	\thispagestyle{empty}
 		
 	% Índice
 	\tableofcontents
