@@ -4,7 +4,7 @@
 
 Se ha realizado una aplicación interactiva que realiza análisis transcriptómicos similares a los realizados en el capítulo 4, con la ventaja de que el usuario no necesita tener conocimientos de programación. La aplicación se ha desarrollado en inglés para facilitar su uso a personas de todo el mundo.\\
 
-Para su desarrollo se ha utilizado el paquete de R \textit{\texttt{\{Shiny\}}} (v.1.2.0) \cite{Chang2020}, que permite crear una interfaz sobre la que se ejecuta código de R. La interfaz de usuario se ha mejorado mediante el uso de CSS. La aplicación está organizada en un cuadro de mandos basado en \textit{\texttt{\{shinydashboard\}}} \cite{Chang2018} que implementa tablas interactivas usando \textit{\texttt{\{DT\}}} \cite{Xie2020} e incluye distintas pantallas de carga mediante \textit{\texttt{\{waiter\}}} \cite{Coene2020}, paquete que integra JavaScript y CSS para que el usuario conozca qué sección del código se está ejecutando en cada momento. La reactividad de la aplicación permite actualizar gráficos y otros resultados en función de las entradas que reciba por parte del usuario. \\
+Para su desarrollo se ha utilizado el paquete de \texttt{R} \textit{\texttt{\{Shiny\}}} (v.1.2.0) \cite{Chang2020}, que permite crear una interfaz sobre la que se ejecuta código de \texttt{R}. La interfaz de usuario se ha mejorado mediante el uso de CSS. La aplicación está organizada en un cuadro de mandos basado en \textit{\texttt{\{shinydashboard\}}} \cite{Chang2018} que implementa tablas interactivas usando \textit{\texttt{\{DT\}}} \cite{Xie2020} e incluye distintas pantallas de carga mediante \textit{\texttt{\{waiter\}}} \cite{Coene2020}, paquete que integra JavaScript y CSS para que el usuario conozca qué sección del código se está ejecutando en cada momento. La reactividad de la aplicación permite actualizar gráficos y otros resultados en función de las entradas que reciba por parte del usuario. \\
 
 \newpage
 \begin{center}
@@ -27,7 +27,7 @@ Para su desarrollo se ha utilizado el paquete de R \textit{\texttt{\{Shiny\}}} (
 
 La aplicación puede ejecutarse de forma local usando RStudio (un entorno de desarrollo integrado de R) \cite{RStudioTeam2020} y también está disponible de forma online en el enlace \url{https://dredondo.shinyapps.io/biomarkeRs/}.\\
 
-El fichero \textit{\texttt{shiny/app.R}} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020} contiene el código de R desarrollado para crear la aplicación web.
+El fichero \textit{\texttt{shiny/app.R}} del repositorio de GitHub asociado al trabajo \cite{Redondo-Sanchez2020} contiene el código de \texttt{R} desarrollado para crear la aplicación web.
 
 \section{Utilidades de la aplicación}
 
@@ -93,6 +93,7 @@ En este apartado (Figura 46) se entrenan modelos en base a tres parámetros que 
 
 Tras hacer clic en el botón, se muestran los resultados: precisión, F1-Score, sensibilidad y especificidad para cada número de genes. Estos indicadores se muestran en una tabla interactiva que permite ordenar de forma ascendente o descendente por cualquier columna, para hallar rápidamente los mejores valores de cada indicador. Además del valor obtenido, cada celda de la tabla tiene incluido un gráfico de barras para visualizar de forma sencilla la evolución de los distintos indicadores. Finalmente, para SVM y kNN se muestran encima de la tabla los parámetros óptimos obtenidos.
 
+\newpage
 \subsection{Validación de modelos}
 
 \begin{center}
@@ -125,6 +126,7 @@ La tabla interactiva tiene muchas funcionalidades que facilita la comprensión d
 	\item Permite filtrar las enfermedades por los coeficientes de evidencia. Al hacer clic en el campo en blanco debajo de las columnas, aparece un control deslizante para que el usuario pueda seleccionar cualquier rango.
 \end{itemize}
 
+\newpage
 \begin{center}
 	\textbf{Figura 49}. Enfermedades relacionadas con el gen TERT que contienen la palabra hígado (\textit{liver}).
 \end{center}

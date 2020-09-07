@@ -220,6 +220,7 @@ Para el análisis se ha utilizado el software estadístico \texttt{R} (v.4.0.1) 
 
 El paquete \textit{\{\texttt{KnowSeq}\}} está además disponible en Docker con el comando \textit{\texttt{Docker run -it casedugr/knowseq}} y en \textit{Bioconductor}, la plataforma de código abierto en \texttt{R} más relevante para el análisis de datos de genómica y transcriptómica \cite{Gentleman2004}.
 
+\newpage
 \begin{center}
 \textbf{Figura 6}. Logo de \textit{\{\texttt{KnowSeq}\}}.
 \end{center}
@@ -235,13 +236,13 @@ Además, para la visualización de datos y resultados del presente trabajo se ut
 
 \subsubsection{Preprocesamiento}
 
-Tras descargar los ficheros de GDC Portal y descomprimirlos con \texttt{R} (ficheros \textit{\texttt{analisis\_higado/02\_descompresion}} y \textit{\texttt{analisis\_cr/02\_descompresion}}  en GitHub \cite{Redondo-Sanchez2020}), se preprocesa la información para trabajar con matrices y data.frames.
+Tras descargar los ficheros de GDC Portal y descomprimirlos con \texttt{R} (usando los ficheros \textit{\texttt{analisis\_higado/02\_descompresion}} y \textit{\texttt{analisis\_cr/02\_descompresion}}  en GitHub \cite{Redondo-Sanchez2020}), se preprocesa la información para trabajar con matrices y data.frames.
 
 \subsubsection{Extracción de genes diferencialmente expresados (DEG)}
 
 Se extraen los genes diferencialmente expresados (DEG, por sus siglas en inglés: \textit{Differentially Expressed Genes}) utilizando un p-valor de p = 0,001 y controlando por el efecto batch usando el método SVA (\textit{Surrogate Variable Analysis}) \cite{Leek2012}. El efecto batch es un sesgo que se puede producir al procesar las muestras biológicas por tandas, y puede ocurrir por varias razones como las condiciones del laboratorio, diferencias entre personal, o incluso la hora del día a la que se procesan las muestras \cite{Goh2017, Leek2010}. Para la extracción de DEG se fija además un LFC (\textit{log fold change}) de 1, que se puede entender como que un gen sólo se considera un DEG si una de las dos expresiones de genes (ya sea de tumores o tejidos sanos) es al menos el doble que la otra. Finalmente, los resultados se extraen a una matriz de DEGs.\\
 
-Aunque esta técnica es habitual \cite{Lee2020}, se podría mejorar haciendo la extracción de DEGS mediante validación cruzada para diferentes conjuntos, seleccionando como DEGS aquellos que han sido identificados como tal en todos los folds.
+Aunque esta técnica es habitual \cite{Lee2020}, se podría mejorar haciendo la extracción de DEGs mediante validación cruzada para diferentes conjuntos, seleccionando como DEGs aquellos que han sido identificados como tal en todos los folds.
 
 \subsubsection{Partición entrenamiento-test}
 
@@ -255,7 +256,6 @@ Se utiliza el conjunto de entrenamiento para seleccionar los diez genes más rel
 
 Se realiza validación cruzada 5-fold para tres algoritmos de clasificación: SVM, RF y kNN. Los parámetros de los clasificadores se optimizan usando los 10 genes más relevantes de cada método de selección de características (mRMR, RF y DA). Para SVM con kernel radial se realiza optimización de los dos parámetros utilizando una rejilla con los valores especificados en la Tabla 13.\\
 
-\newpage
 \textbf{Tabla 13}. Valores de los parámetros que se utilizan para la búsqueda en rejilla de los parámetros óptimos del algoritmo SVM.
 
 \begin{table}[H]
@@ -281,9 +281,8 @@ El código completo del análisis está disponible en el fichero \textit{\texttt
 
 \subsection{Detección de biomarcadores}
 
-Para la clasificación biclase en cáncer de hígado se cuenta con 404 tumores y 58 muestras de tejido sano (Tabla 14).
+Para la clasificación biclase en cáncer de hígado se cuenta con 404 tumores y 58 muestras de tejido sano (Tabla 14).\\
 
-\newpage
 \textbf{Tabla 14}. Distribución de tipos de muestra para el análisis de cáncer de hígado biclase.
 
 \begin{table}[H]
@@ -299,6 +298,7 @@ Para la clasificación biclase en cáncer de hígado se cuenta con 404 tumores y
 
 De los 24.645 genes presentes en los datos se extraen 2.274 genes que presentan en su expresión diferencias significativas entre las muestras de tumores y las de tejido sano. En la Tabla 15 se muestra la partición entrenamiento - test realizada y en la Figura 7 se representa en un diagrama de Sankey.\\
 
+\newpage
 \textbf{Tabla 15}. Distribución entrenamiento-test según tipo de muestra y proporción entre clases (tumores/tejido sano) para el análisis de hígado biclase.\\
 
 \begin{table}[H]
@@ -312,7 +312,6 @@ De los 24.645 genes presentes en los datos se extraen 2.274 genes que presentan 
 	\end{tabular}
 \end{table}
 
-\newpage
 \begin{center}
 	\textbf{Figura 7}. Diagrama de Sankey mostrando la partición entrenamiento-test realizada según tipo de muestra para el análisis de hígado biclase.
 \end{center}
@@ -322,6 +321,7 @@ De los 24.645 genes presentes en los datos se extraen 2.274 genes que presentan 
 
 A continuación se muestran los diez genes más relevantes encontrados por cada método de selección de características:\\
 
+\newpage
 \textbf{Tabla 16}. Diez genes más relevantes según los distintos métodos de selección de características para el análisis de hígado biclase.
 
 \begin{table}[H]
@@ -464,12 +464,11 @@ Para kNN, el mejor F1-Score (99,68\%) se obtiene con el método RF para 2 y 3 ge
 	\includegraphics[width=1\textwidth]{figuras/16_higado_biclase_43_knn_boxplots_mejor_metodo.png} 
 \end{center}
 
-\newpage
-
 \subsection{Validación en test}
 
 Al validar en el conjunto de test el mejor modelo encontrado para SVM (4 genes con RF), RF (7 genes con mRMR) y kNN (2 genes con RF) se obtiene la misma clasificación: una predicción perfecta a falta de un falso positivo, esto es, una muestra de tejido normal que ha sido clasificada como tumor. El F1-Score en test es de 99,5\% con una precisión de 99,1\%.
 
+\newpage
 \begin{center}
 	\textbf{Figura 17}. Matriz de confusión de los mejores modelos encontrados de SVM, RF y kNN en el conjunto de test.
 \end{center}
@@ -551,6 +550,7 @@ Se extraen 8.533 genes que presentan en su expresión diferencias significativas
 
 A continuación se muestran los diez genes más relevantes encontrados por cada método de selección de características:\\
 
+\newpage
 \textbf{Tabla 22}. Diez genes más relevantes según los distintos métodos de selección de características para el análisis de hígado multiclase.
 
 \begin{table}[H]
@@ -619,10 +619,11 @@ En el mapa de calor se observa que hay grandes diferencias entre la expresión d
 	\includegraphics[width=1\textwidth]{figuras/21_higado_multiclase_14_svm_boxplots_mejor_metodo.png} 
 \end{center}
 
-\newpage
 \subsection{Validación cruzada en entrenamiento - RF}
 
 En la Figura 22 se muestran las medidas de evaluación medias obtenidas en las 5 fold.\\
+
+\newpage
 
 \begin{center}
 \textbf{Figura 22}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score, precisión, sensibilidad y especificidad de RF según método de selección de características y número de genes usados.
@@ -634,6 +635,7 @@ En la Figura 22 se muestran las medidas de evaluación medias obtenidas en las 5
 Para random forest, el mejor F1-Score (94,08\%) se obtiene con el método mRMR, considerando 6 genes. Los 6 genes seleccionados son: ANGPTL6, FTLP3, PLXDC1, RAB25, WDR66
 y AP2B1. Se analiza su expresión de genes, utilizando para ello un mapa de calor (Figura 23) y diagramas de caja (Figura 24).\\
 
+\newpage
 \begin{center}
 \textbf{Figura 23}. Mapa de calor de expresión de genes por tipo de muestra (columna izquierda: rojo = carcinoma hepatocelular, naranja = colangiocarcinoma, verde = tejido sano) en los 6 genes más relevantes encontrados en el mejor modelo de RF con mRMR como método de selección de características.
 \end{center}
@@ -692,14 +694,11 @@ Para kNN, el mejor F1-Score (92,98\%) se obtiene con el método mRMR para 7 gene
 	\includegraphics[width=1\textwidth]{figuras/27_higado_multiclase_34_knn_boxplots_mejor_metodo.png} 
 \end{center}
 
-\newpage
-
 \subsection{Validación en test}
-
-
 
 Al validar en el conjunto de test el mejor modelo encontrado para SVM y kNN (ambas con 7 genes con mRMR),  se obtiene la misma clasificación, descrita en la Figura 28, con F1-Score en test es de 91,8\% y una precisión de 96,4\%.\\
 
+\newpage
 \begin{center}
 \textbf{Figura 28}. Matriz de confusión de los mejores modelos encontrados de SVM y kNN en el conjunto de test.
 \end{center}
@@ -710,6 +709,7 @@ Al validar en el conjunto de test el mejor modelo encontrado para SVM y kNN (amb
 
 La validación en el conjunto de test del mejor modelo encontrado para RF (6 genes con mRMR) se muestra en la Figura 29, siendo los resultados ligeramente inferiores a los obtenidos con SVM y kNN.\\
 
+\newpage
 \begin{center}
 \textbf{Figura 29}. Matriz de confusión del mejor modelo encontrado de RF en el conjunto de test.
 \end{center}
@@ -759,8 +759,9 @@ Para la clasificación biclase en cáncer de colon-recto se cuenta con 644 tumor
 	\end{tabular}
 \end{table}
 
-Se extraen 6.836 genes que presentan en su expresión diferencias significativas entre las muestras de tumor y las de tejido sano. En la Tabla 27 se muestra la partición entrenamiento - test realizada y en la figura 30 se representa en un diagrama de Sankey.\\
+Se extraen 6.836 genes que presentan en su expresión diferencias significativas entre las muestras de tumor y las de tejido sano. En la Tabla 27 se muestra la partición entrenamiento - test realizada y en la figura 30 se representa en un diagrama de Sankey.
 
+\newpage
 \textbf{Tabla 27}. Distribución entrenamiento-test según tipo de muestra y proporción entre clases para el análisis de colon-recto biclase.
 
 \begin{table}[H]
@@ -833,7 +834,7 @@ En las Tablas 29 y 30 se muestran los parámetros óptimos de SVM y kNN obtenido
 	\end{tabular}
 \end{table}
 
-En la Figura 31 se muestran para SVM, RF y kNN el F1-Score medio obtenido en las 5 fold.\\
+En la Figura 31 se muestran para SVM, RF y kNN el F1-Score medio obtenido en las 5 fold.
 
 \begin{center}
 \textbf{Figura 31}. Mapa de calor con valores medios y desviación típica de los 5-fold de F1-Score de SVM, RF y kNN según método de selección de características y número de genes usados.
@@ -925,6 +926,7 @@ Para la clasificación multiclase en cáncer de colon-recto se cuenta con 530 ad
 
 Se extraen 6.848 genes que presentan en su expresión diferencias significativas entre las distintas muestras de tumores y las de tejido sano. En la Tabla 33 se muestra la partición entrenamiento - test realizada y en la figura 35 se representa en un diagrama de Sankey.\\
 
+\newpage
 \textbf{Tabla 33}. Distribución entrenamiento-test según tipo de muestra y proporción entre clases para el análisis de colon-recto multiclase.
 
 \begin{table}[H]
