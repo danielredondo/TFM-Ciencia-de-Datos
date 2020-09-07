@@ -1,0 +1,167 @@
+\documentclass[a4paper, 12pt]{book}
+	
+\usepackage[utf8]{inputenc}
+\usepackage[spanish]{babel}
+\decimalpoint % To use point as decimal point
+\usepackage{enumerate}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{cite}
+\usepackage{textcomp}
+\usepackage{subfig}
+\usepackage{multirow}
+\usepackage{ntheorem}
+\usepackage{hyperref}
+\usepackage[dvipsnames]{xcolor}
+\usepackage{color}
+\usepackage{float}
+\hypersetup{
+	colorlinks = true,
+	linkcolor = darkblue,
+	anchorcolor = darkblue,
+	citecolor = darkblue,
+	filecolor = darkblue,
+	urlcolor = darkblue
+}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{lscape}
+\usepackage{url}
+
+ % Para cajas con código R
+\usepackage{listings}
+\lstset{basicstyle=\ttfamily, breaklines=true}
+\lstset{ 
+	language=R,                     % the language of the code
+	basicstyle=\footnotesize\ttfamily, % the size of the fonts that are used for the code
+	numbers=left,                   % where to put the line-numbers
+	numberstyle=\footnotesize\color{gray},  % the style that is used for the line-numbers
+	stepnumber=1,                   % the step between two line-numbers. If it is 1, each line
+	% will be numbered
+	numbersep=5pt,                  % how far the line-numbers are from the code
+	backgroundcolor=\color{white},  % choose the background color. You must add \usepackage{color}
+	showspaces=false,               % show spaces adding particular underscores
+	showstringspaces=false,         % underline spaces within strings
+	showtabs=false,                 % show tabs within strings adding particular underscores
+	frame=single,                   % adds a frame around the code
+	rulecolor=\color{black},        % if not set, the frame-color may be changed on line-breaks within not-black text (e.g. commens (green here))
+	tabsize=2,                      % sets default tabsize to 2 spaces
+	captionpos=b,                   % sets the caption-position to bottom
+	breaklines=true,                % sets automatic line breaking
+	breakatwhitespace=false,        % sets if automatic breaks should only happen at whitespace
+	keywordstyle=\color{RoyalBlue},     % keyword style
+	commentstyle=\color{Mulberry},      % comment style
+	stringstyle=\color{ForestGreen},    % string literal style
+	literate={á}{{\'a}}1
+	{ã}{{\~a}}1
+	{é}{{\'e}}1
+	{ó}{{\'o}}1
+	{í}{{\'i}}1
+	{ñ}{{\~n}}1
+	{Ñ}{{\~N}}1
+	{¡}{{!`}}1
+	{¿}{{?`}}1
+	{ú}{{\'u}}1
+	{Í}{{\'I}}1
+	{Ó}{{\'O}}1
+} 
+
+
+\lstset{
+	language = VBScript,
+	literate={á}{{\'a}}1
+	{ã}{{\~a}}1
+	{é}{{\'e}}1
+	{ó}{{\'o}}1
+	{í}{{\'i}}1
+	{ñ}{{\~n}}1
+	{Ñ}{{\~N}}1
+	{¡}{{!`}}1
+	{¿}{{?`}}1
+	{ú}{{\'u}}1
+	{Í}{{\'I}}1
+	{Ó}{{\'O}}1
+} 
+
+
+\usepackage{fancy} % cls file
+\usepackage{mathfont} % cls file
+
+\definecolor{darkblue}{rgb}{0.0, 0.0, 0.55}
+
+% Para declaración
+\newcommand{\signatureline}[2]{%
+	\par\noindent
+	\begin{tabular}{@{}p{6cm}@{}}
+		\rule{0pt}{4cm}
+		\\ \hline \\[-.75\normalbaselineskip]
+		#1
+	\end{tabular}\hfill
+	\begin{tabular}{@{}p{6cm}@{}}
+		\rule{0pt}{4cm}
+		\\ \hline \\[-.75\normalbaselineskip]
+		#2
+	\end{tabular}\par
+}
+
+\newcommand{\approval}{%
+	\par\vspace*{\fill} % Puts signature lines in the same spot of each page for easy stamping
+	\subsubsection*{Los Directores del Trabajo Fin de Máster:}
+	\signatureline{Luis Javier Herrera Maldonado}{Daniel Castillo-Secilla} % Putting \vspace after this doesn't put space between these signaturelines
+	\clearpage
+}
+
+
+\renewcommand{\thefootnote}{\arabic{footnote}}
+%\renewcommand{\labelitemi}{$\cdot$}
+\renewcommand\labelitemi{-} % - en itemize
+%\renewcommand{\ttdefault}{phv}
+
+%%%%%%%%%%%%%%%%%%%%%%% MEDIDAS %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+% \parindent      0 mm
+ \topmargin      10 mm   %%%%%% 0mm
+ \headsep        8 mm   %%%%%% 8mm
+ \headheight     5 mm   %%%%%% 5mm
+ \textheight     211 mm
+ \footskip       10 mm
+ \headrulewidth  0.7pt
+ \oddsidemargin  5 mm
+ \evensidemargin  29.4 mm
+\evensidemargin 5 mm
+\textwidth      145 mm
+\renewcommand{\baselinestretch}{1.15}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+\setlength\parindent{0pt} %% Eliminar indent (sangría) en todo el documento
+
+\begin{document}
+
+
+	% Declaración
+    \thispagestyle{empty}
+	\newpage
+
+{ \huge \bfseries Declaración de supervisión}\\
+\rule{\linewidth}{0.2 mm} \\[0.5 cm]
+
+El \textbf{Prof. Dr. D. Luis Javier Herrera Maldonado} y el \textbf{Dr. D. Daniel Castillo-Secilla}, ambos del Departamento de Arquitectura y Tecnología de Computadores de la Universidad de Granada,
+\\[0,25 cm]
+CERTIFICAN:
+\\[0,25 cm]
+Que la memoria titulada:
+\\[0,25 cm]
+\textbf{\textit{\large``Epidemiología y detección de biomarcadores en cáncer''}}
+\\[0,2 cm]
+ha sido realizada por \textbf{D. Daniel Redondo Sánchez} bajo nuestra dirección en el Departamento de Arquitectura y Tecnología de Computadores de la Universidad de Granada para optar al \textbf{Máster en Ciencia de Datos e Ingeniería de Computadores por la Universidad de Granada.}
+\\[1 cm]
+\begin{center}
+	En Granada, a 10 de septiembre de 2020
+	\\[2 cm]
+	\approval
+\end{center}
+	
+	
+	
+\end{document}
