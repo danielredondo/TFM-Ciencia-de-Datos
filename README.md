@@ -18,6 +18,8 @@ Universidad de Granada.
 
 - `epidemiologia`: Datos sobre la epidemiología del cáncer.
 
+- `presentacion`: Presentación para la defensa del TFM.
+
 - `shiny`: Aplicación web `biomarkeRs`, disponible online en [https://dredondo.shinyapps.io/biomarkeRs/](https://dredondo.shinyapps.io/biomarkeRs/).
 
 ## Resumen
