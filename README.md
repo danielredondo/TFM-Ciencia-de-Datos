@@ -16,7 +16,7 @@ Universidad de Granada.
 
 - `documento`: Documento del TFM escrito en *LaTeX*. La versión final del documento en PDF está [aquí](https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/documento/documento_entregado.pdf).
 
-- `presentacion`: Presentación para la defensa del TFM.
+- `presentacion`: Presentación para la defensa del TFM. La versión actual de la presentación en PDF está [aquí](https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/presentacion/TFM_Daniel_Redondo.pdf).
 
 - `shiny`: Aplicación web `biomarkeRs`, disponible online en [https://dredondo.shinyapps.io/biomarkeRs/](https://dredondo.shinyapps.io/biomarkeRs/).
 
