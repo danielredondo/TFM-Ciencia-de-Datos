@@ -16,8 +16,6 @@ Universidad de Granada.
 
 - `documento`: Documento del TFM escrito en *LaTeX*. La versión final del documento en PDF está [aquí](https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/documento/documento_entregado.pdf).
 
-- `epidemiologia`: Datos sobre la epidemiología del cáncer.
-
 - `presentacion`: Presentación para la defensa del TFM.
 
 - `shiny`: Aplicación web `biomarkeRs`, disponible online en [https://dredondo.shinyapps.io/biomarkeRs/](https://dredondo.shinyapps.io/biomarkeRs/).
