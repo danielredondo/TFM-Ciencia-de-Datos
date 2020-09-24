@@ -14,7 +14,7 @@ Universidad de Granada.
 
 - `analisis_higado`: Código, resultados y figuras del análisis realizado para cáncer de hígado.
 
-- `documento`: Documento del TFM escrito en *LaTeX*. La versión final del documento en PDF está [aquí](https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/documento/documento_entregado.pdf).
+- `documento`: Documento del TFM escrito en *LaTeX*. El documento en PDF está [aquí](https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/documento/documento_principal.pdf).
 
 - `presentacion`: Presentación para la defensa del TFM. La versión final de la presentación en PDF está [aquí](https://github.com/danielredondo/TFM_ciencia_de_datos/blob/master/presentacion/TFM_Daniel_Redondo.pdf).
 
