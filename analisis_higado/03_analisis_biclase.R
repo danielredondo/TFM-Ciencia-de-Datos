@@ -149,7 +149,7 @@ dev.off()
 
 # ----- Partición entrenamiento-test -----
 
-# Partición 75% / 25% con balanceo de clase
+# Partición 75% / 25% con equilibrio de clase
 porcentaje <- .75
 indices <- createDataPartition(labels, p = porcentaje, list = FALSE)
 particion <- list(training = DEGsMatrixML[indices, ], test = DEGsMatrixML[-indices, ])
@@ -176,7 +176,7 @@ test_san <- table(labels_test)[2]
 # Total
 table(labels)
 
-# Verificar balanceo de clase en entrenamiento y test
+# Verificar equilibrio de clase en entrenamiento y test
 # Train
 labels_train %>% table %>% prop.table %>% round(3) * 100
 # Test
@@ -211,7 +211,7 @@ ggplot(data = datos_sankey,
   geom_text(stat = "stratum", infer.label = TRUE, cex = 3) +
   theme_minimal() +
   ggtitle("Partición en conjuntos de entrenamiento y test",
-          "Reparto 75% - 25% con balanceo de clases") +
+          "Reparto 75% - 25% con equilibrio de clases") +
   theme(plot.title = element_text(hjust = .5),
         plot.subtitle = element_text(hjust = .5),
         axis.text = element_text(color = "black", size = 12),
